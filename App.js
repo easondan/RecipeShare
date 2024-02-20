@@ -14,11 +14,13 @@ import Cookbook from "./pages/Cookbook";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import GroceryList from "./pages/GroceryList";
+import CommunityMaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 export default function App() {
   const [session, setSession] = useState(null);
   const [activeItem, setActiveItem] = useState(null);
-  
+
   useEffect(() => {
     const fetchSession = async () => {
       const { data: session, error } = await supabase.auth.getSession();
@@ -28,7 +30,7 @@ export default function App() {
         setSession(session);
       }
     };
- 
+
     fetchSession();
 
     const authListener = supabase.auth.onAuthStateChange((_event, session) => {
@@ -44,6 +46,13 @@ export default function App() {
     setActiveItem(itemName);
     props.navigation.navigate(itemName);
   };
+
+  const communityMaterialIcon = (name, colour, size) => {
+    return (<CommunityMaterialIcon  name={name} color={colour} size={size} />)
+  };
+  const materialIcon = (name, colour, size) => {
+    return (<MaterialIcon name={name} color={colour} size={size} />)
+  };
   function CustomDrawerContent(props) {
     return (
       <DrawerContentScrollView
@@ -54,16 +63,17 @@ export default function App() {
           style={{
             height: 150,
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "flex-end",
             backgroundColor: "#D75B3F",
             paddingTop: 0,
           }}
         >
           <Text
             style={{
-              fontSize: 20,
-              backgroundColor: "#D75B3F",
-              paddingTop: "10%",
+              fontSize: 40,
+              color: "#FFFFFF",
+              paddingBottom: "5%",
+              fontFamily: "Purtian",
             }}
           >
             RecipeShare
@@ -77,10 +87,28 @@ export default function App() {
           inactiveTintColor="#000000"
           activeTintColor="#C0452A"
           focused={activeItem === "My Recipe"}
-          style={{ borderBottomWidth: 1, borderBottomColor: '#AEAEAE', paddingBottom:10}}
-
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#AEAEAE",
+            paddingBottom: 10,
+          }}
+          icon={()=>communityMaterialIcon("silverware","black",20)}
         />
-
+        <DrawerItem
+          label="Favourited Recipies"
+          onPress={() => handlePress("Favourited Recipies", props)}
+          activeBackgroundColor="#D9D9D9"
+          inactiveBackgroundColor="white"
+          inactiveTintColor="#000000"
+          activeTintColor="#C0452A"
+          focused={activeItem === "Favourited Recipies"}
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#AEAEAE",
+            paddingBottom: 10,
+          }}
+          icon={()=>communityMaterialIcon("cards-heart","black",20)}
+        />
         <DrawerItem
           label="Cookbooks"
           onPress={() => handlePress("Cookbooks", props)}
@@ -89,6 +117,7 @@ export default function App() {
           inactiveTintColor="#000000"
           activeTintColor="#C0452A"
           focused={activeItem === "Cookbooks"}
+          icon={()=>communityMaterialIcon("book-open-page-variant-outline","black",20)}
         />
         <DrawerItem
           label="Grocery List"
@@ -98,7 +127,12 @@ export default function App() {
           inactiveTintColor="#000000"
           activeTintColor="#C0452A"
           focused={activeItem === "Grocery List"}
-          style={{ borderBottomWidth: 1, borderBottomColor: '#AEAEAE', paddingBottom:10}}
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#AEAEAE",
+            paddingBottom: 10,
+          }}
+          icon={()=>communityMaterialIcon("cart-outline","black",20)}
         />
         <DrawerItem
           label="Account"
@@ -108,6 +142,7 @@ export default function App() {
           inactiveTintColor="#000000"
           activeTintColor="#C0452A"
           focused={activeItem === "Account"}
+          icon={()=>materialIcon("account-circle","black",20)}
         />
         <DrawerItem
           label="Settings"
@@ -117,7 +152,12 @@ export default function App() {
           inactiveTintColor="#000000"
           activeTintColor="#C0452A"
           focused={activeItem === "Settings"}
-          style={{ borderBottomWidth: 1, borderBottomColor: '#AEAEAE', paddingBottom:10}}
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#AEAEAE",
+            paddingBottom: 10,
+          }}
+          icon={()=>materialIcon  ("settings","black",20)}
         />
         <DrawerItem
           label="Sign Out"
@@ -127,6 +167,7 @@ export default function App() {
           inactiveTintColor="#000000"
           activeTintColor="#C0452A"
           focused={activeItem === "Sign Out"}
+          icon={()=>communityMaterialIcon("logout","black",20)}
         />
       </DrawerContentScrollView>
     );
