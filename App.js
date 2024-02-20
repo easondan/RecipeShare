@@ -5,7 +5,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
 import { supabase } from "./lib/supabase";
@@ -29,14 +28,17 @@ export default function App() {
         setSession(session);
       }
     };
-
+ 
     fetchSession();
 
     const authListener = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
   }, []);
-
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error("Error signing out:", error.message);
+  };
 
   const handlePress = (itemName, props) => {
     setActiveItem(itemName);
@@ -78,7 +80,7 @@ export default function App() {
           style={{ borderBottomWidth: 1, borderBottomColor: '#AEAEAE', paddingBottom:10}}
 
         />
-      <Text style={{ borderBottomWidth: 1, borderBottomColor: '#AEAEAE' }}></Text>
+
         <DrawerItem
           label="Cookbooks"
           onPress={() => handlePress("Cookbooks", props)}
@@ -131,11 +133,6 @@ export default function App() {
   }
 
   const Drawer = createDrawerNavigator();
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) console.error("Error signing out:", error.message);
-  };
 
   return (
     <View style={styles.container}>

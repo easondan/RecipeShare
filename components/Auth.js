@@ -42,7 +42,7 @@ export default function Auth() {
     })
 
     if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
+    if (!session) Alert.alert('Please check your inbox for email verification!');
     setLoading(false)
   }
 
