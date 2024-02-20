@@ -13,4 +13,12 @@ npx expo install
 
 npx expo start
 
+or run
+
+npx expo start --ios
+
+npx expo start --android
+
+npx expo start --web
+
 ```
