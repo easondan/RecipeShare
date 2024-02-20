@@ -43,11 +43,24 @@ export default function App() {
   };
 
   const handlePress = (itemName, props) => {
-    setActiveItem(itemName);
-    props.navigation.navigate(itemName);
+    if(itemName !== "Sign Out"){
+      setActiveItem(itemName);
+      props.navigation.navigate(itemName);
+      return;
+    }
+    signOut();
+
   };
 
-  const renderItem = (label, itemName, icon, props) => (
+  const icon = (type,color,size,name) =>{
+    if(type ==="Community"){
+      return (<CommunityMaterialIcon name={name} size={size} color={color}/> )
+    }
+
+    return (<MaterialIcon name={name} size={size} color={color}/>);
+  }
+
+  const renderItem = (label, itemName, type, props,iconName) => (
     <DrawerItem
       label={label}
       onPress={() => handlePress(itemName, props)}
@@ -61,7 +74,7 @@ export default function App() {
         borderBottomColor: "#AEAEAE",
         paddingBottom: 10,
       }}
-      icon={() => icon("black", 20)}
+      icon = {() => icon(type,"black",20,iconName)}
     />
   );
 
@@ -91,18 +104,19 @@ export default function App() {
             RecipeShare
           </Text>
         </View>
-        {renderItem("My Recipes", "My Recipe", CommunityMaterialIcon, props)}
+        {renderItem("My Recipes", "My Recipe", "Community", props,"silverware")}
         {renderItem(
           "Favourited Recipes",
           "Favourited Recipies",
-          CommunityMaterialIcon,
-          props
+          "Community",
+          props,
+          "cards-heart"
         )}
-        {renderItem("Cookbooks", "Cookbooks", CommunityMaterialIcon, props)}
-        {renderItem("Grocery List", "Grocery List", CommunityMaterialIcon, props)}
-        {renderItem("Account", "Account", MaterialIcon, props)}
-        {renderItem("Settings", "Settings", MaterialIcon, props)}
-        {renderItem("Sign Out", "Sign Out", CommunityMaterialIcon, props)}
+        {renderItem("Cookbooks", "Cookbooks", "Community", props,"book-open-page-variant-outline")}
+        {renderItem("Grocery List", "Grocery List", "Community", props,"cart-outline")}
+        {renderItem("Account", "Account", "", props,"account-circle")}
+        {renderItem("Settings", "Settings", "", props,"settings")}
+        {renderItem("Sign Out", "Sign Out", "Community", props,"logout")}
       </DrawerContentScrollView>
     );
   }
