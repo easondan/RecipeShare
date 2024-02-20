@@ -1,4 +1,3 @@
-import "react-native-url-polyfill/auto";
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,6 +6,8 @@ import {
   DrawerContentScrollView,
   DrawerItem,
 } from "@react-navigation/drawer";
+import CommunityMaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { supabase } from "./lib/supabase";
 import Auth from "./components/Auth";
 import Home from "./pages/Home";
@@ -14,8 +15,6 @@ import Cookbook from "./pages/Cookbook";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import GroceryList from "./pages/GroceryList";
-import CommunityMaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -37,6 +36,7 @@ export default function App() {
       setSession(session);
     });
   }, []);
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) console.error("Error signing out:", error.message);
@@ -47,12 +47,24 @@ export default function App() {
     props.navigation.navigate(itemName);
   };
 
-  const communityMaterialIcon = (name, colour, size) => {
-    return (<CommunityMaterialIcon  name={name} color={colour} size={size} />)
-  };
-  const materialIcon = (name, colour, size) => {
-    return (<MaterialIcon name={name} color={colour} size={size} />)
-  };
+  const renderItem = (label, itemName, icon, props) => (
+    <DrawerItem
+      label={label}
+      onPress={() => handlePress(itemName, props)}
+      activeBackgroundColor="#D9D9D9"
+      inactiveBackgroundColor="white"
+      inactiveTintColor="#000000"
+      activeTintColor="#C0452A"
+      focused={activeItem === itemName}
+      style={{
+        borderBottomWidth: 1,
+        borderBottomColor: "#AEAEAE",
+        paddingBottom: 10,
+      }}
+      icon={() => icon("black", 20)}
+    />
+  );
+
   function CustomDrawerContent(props) {
     return (
       <DrawerContentScrollView
@@ -79,96 +91,18 @@ export default function App() {
             RecipeShare
           </Text>
         </View>
-        <DrawerItem
-          label="My Recipes"
-          onPress={() => handlePress("My Recipe", props)}
-          activeBackgroundColor="#D9D9D9"
-          inactiveBackgroundColor="white"
-          inactiveTintColor="#000000"
-          activeTintColor="#C0452A"
-          focused={activeItem === "My Recipe"}
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: "#AEAEAE",
-            paddingBottom: 10,
-          }}
-          icon={()=>communityMaterialIcon("silverware","black",20)}
-        />
-        <DrawerItem
-          label="Favourited Recipies"
-          onPress={() => handlePress("Favourited Recipies", props)}
-          activeBackgroundColor="#D9D9D9"
-          inactiveBackgroundColor="white"
-          inactiveTintColor="#000000"
-          activeTintColor="#C0452A"
-          focused={activeItem === "Favourited Recipies"}
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: "#AEAEAE",
-            paddingBottom: 10,
-          }}
-          icon={()=>communityMaterialIcon("cards-heart","black",20)}
-        />
-        <DrawerItem
-          label="Cookbooks"
-          onPress={() => handlePress("Cookbooks", props)}
-          activeBackgroundColor="#D9D9D9"
-          inactiveBackgroundColor="white"
-          inactiveTintColor="#000000"
-          activeTintColor="#C0452A"
-          focused={activeItem === "Cookbooks"}
-          icon={()=>communityMaterialIcon("book-open-page-variant-outline","black",20)}
-        />
-        <DrawerItem
-          label="Grocery List"
-          onPress={() => handlePress("Grocery List", props)}
-          activeBackgroundColor="#D9D9D9"
-          inactiveBackgroundColor="white"
-          inactiveTintColor="#000000"
-          activeTintColor="#C0452A"
-          focused={activeItem === "Grocery List"}
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: "#AEAEAE",
-            paddingBottom: 10,
-          }}
-          icon={()=>communityMaterialIcon("cart-outline","black",20)}
-        />
-        <DrawerItem
-          label="Account"
-          onPress={() => handlePress("Account", props)}
-          activeBackgroundColor="#D9D9D9"
-          inactiveBackgroundColor="white"
-          inactiveTintColor="#000000"
-          activeTintColor="#C0452A"
-          focused={activeItem === "Account"}
-          icon={()=>materialIcon("account-circle","black",20)}
-        />
-        <DrawerItem
-          label="Settings"
-          onPress={() => handlePress("Settings", props)}
-          activeBackgroundColor="#D9D9D9"
-          inactiveBackgroundColor="white"
-          inactiveTintColor="#000000"
-          activeTintColor="#C0452A"
-          focused={activeItem === "Settings"}
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: "#AEAEAE",
-            paddingBottom: 10,
-          }}
-          icon={()=>materialIcon  ("settings","black",20)}
-        />
-        <DrawerItem
-          label="Sign Out"
-          onPress={() => signOut()}
-          activeBackgroundColor="#D9D9D9"
-          inactiveBackgroundColor="white"
-          inactiveTintColor="#000000"
-          activeTintColor="#C0452A"
-          focused={activeItem === "Sign Out"}
-          icon={()=>communityMaterialIcon("logout","black",20)}
-        />
+        {renderItem("My Recipes", "My Recipe", CommunityMaterialIcon, props)}
+        {renderItem(
+          "Favourited Recipes",
+          "Favourited Recipies",
+          CommunityMaterialIcon,
+          props
+        )}
+        {renderItem("Cookbooks", "Cookbooks", CommunityMaterialIcon, props)}
+        {renderItem("Grocery List", "Grocery List", CommunityMaterialIcon, props)}
+        {renderItem("Account", "Account", MaterialIcon, props)}
+        {renderItem("Settings", "Settings", MaterialIcon, props)}
+        {renderItem("Sign Out", "Sign Out", CommunityMaterialIcon, props)}
       </DrawerContentScrollView>
     );
   }

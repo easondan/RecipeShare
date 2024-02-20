@@ -48,7 +48,7 @@ export default function Auth() {
 
   return (
     <View style={styles.container}>
-    <Text>RecipeKeep</Text>
+    <Text>RecipeShare</Text>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           label="Email"
