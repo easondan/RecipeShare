@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
@@ -15,6 +15,9 @@ import Cookbook from "./pages/Cookbook";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import GroceryList from "./pages/GroceryList";
+import SearchRecipe from "./pages/SearchRecipe";
+import SearchCookBooks from "./pages/SearchCookbooks";
+import SearchComponent from "./components/SearchComponent";
 
 export default function Navigation() {
   const [session, setSession] = useState(null);
@@ -149,12 +152,62 @@ export default function Navigation() {
             <Drawer.Screen
               name="My Recipe"
               component={Home}
-              options={styles.options}
+              options={({ navigation }) => ({
+                headerRight: () => (
+                  <TouchableOpacity
+                    style={{ paddingRight: 10 }}
+                    onPress={() =>
+                      navigation.navigate("SearchRecipe", {
+                        searchData: "myRecipe",
+                      })
+                    }
+                  >
+                    <MaterialIcon name="search" size={30} color="black" />
+                  </TouchableOpacity>
+                ),
+                ...styles.options,
+              })}
+            />
+            <Drawer.Screen
+              name="SearchRecipe"
+              component={SearchRecipe}
+              options={({ navigation }) => ({
+                title: "Search Recipe",
+                header: () => (
+                  <SearchComponent onPress={() =>  navigation.navigate("My Recipe")} navigation = {navigation} searchValue = "recipe"/>
+                ),
+                ...styles.options,
+              })}
+            />
+            <Drawer.Screen
+              name="SearchCookbook"
+              component={SearchCookBooks}
+              options={({ navigation }) => ({
+                title: "Search Cookbooks",
+                header: () => (
+                  <SearchComponent onPress={() => navigation.navigate("Cookbooks")} navigation = {navigation} searchValue = "cookbook"/>
+                ),
+                ...styles.options,
+              })}
             />
             <Drawer.Screen
               name="Cookbooks"
               component={Cookbook}
-              options={styles.options}
+              options={({ navigation }) => ({
+                headerRight: () => (
+                  <TouchableOpacity
+                    style={{ paddingRight: 10 }}
+                    onPress={() =>
+                      navigation.navigate("SearchCookbook", {
+                        searchData: "Cookbook",
+                      })
+                    }
+                  >
+                    <MaterialIcon name="search" size={30} color="black" />
+                  </TouchableOpacity>
+                ),
+                ...styles.options,
+              })}
             />
             <Drawer.Screen
               name="Grocery List"

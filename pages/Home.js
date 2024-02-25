@@ -1,9 +1,9 @@
 import React from "react";
-import { Text, View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { Text, View, StyleSheet, SafeAreaView, ScrollView,Button } from "react-native";
 import ActionButton from "../components/ActionButton";
 import { PageIcon } from "../components/PageIcon";
 
-const Home = () => {
+const Home = ({navigation}) => {
   const imageArray = [
     {
       imageUrl:

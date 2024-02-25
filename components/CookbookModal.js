@@ -14,7 +14,7 @@ import * as ImagePicker from "expo-image-picker";
 
 const CookbookModal = ({ modalVisible, setModalVisible }) => {
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const [cookbookTitle, setCookbookTitle] = useState("");
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -26,7 +26,9 @@ const CookbookModal = ({ modalVisible, setModalVisible }) => {
       setSelectedImage(result.assets[0].uri);
     }
   };
-
+  const createCookbook = async() =>{
+    console.log("Created",selectedImage,cookbookTitle);
+  }
   return (
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
@@ -48,6 +50,7 @@ const CookbookModal = ({ modalVisible, setModalVisible }) => {
             placeholderTextColor="#888"
             inputMode="text"
             keyboardType="default"
+            onChangeText={setCookbookTitle}
           />
         </View>
         <TouchableOpacity style={styles.container} onPress={pickImage}>
@@ -64,7 +67,7 @@ const CookbookModal = ({ modalVisible, setModalVisible }) => {
             )}
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.createButton}>
+        <TouchableOpacity style={styles.createButton} onPress={createCookbook}>
           <Text style={{ color: "white", fontSize: 20 }}>Create</Text>
         </TouchableOpacity>
       </View>
