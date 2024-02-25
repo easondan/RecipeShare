@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { View, Modal, StyleSheet } from "react-native";
 import ActionButton from "../components/ActionButton";
 import CookbookModal from "../components/CookbookModal";
+import Dropdown from "../components/Dropdown";
 
-const Cookbook= () => {
+const Cookbook = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
+
+      <Dropdown label="My Cookbooks" />      
+      <View style={{ flex: 0.5 }} />
+      <Dropdown label="Shared Cookbooks" />
+
       <Modal
         animationType="fade"
         transparent={true}
