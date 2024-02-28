@@ -62,9 +62,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     backgroundColor: "#A7CCA2",
-    height: 100,
+    height: 150,
+    paddingTop: 20
   },
   searchContainer: {
     flex: 1,
