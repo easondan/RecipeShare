@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
@@ -10,14 +10,13 @@ import CommunityMaterialIcon from "react-native-vector-icons/MaterialCommunityIc
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { supabase } from "./lib/supabase";
 import Auth from "./components/Auth";
-import Home from "./pages/Home";
-import Cookbook from "./pages/Cookbook";
+import RecipeHome from "./pages/RecipeHome";
+import FavouriteRecipes from "./pages/FavouriteRecipes";
+import CookbookHome from "./pages/CookbookHome";
+import GroceryList from "./pages/GroceryList";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
-import GroceryList from "./pages/GroceryList";
-import SearchRecipe from "./pages/SearchRecipe";
-import SearchCookBooks from "./pages/SearchCookbooks";
-import SearchComponent from "./components/SearchComponent";
+import Toolbar from "./components/Toolbar";
 
 export default function Navigation() {
   const [session, setSession] = useState(null);
@@ -98,7 +97,6 @@ export default function Navigation() {
               fontSize: 40,
               color: "#FFFFFF",
               paddingBottom: "5%",
-              fontFamily: "Purtian",
             }}
           >
             RecipeShare
@@ -106,21 +104,21 @@ export default function Navigation() {
         </View>
         {renderItem(
           "My Recipes",
-          "My Recipe",
+          "RecipeHome",
           "Community",
           props,
           "silverware"
         )}
         {renderItem(
           "Favourited Recipes",
-          "Favourited Recipies",
+          "FavouriteRecipes",
           "Community",
           props,
           "cards-heart"
         )}
         {renderItem(
           "Cookbooks",
-          "Cookbooks",
+          "CookbookHome",
           "Community",
           props,
           "book-open-page-variant-outline"
@@ -146,83 +144,38 @@ export default function Navigation() {
       {session && session.user ? (
         <NavigationContainer>
           <Drawer.Navigator
-            initialRouteName="Home"
+            initialRouteName="RecipeHome"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
           >
             <Drawer.Screen
-              name="My Recipe"
-              component={Home}
-              options={({ navigation }) => ({
-                headerRight: () => (
-                  <TouchableOpacity
-                    style={{ paddingRight: 10 }}
-                    onPress={() =>
-                      navigation.navigate("SearchRecipe", {
-                        searchData: "myRecipe",
-                      })
-                    }
-                  >
-                    <MaterialIcon name="search" size={30} color="black" />
-                  </TouchableOpacity>
-                ),
-                ...styles.options,
-              })}
+              name="RecipeHome"
+              component={RecipeHome}
+              options={{ header: () => <Toolbar title={"My Recipes"} /> }}
             />
             <Drawer.Screen
-              name="SearchRecipe"
-              component={SearchRecipe}
-              options={({ navigation }) => ({
-                title: "Search Recipe",
-                header: () => (
-                  <SearchComponent onPress={() =>  navigation.navigate("My Recipe")} navigation = {navigation} searchValue = "recipe"/>
-                ),
-                ...styles.options,
-              })}
+              name="FavouriteRecipes"
+              component={FavouriteRecipes}
+              options={{ header: () => <Toolbar title={"Favourites"} moreOptions={true}/> }}
             />
             <Drawer.Screen
-              name="SearchCookbook"
-              component={SearchCookBooks}
-              options={({ navigation }) => ({
-                title: "Search Cookbooks",
-                header: () => (
-                  <SearchComponent onPress={() => navigation.navigate("Cookbooks")} navigation = {navigation} searchValue = "cookbook"/>
-                ),
-                ...styles.options,
-              })}
-            />
-            <Drawer.Screen
-              name="Cookbooks"
-              component={Cookbook}
-              options={({ navigation }) => ({
-                headerRight: () => (
-                  <TouchableOpacity
-                    style={{ paddingRight: 10 }}
-                    onPress={() =>
-                      navigation.navigate("SearchCookbook", {
-                        searchData: "Cookbook",
-                      })
-                    }
-                  >
-                    <MaterialIcon name="search" size={30} color="black" />
-                  </TouchableOpacity>
-                ),
-                ...styles.options,
-              })}
+              name="CookbookHome"
+              component={CookbookHome}
+              options={{ header: () => <Toolbar title={"Cookbooks"} /> }}
             />
             <Drawer.Screen
               name="Grocery List"
               component={GroceryList}
-              options={styles.options}
+              options={{ header: () => <Toolbar title={"Grocery List"} /> }}
             />
             <Drawer.Screen
               name="Account"
               component={Profile}
-              options={styles.options}
+              options={{ header: () => <Toolbar title={"Account"} showSearch={false} /> }}
             />
             <Drawer.Screen
               name="Settings"
               component={Settings}
-              options={styles.options}
+              options={{ header: () => <Toolbar title={"Settings"} showSearch={false} /> }}
             />
           </Drawer.Navigator>
         </NavigationContainer>

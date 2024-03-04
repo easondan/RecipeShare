@@ -51,7 +51,8 @@ const imageArray = [
     label: "Classic Beef Chili",
   },
 ];
-const Cookbook = () => {
+
+const CookbookHome = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -87,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Cookbook;
+export default CookbookHome;

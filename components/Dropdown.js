@@ -1,9 +1,6 @@
 import React, { FC, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity,View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { PageIcon } from './PageIcon';
-
-
 
 const  Dropdown = ({label,listOfCookBooks}) => {
   const [visible, setVisible] = useState(false);

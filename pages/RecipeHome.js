@@ -1,9 +1,9 @@
 import React from "react";
-import { Text, View, StyleSheet, SafeAreaView, ScrollView,Button } from "react-native";
+import { Text, View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import ActionButton from "../components/ActionButton";
-import { PageIcon } from "../components/PageIcon";
+import { RecipeCard } from "../components/RecipeCard";
 
-const Home = ({navigation}) => {
+const RecipeHome = ({navigation}) => {
   const imageArray = [
     {
       imageUrl:
@@ -56,15 +56,13 @@ const Home = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.gridContainer}>
         {imageArray.map((item, index) => (
-          <PageIcon key={index} imageUrl={item.imageUrl} label={item.label} />
+          <RecipeCard key={index} imageUrl={item.imageUrl} label={item.label} />
         ))}
       </ScrollView>
       <ActionButton />
     </SafeAreaView>
   );
 };
-
-export default Home;
 
 const styles = StyleSheet.create({
   container: {
@@ -81,3 +79,5 @@ const styles = StyleSheet.create({
     columnGap:10,
   },
 });
+
+export default RecipeHome;

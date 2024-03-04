@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Image, StyleSheet, Text } from "react-native";
+import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-export const PageIcon = ({ imageUrl, label }) => {
+export const RecipeCard = ({ imageUrl, label }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
       <Image source={{ uri: imageUrl }} style={styles.imageStyle} />
       <Text style={styles.textStyle}>{label}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -17,9 +17,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: "2%",
   },
-
   textStyle: {
     fontSize: 10,
-    fontFamily: "barlow",
   },
 });
