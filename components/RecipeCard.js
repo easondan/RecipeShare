@@ -1,23 +1,29 @@
 import React from "react";
+import { useNavigation } from '@react-navigation/native';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-export const RecipeCard = ({ imageUrl, label }) => {
+export const RecipeCard = ({ recipeData }) => {
+
+  const navigation = useNavigation();
+  const handleRecipeClick = (recipeData) => {
+    navigation.navigate('RecipePage', { recipeData });
+  };
+
   return (
-    <TouchableOpacity style={styles.container}>
-      <Image source={{ uri: imageUrl }} style={styles.imageStyle} />
-      <Text style={styles.textStyle}>{label}</Text>
+    <TouchableOpacity activeOpacity={0.8} onPress={() => handleRecipeClick(recipeData)}>
+      <Image source={{ uri: recipeData.imageUrl }} style={styles.image} />
+      <Text style={styles.text}>{recipeData.name}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  imageStyle: {
+  image: {
     width: 120,
     height: 120,
     borderRadius: 20,
-    marginBottom: "2%",
   },
-  textStyle: {
-    fontSize: 10,
+  text: {
+    fontSize: 12,
   },
 });

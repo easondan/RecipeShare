@@ -6,17 +6,20 @@ import {
   DrawerContentScrollView,
   DrawerItem,
 } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CommunityMaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { supabase } from "./lib/supabase";
 import Auth from "./components/Auth";
 import RecipeHome from "./pages/RecipeHome";
+import RecipePage from "./pages/RecipePage";
 import FavouriteRecipes from "./pages/FavouriteRecipes";
 import CookbookHome from "./pages/CookbookHome";
 import GroceryList from "./pages/GroceryList";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import Toolbar from "./components/Toolbar";
+import RecipeToolbar from "./components/RecipeToolbar";
 
 export default function Navigation() {
   const [session, setSession] = useState(null);
@@ -137,6 +140,25 @@ export default function Navigation() {
     );
   }
 
+  const Stack = createNativeStackNavigator();
+
+  const RecipeStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="RecipeHome"
+          component={RecipeHome}
+          options={{ header: () => <Toolbar title={"My Recipes"}/> }} 
+        />
+        <Stack.Screen 
+          name="RecipePage" 
+          component={RecipePage}
+          options={{ header: () => <RecipeToolbar /> }}
+        />
+      </Stack.Navigator>
+    );
+  };
+
   const Drawer = createDrawerNavigator();
 
   return (
@@ -144,13 +166,12 @@ export default function Navigation() {
       {session && session.user ? (
         <NavigationContainer>
           <Drawer.Navigator
-            initialRouteName="RecipeHome"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
           >
             <Drawer.Screen
-              name="RecipeHome"
-              component={RecipeHome}
-              options={{ header: () => <Toolbar title={"My Recipes"} /> }}
+              name="RecipeStack"
+              component={RecipeStack}
+              options={{ headerShown: false }}  // Disable duplicate header, already in Stack
             />
             <Drawer.Screen
               name="FavouriteRecipes"

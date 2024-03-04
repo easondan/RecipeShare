@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: 'center',
-    padding: 25,
+    height: 75,
 
     // TODO need an iOS pal to check how the shadow looks
     // TODO once status bar fixed, ensure shadow doesn't show "above" toolbar
