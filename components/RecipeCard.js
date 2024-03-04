@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigation } from '@react-navigation/native';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 
 export const RecipeCard = ({ recipeData }) => {
 
@@ -17,13 +17,15 @@ export const RecipeCard = ({ recipeData }) => {
   );
 };
 
+// Calculate size of each recipe card, subtracting padding
+const recipeWidth = (Dimensions.get('window').width - 60) / 3;
 const styles = StyleSheet.create({
   image: {
-    width: 120,
-    height: 120,
-    borderRadius: 20,
+    width: recipeWidth,
+    height: recipeWidth,
+    borderRadius: 10,
   },
   text: {
-    fontSize: 12,
+    fontSize: 14,
   },
 });
