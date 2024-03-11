@@ -2,8 +2,13 @@ import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import ActionButton from "../components/ActionButton";
 import { RecipeCard } from "../components/RecipeCard";
 import { recipes } from "../recipes.json";
+import { useNavigation } from '@react-navigation/native';
 
 const RecipeHome = () => {
+  const navigation = useNavigation();
+  const addRecipe = ()=>{
+    navigation.navigate("AddRecipePage")
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.grid}>
@@ -15,7 +20,7 @@ const RecipeHome = () => {
           ))
         }
       </ScrollView>
-      <ActionButton/>
+      <ActionButton onPress={addRecipe}/>
     </SafeAreaView>
   );
 };

@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Toolbar from "./components/Toolbar";
 import RecipeToolbar from "./components/RecipeToolbar";
+import AddRecipe from "./pages/AddRecipe";
 
 import CustomDrawer from "./components/CustomDrawer";
 
@@ -52,6 +53,11 @@ export default function Navigation() {
           name="RecipePage" 
           component={RecipePage}
           options={{ header: () => <RecipeToolbar /> }}
+        />
+        <Stack.Screen 
+          name="AddRecipePage" 
+          component={AddRecipe}
+          options={{ header: () => <RecipeToolbar addRecipe = {true}/> }}
         />
       </Stack.Navigator>
     );
@@ -94,6 +100,11 @@ export default function Navigation() {
               name="Settings"
               component={Settings}
               options={{ header: () => <Toolbar title={"Settings"} showSearch={false} /> }}
+            />
+            <Drawer.Screen
+              name="Settings2"
+              component={Settings}
+              options={{ header: () => <Toolbar title={"Settings2"} showSearch={false} /> }}
             />
           </Drawer.Navigator>
         </NavigationContainer>

@@ -1,0 +1,46 @@
+// FormField.js
+import React from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+
+const FormField = ({ label, value, onChangeText, multiline }) => {
+  return (
+    <View style={styles.container}>
+      <Text>{label}</Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder={label}
+          value={value}
+          onChangeText={onChangeText}
+          multiline={multiline}
+        />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    marginLeft: 20,
+  },
+  inputContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 50,
+    width: '95%',
+  },
+  input: {
+    flex: 1,
+    fontSize: 15,
+    height: 50,
+    marginLeft: 5,
+  },
+});
+
+export default FormField;
