@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
     columnGap: Dimensions.get("window").width/6,
     width: '100%',
