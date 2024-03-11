@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, ScrollView, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 
 const RecipePage = ({ route }) => {
 
@@ -22,7 +22,7 @@ const RecipePage = ({ route }) => {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.overview}>
         <Image source={{ uri: recipeData.imageUrl }} style={styles.image} />
         <View style={{ marginLeft: 15 }}>
@@ -38,7 +38,7 @@ const RecipePage = ({ route }) => {
             <View style={{ marginLeft: 15 }}>
               <Text style={styles.body}>{recipeData.author}</Text>
               <Text style={styles.body}>{recipeData.course}</Text>
-              <Text style={styles.body}>Japanese</Text>
+              <Text style={styles.body}>{recipeData.cuisine}</Text>
               <Text style={styles.body}>{recipeData.difficulty}</Text>
               <Text style={styles.body}>{recipeData.servings}</Text>  
             </View>
@@ -63,11 +63,37 @@ const RecipePage = ({ route }) => {
         <Text style={styles.header}>Description:</Text>
         <Text style={styles.body}>{recipeData.description}</Text> 
       </View>
+      <View style={styles.tabContainer}>
+        <TouchableOpacity style={[styles.tabItem, showIngredients ? styles.activeTab : ""]} onPress={() => setShowIngredients(true)}>
+          <Text style={[styles.tabHeading, { color : showIngredients ? "#D75B3F" : "#222222"}]}>
+            Ingredients
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.tabItem, !showIngredients ? styles.activeTab : ""]} onPress={() => setShowIngredients(false)}>
+          <Text style={[styles.tabHeading, { color : !showIngredients ? "#D75B3F" : "#222222"}]}>
+            Directions
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {
+        showIngredients ? (
+          <ScrollView>
+            <Text>Ingredients List</Text>
+          </ScrollView>
+        ) : (
+          <ScrollView>
+             <Text>Directions List</Text>
+          </ScrollView>
+        )
+      }
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   overview: {
     flexDirection: "row",
     alignItems: "center",
@@ -96,20 +122,38 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     margin: 15,
-    // marginTop: 0
+    marginTop: 0
   },
   time: {
-    // justifyContent: "center",
-    // alignContent: "center",
     alignItems: "center"
   },
   timeSummary: {
     margin: 15,
-    // marginTop: 5,
-    marginBottom: 0,
+    marginTop: 10,
+    marginBottom: 10,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center"
+  },
+  tabContainer: {
+    flexDirection: "row", 
+    borderBottomWidth: 1,
+    borderBottomColor: "#D9D9D9",
+    backgroundColor: "#D9D9D9"
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  tabHeading: {
+    color: "#222222",
+    fontSize: 22,
+    padding: 15
+  },
+  activeTab: {
+    backgroundColor: "#E2E2E2",
+    borderBottomColor: "#D75B3F",
+    borderBottomWidth: 3
   }
 });
 
