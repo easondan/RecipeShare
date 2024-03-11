@@ -13,7 +13,6 @@ const RecipeToolbar = () => {
       <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
         <FAIcon name="chevron-left" size={25} color="black"/>
       </TouchableOpacity>
-
       <View style={styles.iconGroup}>
         <TouchableOpacity activeOpacity={0.7}>
           <MaterialIcon name="cart" size={28} color="black"/>
