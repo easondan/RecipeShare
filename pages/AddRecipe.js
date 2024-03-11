@@ -54,8 +54,7 @@ const AddRecipe = () => {
 
   const hours = timeOptions(1, 24);
   const minutes = timeOptions(1, 60);
-  const seconds = timeOptions(1, 60);
-
+  
   const handleInputChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
