@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -10,10 +10,28 @@ import {
 import FAIcon from "react-native-vector-icons/FontAwesome6";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import SimpleIcon from "react-native-vector-icons/SimpleLineIcons";
+import MoreOptions from "./MoreOptions";
+import { useNavigation } from "@react-navigation/native";
 
-const RecipeToolbar = ({ addRecipe }) => {
+const RecipeToolbar = ({ addRecipe, route }) => {
+  const [showOptions, setShowMoreOptions] = useState(false); // State to control the visibility of the dropdown
   const navigation = useNavigation();
 
+  const toggleOptions = () => {
+    setShowMoreOptions(!showOptions);
+  };
+
+  const options = [
+    { id: 1, label: "Edit" },
+    { id: 2, label: "Duplicate" },
+    { id: 3, label: "Delete" },
+    // Add more options as needed
+  ];
+  const handleSelectOption = (option) => {
+    console.log("Selected option:", option);
+    // Will need to pass in data in order to know what recipe we're working with
+    console.log(route.params);
+  };
   return (
     <View id="toolbar" style={styles.toolbar}>
       <TouchableOpacity
@@ -45,7 +63,13 @@ const RecipeToolbar = ({ addRecipe }) => {
           <TouchableOpacity activeOpacity={0.7}>
             <MaterialIcon name="heart" size={30} color="#D75B3F" />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7}>
+          {showOptions && (
+            <MoreOptions
+              options={options}
+              onSelectOption={handleSelectOption}
+            />
+          )}
+          <TouchableOpacity activeOpacity={0.7} onPress={toggleOptions}>
             <SimpleIcon name="options-vertical" size={24} color="black" />
           </TouchableOpacity>
         </View>
@@ -56,8 +80,7 @@ const RecipeToolbar = ({ addRecipe }) => {
 
 const styles = StyleSheet.create({
   toolbar: {
-    marginTop: Platform.OS === "ios" ? 0 : 25, // TODO remove this once fix status bar spacing
-
+    marginTop: Platform.OS === "ios" ? 0 : 25,
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: "center",
