@@ -12,8 +12,10 @@ import FormField from "../components/FormField";
 import TimeSelectFields from "../components/TimeSelectFields";
 import SelectField from "../components/SelectField";
 import UploadIcon from "react-native-vector-icons/Feather";
+import { useNavigation } from "@react-navigation/native";
 
 const AddRecipe = () => {
+  const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
   const [formData, setFormData] = useState({
     authorName: "",
@@ -73,7 +75,7 @@ const AddRecipe = () => {
   // Placeholder for a function to create a recipe
   const createRecipe = () => {
     console.log("Creating recipe with form data:", formData);
-    // Add logic to handle the creation of the recipe
+    navigation.navigate("RecipeHome")
   };
 
   return (
@@ -164,7 +166,6 @@ const AddRecipe = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -189,9 +190,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
   },
-  imageContainer:{
-    alignItems:'center',
-    justifyContent:'center',
+  imageContainer: {
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 10,
   },
   frame: {
