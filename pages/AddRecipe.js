@@ -21,6 +21,7 @@ const AddRecipe = () => {
     authorName: "",
     recipeName: "",
     recipeDescription: "",
+    cuisineType: "",
     course: "",
     difficulty: "",
     prepTime: "",
@@ -114,6 +115,13 @@ const AddRecipe = () => {
           label="Author Name"
           value={formData.authorName}
           onChangeText={(value) => handleInputChange("authorName", value)}
+        />
+        <FormField
+          label="Cuisine Type"
+          value={formData.cuisineType}
+          onChangeText={(value) =>
+            handleInputChange("cuisineType", value)
+          }
         />
         <SelectField
           label="Course Type"
