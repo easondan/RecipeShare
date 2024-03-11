@@ -54,7 +54,7 @@ const AddRecipe = () => {
 
   const hours = timeOptions(1, 24);
   const minutes = timeOptions(1, 60);
-  
+
   const handleInputChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
@@ -79,7 +79,7 @@ const AddRecipe = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} automaticallyAdjustKeyboardInsets={true}>
         <View style={styles.imageContainer}>
           <Text>Recipe Image</Text>
           <TouchableOpacity onPress={pickImage}>

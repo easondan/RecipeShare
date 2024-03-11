@@ -1,12 +1,14 @@
-// FormField.js
-import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 
 const FormField = ({ label, value, onChangeText, multiline }) => {
+  const inputContainerHeight =
+    label === "Ingredients" || label === "Directions" ? 200 : 50;
+
   return (
     <View style={styles.container}>
       <Text>{label}</Text>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, { height: inputContainerHeight }]}>
         <TextInput
           style={styles.input}
           placeholder={label}
@@ -22,18 +24,16 @@ const FormField = ({ label, value, onChangeText, multiline }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
     marginLeft: 20,
   },
   inputContainer: {
     marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
     borderWidth: 1,
     borderRadius: 5,
-    height: 50,
-    width: '95%',
+    width: "95%",
   },
   input: {
     flex: 1,
