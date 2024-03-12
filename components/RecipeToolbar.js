@@ -20,7 +20,7 @@ const RecipeToolbar = ({ recipeData }) => {
   const toggleFavorite = () => {
     if (recipeData) {
       if (favorite) {
-        removeFavorite(recipeData.name); // Use name
+        removeFavorite(recipeData.name);
       } else {
         addFavorite(recipeData);
       }
@@ -42,8 +42,8 @@ const RecipeToolbar = ({ recipeData }) => {
           <MaterialIcon name="book-plus" size={28} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleFavorite} activeOpacity={0.7}>
-          {/* Dynamically change the icon */}
-          <MaterialIcon name={favorite ? "heart" : "heart-outline"} size={30} color={favorite ? "#D75B3F" : "grey"} />
+          {/* Use red color for both filled and outlined icons */}
+          <MaterialIcon name={favorite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7}>
           <SimpleIcon name="options-vertical" size={24} color="black" />
