@@ -51,7 +51,7 @@ export default function Navigation() {
         <Stack.Screen 
           name="RecipePage" 
           component={RecipePage}
-          options={{ header: () => <RecipeToolbar /> }}
+          options={({ route }) => ({ header: () => <RecipeToolbar recipeData={route.params.recipeData} /> })}
         />
       </Stack.Navigator>
     );
