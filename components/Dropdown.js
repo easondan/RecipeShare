@@ -1,11 +1,10 @@
 import React, { FC, useState, useRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Animated, Easing, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Card } from './Card';
 
 const Dropdown = ({ label, listOfCookBooks }) => {
   const [visible, setVisible] = useState(false);
-  const translateY = useRef(new Animated.Value(200)).current;
 
   const toggleDropdown = () => {
     setVisible(!visible);
