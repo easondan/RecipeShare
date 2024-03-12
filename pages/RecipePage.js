@@ -77,12 +77,20 @@ const RecipePage = ({ route }) => {
       </View>
       {
         showIngredients ? (
-          <ScrollView>
-            <Text>Ingredients List</Text>
+          <ScrollView style={styles.view}>
+            {
+              recipeData.ingredients.map((item, i) => (
+                <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
+              ))
+            }
           </ScrollView>
         ) : (
-          <ScrollView>
-             <Text>Directions List</Text>
+          <ScrollView style={styles.view}>
+            {
+              recipeData.directions.map((item, i) => (
+                <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
+              ))
+            }
           </ScrollView>
         )
       }
@@ -112,11 +120,11 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 16,
     fontWeight: "bold",
-    padding: 2,
+    padding: 3,
   },  
   body: {
     fontSize: 16,
-    padding: 2
+    padding: 3,
   },
   description: {
     flexDirection: "row",
@@ -137,23 +145,32 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: "row", 
-    borderBottomWidth: 1,
+    borderBottomWidth: 3,
     borderBottomColor: "#D9D9D9",
-    backgroundColor: "#D9D9D9"
+    backgroundColor: "#F1F1F1",
   },
   tabItem: {
     flex: 1,
     alignItems: 'center',
   },
   tabHeading: {
-    color: "#222222",
     fontSize: 22,
-    padding: 15
+    color: "#222222",
+    letterSpacing: 1.5,
+    padding: 13
   },
   activeTab: {
     backgroundColor: "#E2E2E2",
     borderBottomColor: "#D75B3F",
     borderBottomWidth: 3
+  },
+  view: {
+    margin: 20,
+    marginTop: 10,
+  },
+  viewText: {
+    fontSize: 18,
+    lineHeight: 35
   }
 });
 
