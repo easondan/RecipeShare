@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
-import { useFavorites } from '../components/FavoritesContext'; // Adjust the import path according to your project structure
+import { useFavorites } from '../components/FavoritesContext';
 
 const RecipeToolbar = ({ recipeData }) => {
   const navigation = useNavigation();
@@ -28,7 +28,6 @@ const RecipeToolbar = ({ recipeData }) => {
     }
   };
 
-
   return (
     <View id="toolbar" style={styles.toolbar}>
       <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
@@ -43,7 +42,8 @@ const RecipeToolbar = ({ recipeData }) => {
           <MaterialIcon name="book-plus" size={28} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleFavorite} activeOpacity={0.7}>
-          <MaterialIcon name="heart" size={30} color={favorite ? "#D75B3F" : "grey"} />
+          {/* Dynamically change the icon */}
+          <MaterialIcon name={favorite ? "heart" : "heart-outline"} size={30} color={favorite ? "#D75B3F" : "grey"} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7}>
           <SimpleIcon name="options-vertical" size={24} color="black" />
