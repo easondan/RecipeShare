@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -33,8 +33,6 @@ const RecipeToolbar = () => {
 
 const styles = StyleSheet.create({
   toolbar: {
-    marginTop: 25,  // TODO remove once status bar fixed on Android
-
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: 'center',

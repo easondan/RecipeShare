@@ -1,11 +1,20 @@
 import Navigation from "./Navigation";
+import { StatusBar, View, StyleSheet } from "react-native";
 
-export default function App() {
+const App = () => {
 
   return (
-    <Navigation/>
+    <View style={styles.root}>
+      <StatusBar/>
+      <Navigation/>
+    </View>
   );
 }
 
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
 
-
+export default App;

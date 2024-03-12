@@ -41,8 +41,6 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
 
 const styles = StyleSheet.create({
   toolbar: {
-    marginTop: 25,  // TODO remove once status bar fixed on Android
-
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: 'center',
