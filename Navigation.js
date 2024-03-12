@@ -64,21 +64,7 @@ export default function Navigation() {
   };
 
 
-  const SearchStack = () =>{
-    <Stack.Navigator>
-        <Stack.Screen 
-              name="SearchScreen"
-              component={Search}
-              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
-        />
-          <Stack.Screen 
-              name="SearchFilter"
-              component={Search}
-              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
-        />
 
-    </Stack.Navigator>
-  }
 
   return (
     <View style={styles.root}>
@@ -120,7 +106,7 @@ export default function Navigation() {
             />
             <Drawer.Screen
               name="Search"
-              component={SearchStack}
+              component={Search}
               options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
             />
           </Drawer.Navigator>

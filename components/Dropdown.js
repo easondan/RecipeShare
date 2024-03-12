@@ -71,22 +71,27 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   container:{
+    flex:1,
+    alignItems:'center',
     marginTop: 30,
+    width:"90%"
   },
   dropdown: {
     backgroundColor: '#fff',
     width: '90%',
     flexDirection: 'column', // Change to column to display rows
     justifyContent: 'flex-start', // Align rows to the top
-    maxHeight: 100,
+    maxHeight: 1000,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems:'center',
     paddingHorizontal: 5,
   },
   gridItem: {
     flex: 1, // Each item occupies equal space
+        alignItems:'center',
     paddingBottom: 50,
   },
 });

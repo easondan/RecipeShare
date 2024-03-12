@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from '@react-navigation/native';
+import {recipes} from '../recipes.json'
 const SearchComponent = ({ route }) => {
   const navigation = useNavigation();
   const {title,searchTest,filters} = route.params;
@@ -15,22 +16,34 @@ const SearchComponent = ({ route }) => {
     console.log()
   }
 
+  //In M3 will be prob some search in the Db
   const search = ()=>{
+        console.log(searchText);
 
-        navigation.navigate("Search", {
-            searchText: searchText,
-            title: title,
-            filters: [],
-          })  
 
+  const filteredRecipes = recipes.filter((recipe) =>
+    recipe.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  console.log(filteredRecipes);
+
+  // Navigate to the Search screen with filtered data
+  navigation.navigate("Search", {
+    searchText: searchText,
+    title: title,
+    filters: [], // You can add filters if needed
+    resultData: filteredRecipes // Pass filtered recipes as resultData
+  });
   }
 
 
   const goBack = () =>{
-
+    setSearchText('');
     if (title==='My Recipes'){
       navigation.navigate("RecipeHome");
       return;
+    }else if(title=== 'Favourites'){
+      navigation.navigate("Favourites");
     }
     navigation.navigate("CookbookHome");
     
