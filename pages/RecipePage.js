@@ -4,6 +4,7 @@ import { View, ScrollView, TouchableOpacity, Text, Image, StyleSheet } from "rea
 const RecipePage = ({ route }) => {
 
   const [showIngredients, setShowIngredients] = useState(true);
+  const [showDeleteModal, setDeleteModal] = useState(false);
   const { recipeData } = route.params;
 
   // TODO for now I'm assuming data is stored in mins
