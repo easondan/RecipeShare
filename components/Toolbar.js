@@ -6,7 +6,9 @@ import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = null }) => {
 
   const navigation = useNavigation();
-
+  const navigateSearch  = () =>{
+    navigation.navigate("Search",{title: title,searchText: "",filters:[]})
+  }
   return (
     <View id="toolbar" style={styles.toolbar}>
       {
@@ -22,7 +24,7 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
       }
       {
         showSearch &&
-        <TouchableOpacity style={[styles.icon, { right: !moreOptions ? 25 : 55 }]} activeOpacity={0.7}>
+        <TouchableOpacity style={[styles.icon, { right: !moreOptions ? 25 : 55 }]} activeOpacity={0.7} onPress={navigateSearch}>
           {/* TODO search icon navigates to search page for current context */}
           <Icon name="search" size={28} color="black"/>
         </TouchableOpacity>

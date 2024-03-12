@@ -2,13 +2,11 @@ import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
 const FormField = ({ label, value, onChangeText, multiline }) => {
-  const inputContainerHeight =
-    label === "Ingredients" || label === "Directions" ? 200 : 50;
 
   return (
     <View style={styles.container}>
       <Text>{label}</Text>
-      <View style={[styles.inputContainer, { height: inputContainerHeight }]}>
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholder={label}

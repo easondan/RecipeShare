@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
-
-const SearchComponent = ({ onPress,navigation,searchValue }) => {
+import { useNavigation } from '@react-navigation/native';
+const SearchComponent = ({ route }) => {
+  const navigation = useNavigation();
+  const {title,searchTest,filters} = route.params;
+  
   const [searchText, setSearchText] = useState('');
   const clearText = () => {
     setSearchText('');
@@ -13,23 +16,30 @@ const SearchComponent = ({ onPress,navigation,searchValue }) => {
   }
 
   const search = ()=>{
-    if(searchValue=="recipe"){ 
-        navigation.navigate("SearchRecipe", {
-            searchData: searchText,
-          })
-        return ;
+
+        navigation.navigate("Search", {
+            searchText: searchText,
+            title: title,
+            filters: [],
+          })  
+
+  }
+
+
+  const goBack = () =>{
+
+    if (title==='My Recipes'){
+      navigation.navigate("RecipeHome");
+      return;
     }
-
+    navigation.navigate("CookbookHome");
     
-
-    navigation.navigate("SearchCookbook", {
-        searchData: searchText,
-      })
+    console.log(title);
   }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress} style={styles.backIcon}>
+      <TouchableOpacity onPress={goBack} style={styles.backIcon}>
         <MaterialIcon name="arrow-back" size={30} color="black" style={styles.icon} />
       </TouchableOpacity>
 
@@ -41,7 +51,7 @@ const SearchComponent = ({ onPress,navigation,searchValue }) => {
         )}
         <TextInput
           style={styles.input}
-          placeholder="Search"
+          placeholder={"Search " + title} 
           value={searchText}
           onChangeText={setSearchText}
         />

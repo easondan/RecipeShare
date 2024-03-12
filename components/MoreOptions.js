@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     label: {
       fontSize: 18,
+      fontFamily: "Amiko",
     },
   },
   optionDelete: {

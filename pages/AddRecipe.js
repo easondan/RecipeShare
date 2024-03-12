@@ -13,6 +13,7 @@ import TimeSelectFields from "../components/TimeSelectFields";
 import SelectField from "../components/SelectField";
 import UploadIcon from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
+import DynamicInputList from "../components/DynamicInputList";
 
 const AddRecipe = () => {
   const navigation = useNavigation();
@@ -26,13 +27,16 @@ const AddRecipe = () => {
     difficulty: "",
     prepTime: "",
     servings: "",
-    ingredients: "",
-    directions: "",
+    ingredients: [],
+    directions: [],
     prepHour: 0,
     prepMin: 0,
     cookHour: 0,
     cookMin: 0,
   });
+
+  // const [ingredients, setIngredients] = useState([]);
+  // const [directions, setDirections] = useState([]);
 
   const courseType = [
     { key: "1", value: "Breakfast" },
@@ -75,12 +79,15 @@ const AddRecipe = () => {
   // Placeholder for a function to create a recipe
   const createRecipe = () => {
     console.log("Creating recipe with form data:", formData);
-    navigation.navigate("RecipeHome")
+    navigation.navigate("RecipeHome");
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView} automaticallyAdjustKeyboardInsets={true}>
+      <ScrollView
+        style={styles.scrollView}
+        automaticallyAdjustKeyboardInsets={true}
+      >
         <View style={styles.imageContainer}>
           <Text>Recipe Image</Text>
           <TouchableOpacity onPress={pickImage}>
@@ -119,9 +126,7 @@ const AddRecipe = () => {
         <FormField
           label="Cuisine Type"
           value={formData.cuisineType}
-          onChangeText={(value) =>
-            handleInputChange("cuisineType", value)
-          }
+          onChangeText={(value) => handleInputChange("cuisineType", value)}
         />
         <SelectField
           label="Course Type"
@@ -153,17 +158,20 @@ const AddRecipe = () => {
           setFormData={setFormData}
           isCookingTime
         />
-        <FormField
-          label="Ingredients"
-          value={formData.ingredients}
-          onChangeText={(value) => handleInputChange("ingredients", value)}
-          multiline
+        <DynamicInputList
+          placeholder="Ingredient"
+          items={formData.ingredients}
+          setItems={(newItems) =>
+            setFormData({ ...formData, ingredients: newItems })
+          }
         />
-        <FormField
-          label="Directions"
-          value={formData.directions}
-          onChangeText={(value) => handleInputChange("directions", value)}
-          multiline
+
+        <DynamicInputList
+          placeholder="Direction"
+          items={formData.directions}
+          setItems={(newItems) =>
+            setFormData({ ...formData, directions: newItems })
+          }
         />
         <TouchableOpacity style={styles.createButton} onPress={createRecipe}>
           <Text style={styles.createButtonText}>Create Recipe</Text>
@@ -178,6 +186,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-start",
     justifyContent: "flex-start",
+    backgroundColor:'white'
   },
   scrollView: {
     width: "100%",

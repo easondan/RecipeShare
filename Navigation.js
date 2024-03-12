@@ -15,9 +15,9 @@ import Account from "./pages/Account";
 import Toolbar from "./components/Toolbar";
 import RecipeToolbar from "./components/RecipeToolbar";
 import AddRecipe from "./pages/AddRecipe";
-
 import CustomDrawer from "./components/CustomDrawer";
-
+import SearchComponent from "./components/SearchComponent";
+import Search from "./pages/SearchPage";
 export default function Navigation() {
   
   const [session, setSession] = useState(null);
@@ -63,6 +63,23 @@ export default function Navigation() {
     );
   };
 
+
+  const SearchStack = () =>{
+    <Stack.Navigator>
+        <Stack.Screen 
+              name="SearchScreen"
+              component={Search}
+              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
+        />
+          <Stack.Screen 
+              name="SearchFilter"
+              component={Search}
+              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
+        />
+
+    </Stack.Navigator>
+  }
+
   return (
     <View style={styles.root}>
       {session && session.user ? (
@@ -102,9 +119,9 @@ export default function Navigation() {
               options={{ header: () => <Toolbar title={"Settings"} showSearch={false} /> }}
             />
             <Drawer.Screen
-              name="Settings2"
-              component={Settings}
-              options={{ header: () => <Toolbar title={"Settings2"} showSearch={false} /> }}
+              name="Search"
+              component={SearchStack}
+              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
             />
           </Drawer.Navigator>
         </NavigationContainer>
@@ -118,5 +135,6 @@ export default function Navigation() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor:'#fff',
   }
 });
