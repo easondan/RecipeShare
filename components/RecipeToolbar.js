@@ -4,27 +4,27 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
-import { useFavorites } from '../components/FavoritesContext';
+import { useFavourites } from './FavouritesContext';
 
 const RecipeToolbar = ({ recipeData }) => {
   const navigation = useNavigation();
-  const { isFavorited, addFavorite, removeFavorite } = useFavorites();
-  const [favorite, setFavorite] = useState(false);
+  const { isFavourited, addFavourite, removeFavourite } = useFavourites();
+  const [favourite, setFavourite] = useState(false);
 
   useEffect(() => {
     if (recipeData) {
-      setFavorite(isFavorited(recipeData.name));
+      setFavourite(isFavourited(recipeData.name));
     }
-  }, [recipeData, isFavorited]);
+  }, [recipeData, isFavourited]);
 
-  const toggleFavorite = () => {
+  const toggleFavourite = () => {
     if (recipeData) {
-      if (favorite) {
-        removeFavorite(recipeData.name);
+      if (favourite) {
+        removeFavourite(recipeData.name);
       } else {
-        addFavorite(recipeData);
+        addFavourite(recipeData);
       }
-      setFavorite(!favorite);
+      setFavourite(!favourite);
     }
   };
 
@@ -41,9 +41,9 @@ const RecipeToolbar = ({ recipeData }) => {
         <TouchableOpacity activeOpacity={0.7}>
           <MaterialIcon name="book-plus" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={toggleFavorite} activeOpacity={0.7}>
+        <TouchableOpacity onPress={toggleFavourite} activeOpacity={0.7}>
           {/* Use red color for both filled and outlined icons */}
-          <MaterialIcon name={favorite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
+          <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7}>
           <SimpleIcon name="options-vertical" size={24} color="black" />

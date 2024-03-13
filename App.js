@@ -1,13 +1,13 @@
 import Navigation from "./Navigation";
 import React from 'react';
-import { FavoritesProvider } from '../Recipe-App/components/FavoritesContext'
+import { FavouritesProvider } from './components/FavouritesContext'
 
 export default function App() {
 
   return (
-    <FavoritesProvider>
+    <FavouritesProvider>
       <Navigation />
-    </FavoritesProvider>
+    </FavouritesProvider>
   );
 }
 
