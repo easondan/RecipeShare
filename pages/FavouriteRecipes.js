@@ -1,24 +1,24 @@
-import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
-import { RecipeCard } from "../components/RecipeCard";
-import { recipes } from "../recipes.json";
+import React from 'react';
+import { View, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { Card } from '../components/Card';
+import { recipes } from '../recipes.json';
 
 const FavouriteRecipes = () => {
+
   return (
-    // Populating with all recipes for nav testing
-    // TODO update when implementing favourites
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.grid}>
         {
           recipes.map((recipe, i) => (
             <View key={i} style={styles.gridItem}>
-              <RecipeCard recipeData={recipe} />
+              <Card data={recipe} navigate={true} type="Recipe" />
             </View>
           ))
         }
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
