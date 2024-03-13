@@ -2,14 +2,15 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from "react-native";
 
 const RecipePage = ({ route }) => {
-  const { recipeData } = route.params;
+  
+  const { data } = route.params;
 
   return (
     <View>
       <View style={styles.overview}>
-        <Image source={{ uri: recipeData.imageUrl }} style={styles.image} />
+        <Image source={{ uri: data.imageUrl }} style={styles.image} />
         <View style={styles.details}>
-          <Text style={styles.recipeName}>{recipeData.name}</Text>
+          <Text style={styles.recipeName}>{data.name}</Text>
           <Text style={styles.body}>Author: Brittany</Text>
         </View>
       </View>
@@ -20,7 +21,7 @@ const RecipePage = ({ route }) => {
 const styles = StyleSheet.create({
   overview: {
     flexDirection: "row",
-    margin: 15
+    margin: 15,
   },
   details: {
     marginLeft: 15

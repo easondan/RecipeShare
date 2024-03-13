@@ -1,15 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  Dimensions,
+} from "react-native";
 import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
+import MoreOptions from "./MoreOptions";
+import { useNavigation } from "@react-navigation/native";
 import { useFavourites } from './FavouritesContext';
 
-const RecipeToolbar = ({ recipeData }) => {
-  const navigation = useNavigation();
+const RecipeToolbar = ({ route }) => {
+  
+  const { recipeData } = route.params;
+  
+  const [showOptions, setShowMoreOptions] = useState(false); // State to control the visibility of the dropdown
+  const options = [
+    { id: 1, label: "Edit" },
+    { id: 2, label: "Duplicate" },
+    { id: 3, label: "Delete" },
+    // Add more options as needed
+  ];
+  
   const { isFavourited, addFavourite, removeFavourite } = useFavourites();
   const [favourite, setFavourite] = useState(false);
+  
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (recipeData) {
@@ -28,6 +48,15 @@ const RecipeToolbar = ({ recipeData }) => {
     }
   };
 
+  const toggleOptions = () => {
+    setShowMoreOptions(!showOptions);
+  };
+
+  const handleSelectOption = (option) => {
+    console.log("Selected option:", option);
+    // Will need to pass in data in order to know what recipe we're working with
+    console.log(route.params);
+  };
   return (
     <View id="toolbar" style={styles.toolbar}>
       <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
@@ -45,7 +74,13 @@ const RecipeToolbar = ({ recipeData }) => {
           {/* Use red color for both filled and outlined icons */}
           <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7}>
+        {showOptions && (
+          <MoreOptions
+            options={options}
+            onSelectOption={handleSelectOption}
+          />
+        )}
+        <TouchableOpacity activeOpacity={0.7} onPress={toggleOptions}>
           <SimpleIcon name="options-vertical" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -55,12 +90,14 @@ const RecipeToolbar = ({ recipeData }) => {
 
 const styles = StyleSheet.create({
   toolbar: {
-    marginTop: 25,
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
-    alignItems: 'center',
-    height: 75,
-    shadowColor: 'black',
+    alignItems: "center",
+    height: Platform.OS === "ios" ? Dimensions.get("screen").height / 8 : 75,
+
+    // TODO need an iOS pal to check how the shadow looks
+    // TODO once status bar fixed, ensure shadow doesn't show "above" toolbar
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -71,6 +108,7 @@ const styles = StyleSheet.create({
   },
   navIcon: {
     position: "absolute",
+    paddingTop: Platform.OS === "ios" ? 30 : 0,
     left: 25,
     zIndex: 1,
   },
@@ -80,7 +118,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
-    gap: 15,
+    gap: 15
   }
 });
 

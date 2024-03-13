@@ -1,34 +1,57 @@
-import React, { FC, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity,View } from 'react-native';
+import React, { FC, useState, useRef } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { Card } from './Card';
 
-const  Dropdown = ({label,listOfCookBooks}) => {
+const Dropdown = ({ label, listOfCookBooks }) => {
   const [visible, setVisible] = useState(false);
 
   const toggleDropdown = () => {
     setVisible(!visible);
+
   };
 
-  const renderDropdown = () => {
-    if (visible) {
-      return (
-        <View>
+  const hideDropdown = () => {
+    setVisible(false);
+  };
 
-        </View>
-        
-      );
-    }
+  // Function to chunk the array into groups of three
+  const chunkArray = (arr, size) => {
+    return arr.reduce((acc, _, i) => {
+      if (i % size === 0) acc.push(arr.slice(i, i + size));
+      return acc;
+    }, []);
+  };
+
+  const renderRows = () => {
+    const rows = chunkArray(listOfCookBooks, 3); // Group items into rows of three
+    return rows.map((row, rowIndex) => (
+      <View key={rowIndex} style={styles.row}>
+        {row.map((recipe, colIndex) => (
+          <View key={colIndex} style={styles.gridItem}>
+            <Card data={recipe} navigate={false} type="Cookbook" />
+          </View>
+        ))}
+      </View>
+    ));
   };
 
   return (
-    <TouchableOpacity
-      style={styles.button}
-      onPress={toggleDropdown}
-    >
-      {renderDropdown()}
-      <Text style={styles.buttonText}>{label}</Text>
-      <Icon type='font-awesome' name='chevron-down'/>
-    </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={hideDropdown}>
+      <View style = {styles.container}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={toggleDropdown}
+        >
+          <Text style={styles.buttonText}>{label}</Text>
+          <Icon type='font-awesome' name={visible ? 'chevron-up' : 'chevron-down'} />
+        </TouchableOpacity>
+
+          
+          {visible ? renderRows():''}
+
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -46,10 +69,29 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
   },
+  container:{
+    flex:1,
+    alignItems:'center',
+    marginTop: 30,
+    width:"90%"
+  },
   dropdown: {
-    position: 'absolute',
     backgroundColor: '#fff',
-    top: 50,
+    width: '90%',
+    flexDirection: 'column', // Change to column to display rows
+    justifyContent: 'flex-start', // Align rows to the top
+    maxHeight: 1000,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+    paddingHorizontal: 5,
+  },
+  gridItem: {
+    flex: 1, // Each item occupies equal space
+        alignItems:'center',
+    paddingBottom: 50,
   },
 });
 

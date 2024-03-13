@@ -1,20 +1,16 @@
-import React from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
-import { RecipeCard } from "../components/RecipeCard";
+import { Card } from '../components/Card';
 import { useFavourites } from '../components/FavouritesContext';
 
 const FavouriteRecipes = () => {
   const { favourites } = useFavourites(); // Use the hook to get the current list of favourites
 
-  // Determine the justifyContent value based on the number of favourites
-  const justifyContentValue = favourites.length === 1 ? 'flex-start' : 'space-between';
-
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={[styles.grid, { justifyContent: justifyContentValue }]}>
+      <ScrollView contentContainerStyle={styles.grid}>
         {favourites.map((recipe, i) => (
-          <View key={i} style={styles.gridItem}>
-            <RecipeCard recipeData={recipe} />
+          <View key={i}>
+            <Card data={recipe} navigate={true} type="Recipe" />
           </View>
         ))}
       </ScrollView>
@@ -32,10 +28,7 @@ const styles = StyleSheet.create({
     margin: 15,
     flexWrap: 'wrap',
     flexDirection: 'row',
-  },
-  gridItem: {
-    marginBottom: 15,
-  },
+  }
 });
 
 export default FavouriteRecipes;
