@@ -22,12 +22,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
   },
   grid: {
     margin: 15,
     flexWrap: 'wrap',
     flexDirection: 'row',
+    justifyContent: 'flex-start',
+    gap: 15
   }
 });
 
