@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigation } from '@react-navigation/native';
 import { Image, StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 
-export const Card = ({ data, type }) => {
+export const Card = ({ data }) => {
 
   const navigation = useNavigation();
   const handleRecipeClick = (data) => {
-    navigate ? navigation.navigate('RecipePage', { data }) : ''
+    navigation.navigate('RecipePage', { data });
   };
 
   return (
