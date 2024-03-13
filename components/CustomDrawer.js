@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const CustomDrawer = ({ navigation }) => {
 
-  const [activeScreen, setActiveScreen] = useState('RecipeStack');
+  const [activeScreen, setActiveScreen] = useState('RecipeHome');
 
   const handleDrawerClick = (screenName) => {
     navigation.navigate(screenName);
@@ -39,8 +39,8 @@ const CustomDrawer = ({ navigation }) => {
       </View>
       <CustomDrawerItem 
         label={"My Recipes"} 
-        screenName={'RecipeStack'} 
-        isActive={activeScreen === 'RecipeStack'}
+        screenName={'RecipeHome'} 
+        isActive={activeScreen === 'RecipeHome'}
         icon={<CommunityMaterialIcon color="black" size={24} name="silverware"/>}
       />
       {/* TODO add the horizontal lines between subsections? */}

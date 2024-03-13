@@ -43,7 +43,7 @@ const SearchComponent = ({ route }) => {
       navigation.navigate("RecipeHome");
       return;
     }else if(title=== 'Favourites'){
-      navigation.navigate("Favourites");
+      navigation.navigate("FavouriteRecipes");
     }
     navigation.navigate("CookbookHome");
     

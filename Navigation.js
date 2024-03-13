@@ -60,6 +60,16 @@ export default function Navigation() {
           options={{ header: () => <Toolbar title={"My Recipes"}/> }} 
         />
         <Stack.Screen 
+          name="FavouriteRecipes"
+          component={FavouriteRecipes}
+          options={{ header: () => <Toolbar title={"Favourites"} moreOptions={true}/> }} 
+        />
+        <Drawer.Screen
+          name="CookbookHome"
+          component={CookbookHome}
+          options={{ header: () => <Toolbar title={"Cookbooks"} /> }}
+        />
+        <Stack.Screen 
           name="RecipePage" 
           component={RecipePage}
           options={({ route }) => ({ header: () => <RecipeToolbar route={route} /> })}
@@ -85,16 +95,6 @@ export default function Navigation() {
               name="RecipeStack"
               component={RecipeStack}
               options={{ headerShown: false }}  // Disable duplicate header, already in Stack
-            />
-            <Drawer.Screen
-              name="FavouriteRecipes"
-              component={FavouriteRecipes}
-              options={{ header: () => <Toolbar title={"Favourites"} moreOptions={true}/> }}
-            />
-            <Drawer.Screen
-              name="CookbookHome"
-              component={CookbookHome}
-              options={{ header: () => <Toolbar title={"Cookbooks"} /> }}
             />
             <Drawer.Screen
               name="GroceryList"
