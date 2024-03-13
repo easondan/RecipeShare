@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -7,6 +7,9 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
 
   const navigation = useNavigation();
 
+  const navigateSearch  = () =>{
+    navigation.navigate("Search",{title: title,searchText: "",filters:[], resultData: []})
+  }
   return (
     <View id="toolbar" style={styles.toolbar}>
       {
@@ -22,7 +25,7 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
       }
       {
         showSearch &&
-        <TouchableOpacity style={[styles.icon, { right: !moreOptions ? 25 : 55 }]} activeOpacity={0.7}>
+        <TouchableOpacity style={[styles.icon, { right: !moreOptions ? 25 : 55 }]} activeOpacity={0.7} onPress={navigateSearch}>
           {/* TODO search icon navigates to search page for current context */}
           <Icon name="search" size={28} color="black"/>
         </TouchableOpacity>
@@ -41,10 +44,12 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
 
 const styles = StyleSheet.create({
   toolbar: {
+    marginTop: Platform.OS === 'ios' ? 0:25,
+
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: 'center',
-    height: 75,
+    height: Platform.OS === 'ios'? Dimensions.get("screen").height/8:75,
 
     // TODO need an iOS pal to check how the shadow looks
     // TODO once status bar fixed, ensure shadow doesn't show "above" toolbar
@@ -58,6 +63,7 @@ const styles = StyleSheet.create({
     elevation: 5, // Android shadow
   },
   title: {
+    paddingTop: Platform.OS === 'ios' ? 30:0,
     flex: 1,
     color: "black",
     textAlign: "center",
@@ -65,11 +71,13 @@ const styles = StyleSheet.create({
     fontSize: 26,
   },
   navIcon: {
+    paddingTop: Platform.OS === 'ios' ? 30:0,
     position: "absolute",
     left: 25,
     zIndex: 1,
   },
   icon: {
+    paddingTop: Platform.OS === 'ios' ? 30:0,
     position: "absolute",
     zIndex: 1
   }

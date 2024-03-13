@@ -1,0 +1,19 @@
+{
+    "recipes": [
+      {
+        "name": "Tonkotsu Ramen",
+        "imageUrl":
+          "https://glebekitchen.com/wp-content/uploads/2017/04/tonkotsuramenfront.jpg"
+      },
+      {
+        "name": "Spaghetti Bolognese",
+        "imageUrl":
+          "https://supervalu.ie/thumbnail/800x600/var/files/real-food/recipes/Uploaded-2020/spaghetti-bolognese-recipe.jpg"
+      },
+      {
+        "name": "Spaghetti Bolognese",
+        "imageUrl":
+          "https://supervalu.ie/thumbnail/800x600/var/files/real-food/recipes/Uploaded-2020/spaghetti-bolognese-recipe.jpg"
+      }
+    ]
+  }

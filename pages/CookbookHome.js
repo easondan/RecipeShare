@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { View, Modal, StyleSheet } from "react-native";
+import { View, Modal, StyleSheet,SafeAreaView,ScrollView } from "react-native";
 import ActionButton from "../components/ActionButton";
 import CookbookModal from "../components/CookbookModal";
 import Dropdown from "../components/Dropdown";
+import { recipes } from "../recipes.json";
 
 const CookbookHome = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={styles.container}>
-
-      <Dropdown label="My Cookbooks" />      
-      <View style={{ flex: 0.5 }} />
-      <Dropdown label="Shared Cookbooks" />
-
+    <SafeAreaView style={styles.container}>
+    <ScrollView contentContainerStyle = {{alignItems:'center'}}>
+      <Dropdown label="My Cookbooks" listOfCookBooks={recipes} />
+      <Dropdown label="Shared Cookbooks" listOfCookBooks={recipes} />
+      </ScrollView>
+      <ActionButton onPress={() => setModalVisible(true)} />
       <Modal
         animationType="fade"
         transparent={true}
@@ -27,16 +28,17 @@ const CookbookHome = () => {
           setModalVisible={setModalVisible}
         />
       </Modal>
-      <ActionButton onPress={() => setModalVisible(true)} />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    marginTop: 1,
+    justifyContent:'center',
+    backgroundColor: "white",
   },
 });
 

@@ -47,13 +47,8 @@
         "eat!"
       ],
       "favourited": "true",
-      "imageUrl":
-        "https://supervalu.ie/thumbnail/800x600/var/files/real-food/recipes/Uploaded-2020/spaghetti-bolognese-recipe.jpg"
-    },
     {
       "name": "Chicken Quesadillas",
-      "author": "Brittany Mueller",
-      "course": "Dessert",
       "cuisine": "Japanese",
       "difficulty": "Easy",
       "servings": "10 pieces",
@@ -72,7 +67,6 @@
         "eat!"
       ],
       "favourited": "true",
-      "imageUrl":
         "https://hips.hearstapps.com/hmg-prod/images/chicken-quesadilla-index-64515c8e98e28.jpg?crop=1xw:0.9994669509594882xh;center,top&resize=1200:*"
     },
     {
@@ -122,7 +116,6 @@
         "eat!"
       ],
       "favourited": "true",
-      "imageUrl":
         "https://www.culinaryhill.com/wp-content/uploads/2021/01/Tiramisu-Culinary-Hill-1200x800-1.jpg"
     },
     {

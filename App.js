@@ -1,12 +1,15 @@
 import Navigation from "./Navigation";
 import { StatusBar, View, StyleSheet } from "react-native";
+import { FavouritesProvider } from './components/FavouritesContext'
 
 const App = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar/>
-      <Navigation/>
+      <FavouritesProvider>
+        <StatusBar/>
+        <Navigation/>
+      </FavouritesProvider>
     </View>
   );
 }

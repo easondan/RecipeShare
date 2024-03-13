@@ -17,6 +17,11 @@ import RecipeToolbar from "./components/RecipeToolbar";
 
 import CustomDrawer from "./components/CustomDrawer";
 
+import AddRecipe from "./pages/AddRecipe";
+import CustomDrawer from "./components/CustomDrawer";
+import SearchComponent from "./components/SearchComponent";
+import Search from "./pages/SearchPage";
+
 export default function Navigation() {
   
   const [session, setSession] = useState(null);
@@ -48,7 +53,7 @@ export default function Navigation() {
       background: '#FAFAFA',
     },
   };
-
+  
   const RecipeStack = () => {
     return (
       <Stack.Navigator>
@@ -60,14 +65,19 @@ export default function Navigation() {
         <Stack.Screen 
           name="RecipePage" 
           component={RecipePage}
-          options={{ header: () => <RecipeToolbar /> }}
+          options={({ route }) => ({ header: () => <RecipeToolbar route={route} /> })}
+        />
+        <Stack.Screen 
+          name="AddRecipePage" 
+          component={AddRecipe}
+          options={{ header: () => <Toolbar title={'Add Recipe'} showSearch={false} /> }}
         />
       </Stack.Navigator>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.root}>
       {session && session.user ? (
         <NavigationContainer theme={customTheme}>
           <Drawer.Navigator
@@ -104,6 +114,11 @@ export default function Navigation() {
               component={Settings}
               options={{ header: () => <Toolbar title={"Settings"} showSearch={false} /> }}
             />
+            <Drawer.Screen
+              name="Search"
+              component={Search}
+              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
+            />
           </Drawer.Navigator>
         </NavigationContainer>
       ) : (
@@ -114,7 +129,8 @@ export default function Navigation() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
+    backgroundColor:'#fff',
   }
 });
