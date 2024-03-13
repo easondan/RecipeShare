@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,26 +7,51 @@ import {
   Platform,
   Dimensions,
 } from "react-native";
-import FAIcon from "react-native-vector-icons/FontAwesome6";
-import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import SimpleIcon from "react-native-vector-icons/SimpleLineIcons";
+import FAIcon from 'react-native-vector-icons/FontAwesome6';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MoreOptions from "./MoreOptions";
 import { useNavigation } from "@react-navigation/native";
+import { useFavourites } from './FavouritesContext';
 
-const RecipeToolbar = ({ addRecipe, route }) => {
+const RecipeToolbar = ({ route }) => {
+  
+  const { recipeData } = route.params;
+  
   const [showOptions, setShowMoreOptions] = useState(false); // State to control the visibility of the dropdown
-  const navigation = useNavigation();
-
-  const toggleOptions = () => {
-    setShowMoreOptions(!showOptions);
-  };
-
   const options = [
     { id: 1, label: "Edit" },
     { id: 2, label: "Duplicate" },
     { id: 3, label: "Delete" },
     // Add more options as needed
   ];
+  
+  const { isFavourited, addFavourite, removeFavourite } = useFavourites();
+  const [favourite, setFavourite] = useState(false);
+  
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (recipeData) {
+      setFavourite(isFavourited(recipeData.name));
+    }
+  }, [recipeData, isFavourited]);
+
+  const toggleFavourite = () => {
+    if (recipeData) {
+      if (favourite) {
+        removeFavourite(recipeData.name);
+      } else {
+        addFavourite(recipeData);
+      }
+      setFavourite(!favourite);
+    }
+  };
+
+  const toggleOptions = () => {
+    setShowMoreOptions(!showOptions);
+  };
+
   const handleSelectOption = (option) => {
     console.log("Selected option:", option);
     // Will need to pass in data in order to know what recipe we're working with
@@ -34,53 +59,37 @@ const RecipeToolbar = ({ addRecipe, route }) => {
   };
   return (
     <View id="toolbar" style={styles.toolbar}>
-      <TouchableOpacity
-        style={styles.navIcon}
-        onPress={() => navigation.goBack()}
-        activeOpacity={0.7}
-      >
+      <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
         <FAIcon name="chevron-left" size={25} color="black" />
       </TouchableOpacity>
-      {addRecipe ? (
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            paddingTop: Platform.OS === "ios" ? 30 : 0,
-          }}
-        >
-          <Text style={{ fontSize: 28 }}>Create Recipe</Text>
-        </View>
-      ) : (
-        <View style={styles.iconGroup}>
-          <TouchableOpacity activeOpacity={0.7}>
-            <MaterialIcon name="cart" size={28} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7}>
-            <MaterialIcon name="book-plus" size={28} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7}>
-            <MaterialIcon name="heart" size={30} color="#D75B3F" />
-          </TouchableOpacity>
-          {showOptions && (
-            <MoreOptions
-              options={options}
-              onSelectOption={handleSelectOption}
-            />
-          )}
-          <TouchableOpacity activeOpacity={0.7} onPress={toggleOptions}>
-            <SimpleIcon name="options-vertical" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-      )}
+
+      <View style={styles.iconGroup}>
+        <TouchableOpacity activeOpacity={0.7}>
+          <MaterialIcon name="cart" size={28} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.7}>
+          <MaterialIcon name="book-plus" size={28} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleFavourite} activeOpacity={0.7}>
+          {/* Use red color for both filled and outlined icons */}
+          <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
+        </TouchableOpacity>
+        {showOptions && (
+          <MoreOptions
+            options={options}
+            onSelectOption={handleSelectOption}
+          />
+        )}
+        <TouchableOpacity activeOpacity={0.7} onPress={toggleOptions}>
+          <SimpleIcon name="options-vertical" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   toolbar: {
-    marginTop: Platform.OS === "ios" ? 0 : 25,
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: "center",
@@ -109,9 +118,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingTop: Platform.OS === "ios" ? 30 : 0,
-    gap: 15,
-  },
+    gap: 15
+  }
 });
 
 export default RecipeToolbar;

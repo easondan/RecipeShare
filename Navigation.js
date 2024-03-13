@@ -57,7 +57,7 @@ export default function Navigation() {
         <Stack.Screen 
           name="AddRecipePage" 
           component={AddRecipe}
-          options={{ header: () => <RecipeToolbar addRecipe = {true} /> }}
+          options={{ header: () => <Toolbar title={'Add Recipe'} showSearch={false} /> }}
         />
       </Stack.Navigator>
     );
