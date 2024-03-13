@@ -17,13 +17,13 @@ const RecipeHome = () => {
       <ScrollView contentContainerStyle={styles.grid}>
         {
           recipes.map((recipe, i) => (
-            <View key={i} style={styles.gridItem}>
+            <View key={i}>
               <Card data={recipe} navigate={true} type="Recipe" />
             </View>
           ))
         }
       </ScrollView>
-      <ActionButton/>
+      <ActionButton onPress={addRecipe}/>
     </SafeAreaView>
   );
 };
@@ -39,9 +39,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     gap: 15
-  },
-  gridItem: {
-    marginBottom: 15
   }
 });
 
