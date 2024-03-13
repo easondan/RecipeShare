@@ -16,7 +16,7 @@ import { useFavourites } from './FavouritesContext';
 
 const RecipeToolbar = ({ route }) => {
   
-  const { recipeData } = route.params;
+  const { data } = route.params;
   
   const [showOptions, setShowMoreOptions] = useState(false); // State to control the visibility of the dropdown
   const options = [
@@ -32,17 +32,17 @@ const RecipeToolbar = ({ route }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (recipeData) {
-      setFavourite(isFavourited(recipeData.name));
+    if (data) {
+      setFavourite(isFavourited(data.name));
     }
-  }, [recipeData, isFavourited]);
+  }, [data, isFavourited]);
 
   const toggleFavourite = () => {
-    if (recipeData) {
+    if (data) {
       if (favourite) {
-        removeFavourite(recipeData.name);
+        removeFavourite(data.name);
       } else {
-        addFavourite(recipeData);
+        addFavourite(data);
       }
       setFavourite(!favourite);
     }

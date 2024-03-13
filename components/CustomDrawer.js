@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     width: "60%"
   },
   topBar: {
-    marginTop: Platform.OS === 'ios' ? 0:25,  // TODO remove this once fix status bar spacing
     height: Platform.OS === 'ios'? Dimensions.get("screen").height/7:100,
     backgroundColor: "#D75B3F",
     justifyContent: "center",

@@ -44,8 +44,6 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
 
 const styles = StyleSheet.create({
   toolbar: {
-    marginTop: Platform.OS === 'ios' ? 0:25,
-
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: 'center',

@@ -7,7 +7,7 @@ const RecipePage = ({ route }) => {
   const navigation = useNavigation();
   const [showIngredients, setShowIngredients] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { recipeData } = route.params;
+  const { data } = route.params;
 
   const handleDelete = () => {
     // TODO backend stuff to delete recipe record
@@ -37,9 +37,9 @@ const RecipePage = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.overview}>
-        <Image source={{ uri: recipeData.imageUrl }} style={styles.image} />
+        <Image source={{ uri: data.imageUrl }} style={styles.image} />
         <View style={{ marginLeft: 15 }}>
-          <Text style={styles.recipeName}>{recipeData.name}</Text>
+          <Text style={styles.recipeName}>{data.name}</Text>
           <View style={{ flexDirection: "row" }}>
             <View>  
               <Text style={styles.header}>Author:</Text>
@@ -49,11 +49,11 @@ const RecipePage = ({ route }) => {
               <Text style={styles.header}>Servings:</Text>
             </View>
             <View style={{ marginLeft: 15 }}>
-              <Text style={styles.body}>{recipeData.author}</Text>
-              <Text style={styles.body}>{recipeData.course}</Text>
-              <Text style={styles.body}>{recipeData.cuisine}</Text>
-              <Text style={styles.body}>{recipeData.difficulty}</Text>
-              <Text style={styles.body}>{recipeData.servings}</Text>  
+              <Text style={styles.body}>{data.author}</Text>
+              <Text style={styles.body}>{data.course}</Text>
+              <Text style={styles.body}>{data.cuisine}</Text>
+              <Text style={styles.body}>{data.difficulty}</Text>
+              <Text style={styles.body}>{data.servings}</Text>  
             </View>
           </View>
         </View>
@@ -61,20 +61,20 @@ const RecipePage = ({ route }) => {
       <View style={styles.timeSummary}>
         <View style={styles.time}>
           <Text style={styles.header}>Prep Time</Text>
-          <Text style={styles.body}>{minsToHours(recipeData.prepTime)}</Text>
+          <Text style={styles.body}>{minsToHours(data.prepTime)}</Text>
         </View>
         <View style={styles.time}>
           <Text style={styles.header}>Cook Time</Text>
-          <Text style={styles.body}>{minsToHours(recipeData.cookTime)}</Text>
+          <Text style={styles.body}>{minsToHours(data.cookTime)}</Text>
         </View>
         <View style={styles.time}>
           <Text style={styles.header}>Total Time</Text>
-          <Text style={styles.body}>{minsToHours(Number(recipeData.cookTime) + Number(recipeData.prepTime))}</Text>
+          <Text style={styles.body}>{minsToHours(Number(data.cookTime) + Number(data.prepTime))}</Text>
         </View>
       </View>
       <View style={styles.description}>
         <Text style={styles.header}>Description:</Text>
-        <Text style={styles.body}>{recipeData.description}</Text> 
+        <Text style={styles.body}>{data.description}</Text> 
       </View>
       <View style={styles.tabContainer}>
         <TouchableOpacity style={[styles.tabItem, showIngredients ? styles.activeTab : ""]} onPress={() => setShowIngredients(true)}>
@@ -92,7 +92,7 @@ const RecipePage = ({ route }) => {
         showIngredients ? (
           <ScrollView style={styles.view}>
             {
-              recipeData.ingredients.map((item, i) => (
+              data.ingredients.map((item, i) => (
                 <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
               ))
             }
@@ -102,7 +102,7 @@ const RecipePage = ({ route }) => {
         ) : (
           <ScrollView style={styles.view}>
             {
-              recipeData.directions.map((item, i) => (
+              data.directions.map((item, i) => (
                 <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
               ))
             }
@@ -113,7 +113,7 @@ const RecipePage = ({ route }) => {
         isVisible={showDeleteModal} 
         onCancel={() => handleCancel()}
         onDelete={() => handleDelete()}
-        msg={`Are you sure you want to delete the recipe "${recipeData.name}" ?\n\nThis action cannot be undone.`}
+        msg={`Are you sure you want to delete the recipe "${data.name}" ?\n\nThis action cannot be undone.`}
       />
     </View>
   )
