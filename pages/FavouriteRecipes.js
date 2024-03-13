@@ -4,13 +4,13 @@ import { useFavourites } from '../components/FavouritesContext';
 
 const FavouriteRecipes = () => {
   const { favourites } = useFavourites(); // Use the hook to get the current list of favourites
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.grid}>
         {favourites.map((recipe, i) => (
           <View key={i}>
-            <Card data={recipe} navigate={true} type="Recipe" />
+            <Card data={recipe} />
           </View>
         ))}
       </ScrollView>

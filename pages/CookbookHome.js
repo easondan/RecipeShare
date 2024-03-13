@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Modal, StyleSheet,SafeAreaView,ScrollView } from "react-native";
+import { View, Modal, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import ActionButton from "../components/ActionButton";
 import CookbookModal from "../components/CookbookModal";
 import Dropdown from "../components/Dropdown";
@@ -35,7 +35,7 @@ const CookbookHome = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
+    alignItems: "center",
     marginTop: 1,
     justifyContent:'center',
     backgroundColor: "white",

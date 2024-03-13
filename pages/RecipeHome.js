@@ -18,7 +18,7 @@ const RecipeHome = () => {
         {
           recipes.map((recipe, i) => (
             <View key={i}>
-              <Card data={recipe} navigate={true} type="Recipe" />
+              <Card data={recipe} />
             </View>
           ))
         }

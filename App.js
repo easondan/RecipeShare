@@ -1,15 +1,23 @@
 import Navigation from "./Navigation";
-import React from 'react';
+import { StatusBar, View, StyleSheet } from "react-native";
 import { FavouritesProvider } from './components/FavouritesContext'
 
-export default function App() {
+const App = () => {
 
   return (
-    <FavouritesProvider>
-      <Navigation />
-    </FavouritesProvider>
+    <View style={styles.root}>
+      <FavouritesProvider>
+        <StatusBar/>
+        <Navigation/>
+      </FavouritesProvider>
+    </View>
   );
 }
 
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
 
-
+export default App;

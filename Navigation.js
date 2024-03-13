@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { supabase } from "./lib/supabase";
@@ -18,6 +18,7 @@ import AddRecipe from "./pages/AddRecipe";
 import CustomDrawer from "./components/CustomDrawer";
 import SearchComponent from "./components/SearchComponent";
 import Search from "./pages/SearchPage";
+
 export default function Navigation() {
   
   const [session, setSession] = useState(null);
@@ -41,6 +42,15 @@ export default function Navigation() {
   const Drawer = createDrawerNavigator();
   const Stack = createNativeStackNavigator();
 
+  const customTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      text: 'black',
+      background: '#FAFAFA',
+    },
+  };
+  
   const RecipeStack = () => {
     return (
       <Stack.Navigator>
@@ -63,13 +73,10 @@ export default function Navigation() {
     );
   };
 
-
-
-
   return (
     <View style={styles.root}>
       {session && session.user ? (
-        <NavigationContainer>
+        <NavigationContainer theme={customTheme}>
           <Drawer.Navigator
             initialRouteName="RecipeHome"
             drawerContent={({navigation}) => <CustomDrawer navigation={navigation} />}

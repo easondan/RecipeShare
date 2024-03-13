@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { Text, View, TouchableOpacity, StyleSheet,Platform,Dimensions} from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, Platform, Dimensions} from 'react-native'
 import CommunityMaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     width: "60%"
   },
   topBar: {
-    marginTop: Platform.OS === 'ios' ? 0:25,  // TODO remove this once fix status bar spacing
     height: Platform.OS === 'ios'? Dimensions.get("screen").height/7:100,
     backgroundColor: "#D75B3F",
     justifyContent: "center",

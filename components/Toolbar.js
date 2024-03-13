@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, StyleSheet, TouchableOpacity,Platform,Dimensions } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 
 const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = null }) => {
 
   const navigation = useNavigation();
+
   const navigateSearch  = () =>{
     navigation.navigate("Search",{title: title,searchText: "",filters:[], resultData: []})
   }
@@ -43,8 +44,6 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
 
 const styles = StyleSheet.create({
   toolbar: {
-    marginTop: Platform.OS === 'ios' ? 0:25,
-
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: 'center',
