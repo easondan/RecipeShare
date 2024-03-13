@@ -13,57 +13,57 @@ const RecipeHome = () => {
   };
 
   // Function to chunk the array into groups of three
-  const chunkArray = (arr, size) => {
-    return arr.reduce((acc, _, i) => {
-      if (i % size === 0) acc.push(arr.slice(i, i + size));
-      return acc;
-    }, []);
-  };
+  // const chunkArray = (arr, size) => {
+  //   return arr.reduce((acc, _, i) => {
+  //     if (i % size === 0) acc.push(arr.slice(i, i + size));
+  //     return acc;
+  //   }, []);
+  // };
 
-  const renderRows = () => {
-    const rows = chunkArray(recipes, 3); // Group items into rows of three
-    return rows.map((row, rowIndex) => (
-      <View key={rowIndex} style={styles.row}>
-        {row.map((recipe, colIndex) => (
-          <View key={colIndex} style={styles.gridItem}>
-            <Card data={recipe} navigate={true} type="Recipe" />
-          </View>
-        ))}
-      </View>
-    ));
-  };
+  // const renderRows = () => {
+  //   const rows = chunkArray(recipes, 3); // Group items into rows of three
+  //   return rows.map((row, rowIndex) => (
+  //     <View key={rowIndex} style={styles.row}>
+  //       {row.map((recipe, colIndex) => (
+  //         <View key={colIndex} style={styles.gridItem}>
+  //           <Card data={recipe} navigate={true} type="Recipe" />
+  //         </View>
+  //       ))}
+  //     </View>
+  //   ));
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.grid}>
-        {renderRows()}
+        {
+          recipes.map((recipe, i) => (
+            <View key={i} style={styles.gridItem}>
+              <Card data={recipe} navigate={true} type="Recipe" />
+            </View>
+          ))
+        }
       </ScrollView>
-      <ActionButton onPress={addRecipe} />
+      <ActionButton/>
     </SafeAreaView>
   );
 };
 
-const { width } = Dimensions.get('window');
-const ITEM_WIDTH = width / 3;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   grid: {
-    flexDirection: 'column', // Change to column to display rows
-  },
-  row: {
+    margin: 15,
+    flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    marginBottom: 50,
   },
   gridItem: {
-    width: ITEM_WIDTH,
-  },
+    marginBottom: 15
+  }
 });
 
 export default RecipeHome;
