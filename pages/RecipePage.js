@@ -5,7 +5,7 @@ import { View, ScrollView, TouchableOpacity, Text, Image, StyleSheet, Button } f
 const RecipePage = ({ route }) => {
   const [showIngredients, setShowIngredients] = useState(true);
   const { data } = route.params;
-
+  
   // TODO for now I'm assuming data is stored in mins
   const minsToHours = (mins) => {
     const hours = Math.floor(mins / 60);
