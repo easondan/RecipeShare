@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Text,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -11,13 +10,15 @@ import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MoreOptions from "./MoreOptions";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { useNavigation } from "@react-navigation/native";
 import { useFavourites } from './FavouritesContext';
 
 const RecipeToolbar = ({ route }) => {
   
   const { data } = route.params;
-  
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showOptions, setShowMoreOptions] = useState(false); // State to control the visibility of the dropdown
   const options = [
     { id: 1, label: "Edit" },
@@ -53,10 +54,28 @@ const RecipeToolbar = ({ route }) => {
   };
 
   const handleSelectOption = (option) => {
-    console.log("Selected option:", option);
-    // Will need to pass in data in order to know what recipe we're working with
-    console.log(route.params);
+    setShowMoreOptions(false);
+    switch (option.label) {
+      case 'Edit':
+        break;
+      case 'Duplicate':
+        break;
+      case 'Delete':
+        // Show delete confirmation prompt
+        setShowDeleteModal(true);
+    }
   };
+
+  const handleDelete = () => {
+    // TODO backend stuff to delete recipe record
+    setShowDeleteModal(false);
+    navigation.goBack();  // Return to previous page
+  }
+
+  const handleCancel = () => {
+    setShowDeleteModal(false);
+  }
+
   return (
     <View id="toolbar" style={styles.toolbar}>
       <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
@@ -84,6 +103,12 @@ const RecipeToolbar = ({ route }) => {
           <SimpleIcon name="options-vertical" size={24} color="black" />
         </TouchableOpacity>
       </View>
+      <ConfirmDeleteModal 
+        isVisible={showDeleteModal} 
+        onCancel={() => handleCancel()}
+        onDelete={() => handleDelete()}
+        msg={`Are you sure you want to delete the recipe "${data.name}" ?\n\nThis action cannot be undone.`}
+      />
     </View>
   );
 };

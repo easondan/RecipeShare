@@ -6,9 +6,10 @@ const App = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="dark-content" backgroundColor="#A7CCA2"/>
+      {/* <StatusBar barStyle="dark-content" backgroundColor="#A7CCA2"/> */}
+      <StatusBar />
       <FavouritesProvider>
-        <Navigation/>
+        <Navigation />
       </FavouritesProvider>
     </View>
   );

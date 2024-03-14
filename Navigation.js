@@ -57,14 +57,14 @@ export default function Navigation() {
         <Stack.Screen 
           name="RecipeHome"
           component={RecipeHome}
-          options={{ header: () => <Toolbar title={"My Recipes"}/> }} 
+          options={{ header: () => <Toolbar title={"My Recipes"} /> }} 
         />
         <Stack.Screen 
           name="FavouriteRecipes"
           component={FavouriteRecipes}
-          options={{ header: () => <Toolbar title={"Favourites"} moreOptions={true}/> }} 
+          options={{ header: () => <Toolbar title={"Favourites"} /> }} 
         />
-        <Drawer.Screen
+        <Stack.Screen
           name="CookbookHome"
           component={CookbookHome}
           options={{ header: () => <Toolbar title={"Cookbooks"} /> }}

@@ -3,7 +3,7 @@
     {
       "name": "Tonkotsu Ramen",
       "author": "Brittany Mueller",
-      "course": "Dessert",
+      "course": "Dinner",
       "cuisine": "Japanese",
       "difficulty": "Easy",
       "servings": "10 bowls",
@@ -28,7 +28,7 @@
     {
       "name": "Spaghetti Bolognese",
       "author": "Brittany Mueller",
-      "course": "Dessert",
+      "course": "Dinner",
       "cuisine": "Japanese",
       "difficulty": "Easy",
       "servings": "10 pieces",
@@ -52,6 +52,8 @@
     },
     {
       "name": "Chicken Quesadillas",
+      "author": "Brittany Mueller",
+      "course": "Dinner",
       "cuisine": "Japanese",
       "difficulty": "Easy",
       "servings": "10 pieces",
@@ -77,7 +79,7 @@
       "name": "Banana Bread",
       "author": "Brittany Mueller",
       "course": "Dessert",
-      "cuisine": "Japanese",
+      "cuisine": "North American",
       "difficulty": "Easy",
       "servings": "10 pieces",
       "prepTime": "30",
@@ -126,7 +128,7 @@
     {
       "name": "Omurice",
       "author": "Brittany Mueller",
-      "course": "Dessert",
+      "course": "Dinner",
       "cuisine": "Japanese",
       "difficulty": "Easy",
       "servings": "10 pieces",
@@ -151,7 +153,7 @@
     {
       "name": "Classic Beef Chili",
       "author": "Brittany Mueller",
-      "course": "Dessert",
+      "course": "Dinner",
       "cuisine": "Japanese",
       "difficulty": "Easy",
       "servings": "10 pieces",

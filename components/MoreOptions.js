@@ -2,30 +2,14 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 const MoreOptions = ({ options, onSelectOption }) => {
   return (
-    <View
-      style={[
-        // Jank cause the Dropdown wouldn't move below the toolbar
-        styles.container,
-        {
-          width: 150,
-          height: 80 + options.length * 20,
-          bottom: -80 - options.length * 20,
-        },
-      ]}
-    >
+    <View style={styles.container}>
       {options.map((option) => (
         <TouchableOpacity
           key={option.id}
           style={styles.option}
           onPress={() => onSelectOption(option)}
         >
-          <Text
-            style={
-              option.label === "Delete"
-                ? styles.optionDelete.label
-                : styles.option.label
-            }
-          >
+          <Text style={[styles.option, option.label === 'Delete' ? styles.deleteOption : '']}>
             {option.label}
           </Text>
         </TouchableOpacity>
@@ -36,29 +20,29 @@ const MoreOptions = ({ options, onSelectOption }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingLeft: 20,
     backgroundColor: "#E2E2E2",
     position: "absolute",
-    right: 15,
+    top: 32,
+    right: 10,
+    // TODO need an iOS pal to check how the shadow looks
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 2, 
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    elevation: 3,
   },
   option: {
-    paddingBottom: 10,
-    label: {
-      fontSize: 18,
-      fontFamily: "Amiko",
-    },
+    margin: 10,
+    marginBottom: 0,
+    fontSize: 18
   },
-  optionDelete: {
-    paddingBottom: 10,
-    label: {
-      fontSize: 18,
-      fontFamily: "Amiko",
-      color: "#CE3535",
-    },
+  deleteOption: {
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: "#CE3535"
   },
 });
 
