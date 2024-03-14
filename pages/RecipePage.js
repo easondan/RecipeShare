@@ -1,24 +1,11 @@
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { View, ScrollView, TouchableOpacity, Text, Image, StyleSheet, Button } from "react-native";
-import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const RecipePage = ({ route }) => {
-  const navigation = useNavigation();
   const [showIngredients, setShowIngredients] = useState(true);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { data } = route.params;
-
-  const handleDelete = () => {
-    // TODO backend stuff to delete recipe record
-    setShowDeleteModal(false);
-    navigation.goBack();  // Return to previous page
-  }
-
-  const handleCancel = () => {
-    setShowDeleteModal(false);
-  }
-
+  
   // TODO for now I'm assuming data is stored in mins
   const minsToHours = (mins) => {
     const hours = Math.floor(mins / 60);
@@ -96,8 +83,6 @@ const RecipePage = ({ route }) => {
                 <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
               ))
             }
-            {/* TODO remove once add delete functionality to 3 dot options */}
-            <Button title="DEBUG Delete" onPress={() => setShowDeleteModal(true)}/>
           </ScrollView>
         ) : (
           <ScrollView style={styles.view}>
@@ -109,12 +94,6 @@ const RecipePage = ({ route }) => {
           </ScrollView>
         )
       }
-      <ConfirmDeleteModal 
-        isVisible={showDeleteModal} 
-        onCancel={() => handleCancel()}
-        onDelete={() => handleDelete()}
-        msg={`Are you sure you want to delete the recipe "${data.name}" ?\n\nThis action cannot be undone.`}
-      />
     </View>
   )
 }

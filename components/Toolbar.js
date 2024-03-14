@@ -8,17 +8,16 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
   const navigation = useNavigation();
 
   const navigateSearch  = () =>{
-    navigation.navigate("Search",{title: title,searchText: "",filters:[], resultData: []})
+    navigation.navigate("SearchPage", { title: title, searchText: "", filters: [], resultData: []})
   }
   return (
     <View id="toolbar" style={styles.toolbar}>
       {
-        showMenuIcon &&     // Render hamburger menu on main pages
+        showMenuIcon ? // Render hamburger menu on main pages
         <TouchableOpacity style={styles.navIcon} onPress={() => navigation.toggleDrawer()} activeOpacity={0.7}>
           <Icon name="menu" size={28} color="black" />
         </TouchableOpacity>
-      }
-      { !showMenuIcon &&   // Render back arrow on internal pages
+        : // Render back arrow on internal pages
         <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
           <Icon name="chevron-back-outline" size={28} color="black"/>
         </TouchableOpacity>

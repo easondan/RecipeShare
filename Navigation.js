@@ -16,8 +16,8 @@ import Toolbar from "./components/Toolbar";
 import RecipeToolbar from "./components/RecipeToolbar";
 import AddRecipe from "./pages/AddRecipe";
 import CustomDrawer from "./components/CustomDrawer";
-import SearchComponent from "./components/SearchComponent";
-import Search from "./pages/SearchPage";
+import SearchToolbar from "./components/SearchToolbar";
+import SearchResultPage from "./pages/SearchResultPage";
 
 export default function Navigation() {
   
@@ -57,7 +57,17 @@ export default function Navigation() {
         <Stack.Screen 
           name="RecipeHome"
           component={RecipeHome}
-          options={{ header: () => <Toolbar title={"My Recipes"}/> }} 
+          options={{ header: () => <Toolbar title={"My Recipes"} /> }} 
+        />
+        <Stack.Screen 
+          name="FavouriteRecipes"
+          component={FavouriteRecipes}
+          options={{ header: () => <Toolbar title={"Favourites"} /> }} 
+        />
+        <Stack.Screen
+          name="CookbookHome"
+          component={CookbookHome}
+          options={{ header: () => <Toolbar title={"Cookbooks"}   showSearch={false}  /> }}
         />
         <Stack.Screen 
           name="RecipePage" 
@@ -75,7 +85,7 @@ export default function Navigation() {
 
   return (
     <View style={styles.root}>
-      {session && session.user ? (
+    
         <NavigationContainer theme={customTheme}>
           <Drawer.Navigator
             initialRouteName="RecipeHome"
@@ -85,16 +95,6 @@ export default function Navigation() {
               name="RecipeStack"
               component={RecipeStack}
               options={{ headerShown: false }}  // Disable duplicate header, already in Stack
-            />
-            <Drawer.Screen
-              name="FavouriteRecipes"
-              component={FavouriteRecipes}
-              options={{ header: () => <Toolbar title={"Favourites"} moreOptions={true}/> }}
-            />
-            <Drawer.Screen
-              name="CookbookHome"
-              component={CookbookHome}
-              options={{ header: () => <Toolbar title={"Cookbooks"} /> }}
             />
             <Drawer.Screen
               name="GroceryList"
@@ -112,15 +112,13 @@ export default function Navigation() {
               options={{ header: () => <Toolbar title={"Settings"} showSearch={false} /> }}
             />
             <Drawer.Screen
-              name="Search"
-              component={Search}
-              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
+              name="SearchPage"
+              component={SearchResultPage}
+              options={({ route }) => ({ header: () => <SearchToolbar route={route} /> })}
             />
           </Drawer.Navigator>
         </NavigationContainer>
-      ) : (
-        <Auth />
-      )}
+      
     </View>
   );
 }
