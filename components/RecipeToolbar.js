@@ -13,8 +13,12 @@ import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MoreOptions from "./MoreOptions";
 import { useNavigation } from "@react-navigation/native";
 import { useFavourites } from './FavouritesContext';
+import SelectCookbookModal from '../components/SelectCookBookModel'; // This is a new component you will create
+
 
 const RecipeToolbar = ({ route }) => {
+  const [isSelectCookbookModalVisible, setIsSelectCookbookModalVisible] = useState(false);
+
   
   const { data } = route.params;
   
@@ -53,9 +57,9 @@ const RecipeToolbar = ({ route }) => {
   };
 
   const handleSelectOption = (option) => {
-    console.log("Selected option:", option);
-    // Will need to pass in data in order to know what recipe we're working with
-    console.log(route.params);
+    // console.log("Selected option:", option);
+    // // Will need to pass in data in order to know what recipe we're working with
+    // console.log(route.params);
   };
   return (
     <View id="toolbar" style={styles.toolbar}>
@@ -67,11 +71,15 @@ const RecipeToolbar = ({ route }) => {
         <TouchableOpacity activeOpacity={0.7}>
           <MaterialIcon name="cart" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7}>
-          <MaterialIcon name="book-plus" size={28} color="black" />
+        <TouchableOpacity onPress={() => setIsSelectCookbookModalVisible(true)} activeOpacity={0.7}>
+        <MaterialIcon name="book-plus" size={28} color="black" />
         </TouchableOpacity>
+        <SelectCookbookModal
+          isVisible={isSelectCookbookModalVisible}
+          onClose={() => setIsSelectCookbookModalVisible(false)}
+          recipeData={data}
+        />
         <TouchableOpacity onPress={toggleFavourite} activeOpacity={0.7}>
-          {/* Use red color for both filled and outlined icons */}
           <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
         </TouchableOpacity>
         {showOptions && (

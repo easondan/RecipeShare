@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { Card } from './Card';
+import { Card } from './cookbookCard';
 
 const Dropdown = ({ label, listOfCookBooks }) => {
   const [visible, setVisible] = useState(false);
@@ -14,6 +14,8 @@ const Dropdown = ({ label, listOfCookBooks }) => {
   const hideDropdown = () => {
     setVisible(false);
   };
+
+
 
   // Function to chunk the array into groups of three
   const chunkArray = (arr, size) => {
@@ -29,7 +31,7 @@ const Dropdown = ({ label, listOfCookBooks }) => {
       <View key={rowIndex} style={styles.row}>
         {row.map((recipe, colIndex) => (
           <View key={colIndex} style={styles.gridItem}>
-            <Card data={recipe} navigate={false} type="Cookbook" />
+            <Card data={{ imageUrl: recipe.image, name: recipe.title, recipes: recipe.recipes }} />
           </View>
         ))}
       </View>

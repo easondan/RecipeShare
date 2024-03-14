@@ -10,6 +10,7 @@ import RecipePage from "./pages/RecipePage";
 import FavouriteRecipes from "./pages/FavouriteRecipes";
 import CookbookHome from "./pages/CookbookHome";
 import GroceryList from "./pages/GroceryList";
+import CookbookPage from "./pages/CookbookPage";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Toolbar from "./components/Toolbar";
@@ -18,6 +19,7 @@ import AddRecipe from "./pages/AddRecipe";
 import CustomDrawer from "./components/CustomDrawer";
 import SearchComponent from "./components/SearchComponent";
 import Search from "./pages/SearchPage";
+import CookBookToolBar from "./components/CookBookToolBar";
 
 export default function Navigation() {
   
@@ -85,6 +87,11 @@ export default function Navigation() {
               name="RecipeStack"
               component={RecipeStack}
               options={{ headerShown: false }}  // Disable duplicate header, already in Stack
+            />
+             <Stack.Screen
+              name="CookbookPage"
+              component={CookbookPage}
+              options={{ header: () => <CookBookToolBar title={"Cookbook Details"} /> }}
             />
             <Drawer.Screen
               name="FavouriteRecipes"
