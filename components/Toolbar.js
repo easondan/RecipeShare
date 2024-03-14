@@ -8,7 +8,7 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
   const navigation = useNavigation();
 
   const navigateSearch  = () =>{
-    navigation.navigate("Search",{title: title,searchText: "",filters:[], resultData: []})
+    navigation.navigate("SearchPage", { title: title, searchText: "", filters: [], resultData: []})
   }
   return (
     <View id="toolbar" style={styles.toolbar}>

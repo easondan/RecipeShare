@@ -16,8 +16,8 @@ import Toolbar from "./components/Toolbar";
 import RecipeToolbar from "./components/RecipeToolbar";
 import AddRecipe from "./pages/AddRecipe";
 import CustomDrawer from "./components/CustomDrawer";
-import SearchComponent from "./components/SearchComponent";
-import Search from "./pages/SearchPage";
+import SearchToolbar from "./components/SearchToolbar";
+import SearchResultPage from "./pages/SearchResultPage";
 
 export default function Navigation() {
   
@@ -112,9 +112,9 @@ export default function Navigation() {
               options={{ header: () => <Toolbar title={"Settings"} showSearch={false} /> }}
             />
             <Drawer.Screen
-              name="Search"
-              component={Search}
-              options={({ route }) => ({ header: () => <SearchComponent route={route} /> })}
+              name="SearchPage"
+              component={SearchResultPage}
+              options={({ route }) => ({ header: () => <SearchToolbar route={route} /> })}
             />
           </Drawer.Navigator>
         </NavigationContainer>

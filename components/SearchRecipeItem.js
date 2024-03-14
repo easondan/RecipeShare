@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-const SearchListIcon = ({ data,title }) => {
-  const navigation = useNavigation();
 
+const SearchRecipeItem = ({ data, title }) => {
+  
+  const navigation = useNavigation();
   const navigate = () =>{
-    console.log(title);
     if(title === 'My Recipes' || title === 'Favourites'){
-      navigation.navigate("RecipePage",{data});
+      navigation.navigate("RecipePage", { data });
     }
   }
   return (
@@ -18,43 +18,49 @@ const SearchListIcon = ({ data,title }) => {
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.primaryText}>{data.name}</Text>
+          <Text style={styles.secondaryText}>{data.author}</Text>
         </View>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default SearchListIcon;
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#D9D9D9",
-    marginTop:20 ,
-
+    margin: 15,
+    marginBottom: -5,
+    borderRadius: 5,
+    backgroundColor: "#E9E9E9",
+    
+    // TODO need an iOS pal to check how the shadow looks
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 3, // Android shadow
   },
   touchable: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
   },
   imageContainer: {
-    marginRight: 10,
+    margin: 10,
   },
   image: {
-    width: 100,
-    height: 100,
-  },
-  textContainer: {
-    flex: 1,
-    justifyContent: "center",
+    width: 80,
+    height: 80,
   },
   primaryText: {
     fontSize: 18,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   secondaryText: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#666",
   },
 });
+
+export default SearchRecipeItem;
