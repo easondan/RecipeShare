@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigation } from '@react-navigation/native';
 import { Image, StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 
-export const Card = ({ data }) => {
+const Card = ({ data }) => {
 
   const navigation = useNavigation();
   const handleRecipeClick = (data) => {
@@ -36,3 +36,5 @@ const styles = StyleSheet.create({
       flexWrap: 'wrap', // Allow names to line wrap
     },
 });
+
+export default Card;
