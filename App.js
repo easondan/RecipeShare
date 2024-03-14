@@ -6,8 +6,8 @@ const App = () => {
 
   return (
     <View style={styles.root}>
+      <StatusBar barStyle="dark-content" backgroundColor="#A7CCA2"/>
       <FavouritesProvider>
-        <StatusBar/>
         <Navigation/>
       </FavouritesProvider>
     </View>
