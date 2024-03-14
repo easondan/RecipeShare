@@ -67,7 +67,7 @@ export default function Navigation() {
         <Stack.Screen
           name="CookbookHome"
           component={CookbookHome}
-          options={{ header: () => <Toolbar title={"Cookbooks"} /> }}
+          options={{ header: () => <Toolbar title={"Cookbooks"}   showSearch={false}  /> }}
         />
         <Stack.Screen 
           name="RecipePage" 
@@ -85,7 +85,7 @@ export default function Navigation() {
 
   return (
     <View style={styles.root}>
-      {session && session.user ? (
+    
         <NavigationContainer theme={customTheme}>
           <Drawer.Navigator
             initialRouteName="RecipeHome"
@@ -118,9 +118,7 @@ export default function Navigation() {
             />
           </Drawer.Navigator>
         </NavigationContainer>
-      ) : (
-        <Auth />
-      )}
+      
     </View>
   );
 }

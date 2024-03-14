@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, TextInput, StyleSheet, Platform } from "react-native";
+import { View, TouchableOpacity, TextInput, StyleSheet, Platform,Dimensions } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';

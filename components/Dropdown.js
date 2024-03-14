@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { Card } from './Card';
+import Card from './Card';
 
 const Dropdown = ({ label, listOfCookBooks }) => {
   const [visible, setVisible] = useState(false);
@@ -29,7 +29,7 @@ const Dropdown = ({ label, listOfCookBooks }) => {
       <View key={rowIndex} style={styles.row}>
         {row.map((recipe, colIndex) => (
           <View key={colIndex} style={styles.gridItem}>
-            <Card data={recipe} navigate={false} type="Cookbook" />
+            <Card data={recipe} />
           </View>
         ))}
       </View>
