@@ -1,7 +1,8 @@
 import React, { FC, useState, useRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
-import { Icon } from 'react-native-elements';
 import Card from './Card';
+import { Icon } from 'react-native-elements';
+
 
 const Dropdown = ({ label, listOfCookBooks }) => {
   const [visible, setVisible] = useState(false);
@@ -15,6 +16,8 @@ const Dropdown = ({ label, listOfCookBooks }) => {
     setVisible(false);
   };
 
+
+
   // Function to chunk the array into groups of three
   const chunkArray = (arr, size) => {
     return arr.reduce((acc, _, i) => {
@@ -25,15 +28,13 @@ const Dropdown = ({ label, listOfCookBooks }) => {
 
   const renderRows = () => {
     const rows = chunkArray(listOfCookBooks, 3); // Group items into rows of three
-    return rows.map((row, rowIndex) => (
-      <View key={rowIndex} style={styles.row}>
-        {row.map((recipe, colIndex) => (
-          <View key={colIndex} style={styles.gridItem}>
-            <Card data={recipe} />
-          </View>
-        ))}
-      </View>
-    ));
+    return (  <View style={styles.row}>
+      {listOfCookBooks.map((recipe, colIndex) => (
+        <View key={colIndex} style={styles.gridItem}>
+<Card data={{ imageUrl: recipe.image, name: recipe.title, recipes: recipe.recipes }} Cookbook={true}/>
+        </View>
+      ))}
+    </View>)
   };
 
   return (
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#efefef',
     height: 50,
-    width: '90%',
+    width: '100%',
     paddingHorizontal: 10,
     zIndex: 1,
   },
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems:'center',
     marginTop: 30,
-    width:"90%"
+    width:"100%"
   },
   dropdown: {
     backgroundColor: '#fff',
@@ -83,10 +84,11 @@ const styles = StyleSheet.create({
     maxHeight: 1000,
   },
   row: {
+    margin: 15,
+    flexWrap: 'wrap',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems:'center',
-    paddingHorizontal: 5,
+    justifyContent: 'flex-start',
+    gap: 55
   },
   gridItem: {
     flex: 1, // Each item occupies equal space

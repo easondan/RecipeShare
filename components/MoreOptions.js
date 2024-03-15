@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#E2E2E2",
     position: "absolute",
-    top: 32,
+    top: 50,
     right: 10,
     // TODO need an iOS pal to check how the shadow looks
     shadowColor: 'black',

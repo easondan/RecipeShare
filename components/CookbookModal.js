@@ -1,20 +1,16 @@
-// CookbookModal.js
-import { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  StyleSheet,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Alert } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import UploadIcon from "react-native-vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CookbookModal = ({ modalVisible, setModalVisible }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [cookbookTitle, setCookbookTitle] = useState("");
+  const COOKBOOKS_KEY = 'cookbooks';
+
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -25,10 +21,36 @@ const CookbookModal = ({ modalVisible, setModalVisible }) => {
     if (!result.cancelled) {
       setSelectedImage(result.assets[0].uri);
     }
+    
   };
-  const createCookbook = async() =>{
-    console.log("Created",selectedImage,cookbookTitle);
-  }
+
+  const createCookbook = async () => {
+    if (cookbookTitle.trim() === '') {
+      Alert.alert("Error", "Please enter a title for the cookbook.");
+      return;
+    }
+    
+    const newCookbook = {
+      title: cookbookTitle,
+      image: selectedImage,
+      recipes: []
+    };
+  
+    try {
+      const existingCookbooksJson = await AsyncStorage.getItem(COOKBOOKS_KEY);
+      const existingCookbooks = existingCookbooksJson ? JSON.parse(existingCookbooksJson) : [];
+  
+      existingCookbooks.push(newCookbook);
+  
+      await AsyncStorage.setItem(COOKBOOKS_KEY, JSON.stringify(existingCookbooks));
+  
+      Alert.alert("Success", "Cookbook saved successfully");
+      setModalVisible(false); // Close the modal
+    } catch (error) {
+      Alert.alert("Error", "There was an error saving the cookbook");
+      console.error("AsyncStorage error: ", error.message);
+    }
+  };
   return (
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
@@ -36,7 +58,7 @@ const CookbookModal = ({ modalVisible, setModalVisible }) => {
           style={styles.closeIcon}
           onPress={() => {
             setModalVisible(false);
-            setSelectedImage(null);
+            setSelectedImage();
           }}
         >
           <Icon name="close" size={30} color="black" />
@@ -142,12 +164,10 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 22,
-    fontFamily: "Puritan",
   },
   titleModalText: {
     paddingTop: 10,
     fontSize: 18,
-    fontFamily: "Puritan",
     marginTop: 10,
   },
   createButton: {

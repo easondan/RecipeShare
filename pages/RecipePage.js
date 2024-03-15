@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   overview: {
     flexDirection: "row",
     alignItems: "center",
-    margin: 15,
+    margin: 10,
     marginBottom: 0
   },
   image: {
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   recipeName: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold"
   },
   header: {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     padding: 3,
   },  
   body: {
-    fontSize: 16,
+    fontSize: 14,
     padding: 3,
   },
   description: {

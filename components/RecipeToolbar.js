@@ -13,8 +13,12 @@ import MoreOptions from "./MoreOptions";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { useNavigation } from "@react-navigation/native";
 import { useFavourites } from './FavouritesContext';
+import SelectCookbookModal from '../components/SelectCookBookModel'; // This is a new component you will create
+import DuplicateModal from './DuplicateModal';
 
 const RecipeToolbar = ({ route }) => {
+  const [isSelectCookbookModalVisible, setIsSelectCookbookModalVisible] = useState(false);
+
   
   const { data } = route.params;
   
@@ -30,6 +34,7 @@ const RecipeToolbar = ({ route }) => {
   
   const { isFavourited, addFavourite, removeFavourite } = useFavourites();
   const [favourite, setFavourite] = useState(false);
+  const [showCopyModal, setShowCopyModal] = useState(false);
   
   const navigation = useNavigation();
 
@@ -58,8 +63,10 @@ const RecipeToolbar = ({ route }) => {
     setShowMoreOptions(false);
     switch (option.label) {
       case 'Edit':
+        navigation.navigate("EditRecipePage",data);
         break;
       case 'Duplicate':
+        setShowCopyModal(true);
         break;
       case 'Delete':
         // Show delete confirmation prompt
@@ -75,6 +82,12 @@ const RecipeToolbar = ({ route }) => {
 
   const handleCancel = () => {
     setShowDeleteModal(false);
+    setShowCopyModal(false);
+  }
+
+  const handleCopy = () =>{
+    setShowCopyModal(false);
+    navigation.goBack();  // Return to previous page
   }
 
   return (
@@ -87,11 +100,15 @@ const RecipeToolbar = ({ route }) => {
         <TouchableOpacity activeOpacity={0.7}>
           <MaterialIcon name="cart" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7}>
-          <MaterialIcon name="book-plus" size={28} color="black" />
+        <TouchableOpacity onPress={() => setIsSelectCookbookModalVisible(true)} activeOpacity={0.7}>
+        <MaterialIcon name="book-plus" size={28} color="black" />
         </TouchableOpacity>
+        <SelectCookbookModal
+          isVisible={isSelectCookbookModalVisible}
+          onClose={() => setIsSelectCookbookModalVisible(false)}
+          recipeData={data}
+        />
         <TouchableOpacity onPress={toggleFavourite} activeOpacity={0.7}>
-          {/* Use red color for both filled and outlined icons */}
           <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
         </TouchableOpacity>
         {showOptions && (
@@ -110,6 +127,7 @@ const RecipeToolbar = ({ route }) => {
         onDelete={() => handleDelete()}
         msg={`Are you sure you want to delete the recipe "${data.name}" ?\n\nThis action cannot be undone.`}
       />
+      <DuplicateModal type = "Recipe" isVisible={showCopyModal} onCancel={()=>handleCancel()} onConfirm={()=>handleCopy()}/>
     </View>
   );
 };
@@ -139,6 +157,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   iconGroup: {
+    paddingTop: Platform.OS === "ios" ? 30 : 0,
     flex: 1,
     right: 25,
     flexDirection: "row",

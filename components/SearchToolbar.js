@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     alignContent: 'center'
   },
   searchContainer: {
+    marginTop: Platform.OS === "ios" ? 30 : 0,
     flex: 1,
     backgroundColor: 'white',
     flexDirection: 'row',

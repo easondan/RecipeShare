@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet,Dimensions } from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list';
 
-const TimeSelectFields = ({ label, hours, minutes, formData, setFormData, isCookingTime }) => {
+const TimeSelectFields = ({ label, hours, minutes, formData, setFormData, isCookingTime, editHour,editMinute }) => {
   const keyPrefix = isCookingTime ? 'cook' : 'prep';
 
   return (
@@ -17,7 +17,7 @@ const TimeSelectFields = ({ label, hours, minutes, formData, setFormData, isCook
           search={false}
           maxHeight={50}
           boxStyles={styles.selectTimeList}
-          placeholder="Hour"
+          {...(editHour ? { defaultOption: editHour } : { placeholder: "Hour" })}
         />
         <SelectList
           setSelected={(val) => setFormData({ ...formData, [`${keyPrefix}Min`]: val })}
@@ -26,7 +26,7 @@ const TimeSelectFields = ({ label, hours, minutes, formData, setFormData, isCook
           search={false}
           maxHeight={50}
           boxStyles={styles.selectTimeList}
-          placeholder="Minute"
+          {...(editMinute ? { defaultOption: editMinute } : { placeholder: "Minute" })}
         />
       </View>
     </View>

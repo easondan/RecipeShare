@@ -10,6 +10,7 @@ import RecipePage from "./pages/RecipePage";
 import FavouriteRecipes from "./pages/FavouriteRecipes";
 import CookbookHome from "./pages/CookbookHome";
 import GroceryList from "./pages/GroceryList";
+import CookbookPage from "./pages/CookbookPage";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Toolbar from "./components/Toolbar";
@@ -18,6 +19,9 @@ import AddRecipe from "./pages/AddRecipe";
 import CustomDrawer from "./components/CustomDrawer";
 import SearchToolbar from "./components/SearchToolbar";
 import SearchResultPage from "./pages/SearchResultPage";
+import CookBookToolBar from "./components/CookBookToolBar";
+import EditRecipe from "./pages/EditRecipe";
+
 
 export default function Navigation() {
   
@@ -67,7 +71,7 @@ export default function Navigation() {
         <Stack.Screen
           name="CookbookHome"
           component={CookbookHome}
-          options={{ header: () => <Toolbar title={"Cookbooks"}   showSearch={false}  /> }}
+          options={({ route }) => ({ header: () => <Toolbar title={'Cookbooks'} showSearch={true} />  })}
         />
         <Stack.Screen 
           name="RecipePage" 
@@ -78,6 +82,11 @@ export default function Navigation() {
           name="AddRecipePage" 
           component={AddRecipe}
           options={{ header: () => <Toolbar title={'Add Recipe'} showSearch={false} /> }}
+        />
+        <Stack.Screen 
+          name="EditRecipePage" 
+          component={EditRecipe}
+          options={{ header: () => <Toolbar title={'Edit Recipe'} showSearch={false} /> }}
         />
       </Stack.Navigator>
     );
@@ -95,6 +104,11 @@ export default function Navigation() {
               name="RecipeStack"
               component={RecipeStack}
               options={{ headerShown: false }}  // Disable duplicate header, already in Stack
+            />
+             <Stack.Screen
+              name="CookbookPage"
+              component={CookbookPage}
+              options={({ route }) => ({ header: () => <CookBookToolBar route={route} /> })}
             />
             <Drawer.Screen
               name="GroceryList"

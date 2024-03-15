@@ -1,11 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-
-const ActionButton = ({ onPress }) => {
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+const ActionButton = ({ onPress,share }) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-     <MaterialCommunityIcon name='plus' color="white" size= {40}/>
+     {share ? <MaterialIcon name = 'people' color='white' size= {40}/>:<MaterialCommunityIcon name= 'plus' color="white" size= {40}/>}
     </TouchableOpacity>
   );
 };

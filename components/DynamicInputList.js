@@ -29,10 +29,11 @@ const DynamicInputList = ({ placeholder, items, setItems }) => {
   return (
     <View style={styles.container}>
       <Text>{placeholder}</Text>
-      {items.map((item, index) => (
+      {items.map((item, index,key) => (
         <View key={item.key} style={styles.inputContainer}>
           <TextInput
-            value={item.value}
+            key={key}
+            value={item}
             onChangeText={(text) => handleChange(text, index)}
             placeholder={placeholder}
             style={styles.input}
