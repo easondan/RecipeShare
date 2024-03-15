@@ -2,28 +2,29 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
-const ActionButton = ({ onPress,share }) => {
+const ActionButton = ({ onPress,share, disabled = false }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity style={styles.button} onPress={onPress} disabled={disabled}>
      {share ? <MaterialIcon name = 'people' color='white' size= {40}/>:<MaterialCommunityIcon name= 'plus' color="white" size= {40}/>}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-    button: {
-      backgroundColor: '#D75B3F', 
-      padding: 15,
-      borderRadius: 50,
-      alignItems: 'center',
-      position: 'absolute',
-      bottom: 40,
-      right: 40,
-    },
-    buttonText: {
-      color: 'white',
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-  });
+  button: {
+    backgroundColor: '#D75B3F',
+    padding: 15,
+    borderRadius: 50,
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 40,
+    right: 40,
+    elevation: 5, // Add elevation for drop shadow
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 export default ActionButton;

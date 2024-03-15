@@ -11,7 +11,12 @@ const CookbookHome = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cookbooks, setCookbooks] = useState([]);
   const listOfCookBooks = cookbooks
-
+  const renamedData = cookbooks.map((item, index) => {
+    return {
+      ...item,
+      title: `sharedbook${index + 1}`
+    };
+  });
   const loadCookbooks = async () => {
     try {
       const cookbooksJson = await AsyncStorage.getItem(COOKBOOKS_KEY);
@@ -39,6 +44,7 @@ const CookbookHome = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <Dropdown label="My Cookbooks" listOfCookBooks={listOfCookBooks} />
+        <Dropdown label="Shared Cookbooks" listOfCookBooks={renamedData} />
       </ScrollView>
       <ActionButton onPress={() => setModalVisible(true)} />
       <Modal

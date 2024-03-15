@@ -38,7 +38,8 @@ const CookBookToolBar = ({route}) => {
   const handleSelectOption = (option) => {
     setShowMoreOptions(false);
     switch (option.label) {
-      case 'Add Recipe':
+      case 'Add Recipes':
+        navigation.navigate("AddRecipeCookbookPage",data);
         break;
       case 'Duplicate':
 
@@ -47,6 +48,7 @@ const CookBookToolBar = ({route}) => {
       case 'Delete':
         // Show delete confirmation prompt
         setShowDeleteModal(true);
+        break;
     }
   };
   const handleCancel = () => {

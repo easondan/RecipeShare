@@ -21,6 +21,7 @@ import SearchToolbar from "./components/SearchToolbar";
 import SearchResultPage from "./pages/SearchResultPage";
 import CookBookToolBar from "./components/CookBookToolBar";
 import EditRecipe from "./pages/EditRecipe";
+import AddRecipeToCookbook from "./pages/AddRecipeToCookbook";
 
 
 export default function Navigation() {
@@ -81,13 +82,18 @@ export default function Navigation() {
         <Stack.Screen 
           name="AddRecipePage" 
           component={AddRecipe}
-          options={{ header: () => <Toolbar title={'Add Recipe'} showSearch={false} /> }}
+          options={{ header: () => <Toolbar title={'Add Recipe'} showMenuIcon = {false} showSearch={false} /> }}
         />
         <Stack.Screen 
           name="EditRecipePage" 
           component={EditRecipe}
-          options={{ header: () => <Toolbar title={'Edit Recipe'} showSearch={false} /> }}
+          options={{ header: () => <Toolbar title={'Edit Recipe'} showSearch={false} showMenuIcon = {false} /> }}
         />
+            <Stack.Screen
+              name="AddRecipeCookbookPage"
+              component={AddRecipeToCookbook}
+              options={({ route }) => ({ header: () => <Toolbar title={'Add Recipe'} showMenuIcon = {false} showSearch={false} route= {route} />})}
+            />
       </Stack.Navigator>
     );
   };

@@ -13,6 +13,8 @@ import UploadIcon from "react-native-vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SelectList } from "react-native-dropdown-select-list";
+import ShareProfile from "./ShareProfile";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ShareModal = ({ modalVisible, setModalVisible }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -21,8 +23,28 @@ const ShareModal = ({ modalVisible, setModalVisible }) => {
   const data = [
     { key: "1", value: "Viewer" },
     { key: "2", value: "Contributor" },
+    { key: "2", value: "Remove" },
   ];
-
+  const userData = [
+    {
+      key: 1,
+      imageUrl: "https://cdn.pfps.gg/pfps/6053-pepe-mcdonals.png",
+      name: "Eason Liang",
+      email: "eliang@uoguelph.ca",
+    },
+    {
+      key: 2,
+      imageUrl: "https://cdn.pfps.gg/pfps/6053-pepe-mcdonals.png",
+      name: "Eason Liang",
+      email: "eliang@uoguelph.ca",
+    },
+    {
+      key: 3,
+      imageUrl: "https://cdn.pfps.gg/pfps/6053-pepe-mcdonals.png",
+      name: "Eason Liang",
+      email: "eliang@uoguelph.ca",
+    },
+  ];
   const saveShareCoobook = async () => {
     console.log("Hello");
   };
@@ -41,20 +63,19 @@ const ShareModal = ({ modalVisible, setModalVisible }) => {
         <Text style={styles.modalText}>Manage Sharing</Text>
         <View style={styles.cookbookTitleContainer}>
           <Text style={styles.titleModalText}>Add Members</Text>
-          <View style= {styles.addMemberContainer}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Email Address"
-              placeholderTextColor="#888"
-              inputMode="text"
-              keyboardType="default"
-              multiline={true}
-              onChangeText={setEmailAddress}
-            />
-
-          </View>
-          <SelectList
+          <View style={styles.addMemberContainer}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Email Address"
+                placeholderTextColor="#888"
+                inputMode="text"
+                keyboardType="default"
+                multiline={true}
+                onChangeText={setEmailAddress}
+              />
+            </View>
+            <SelectList
               setSelected={setNewPermission}
               data={data}
               save="value"
@@ -62,11 +83,23 @@ const ShareModal = ({ modalVisible, setModalVisible }) => {
               defaultOption={data[1]}
               maxHeight={80}
               boxStyles={styles.selectList}
-              dropdownStyles= {styles.inputStyle}
+              dropdownStyles={styles.inputStyle}
             />
           </View>
 
           <Text style={styles.titleModalText}>Manage Member Permissions</Text>
+          <View style = {styles.peopleContainer}>
+            <ScrollView>
+              {userData.map((data) => (
+                <ShareProfile
+                  key={data.key}
+                  name={data.name}
+                  imageUrl={data.imageUrl}
+                  email={data.email}
+                />
+              ))}
+            </ScrollView>
+          </View>
         </View>
 
         <TouchableOpacity
@@ -81,6 +114,9 @@ const ShareModal = ({ modalVisible, setModalVisible }) => {
 };
 
 const styles = StyleSheet.create({
+  peopleContainer:{
+    height: 150,
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -92,15 +128,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     width: "60%",
-
   },
-  addMemberContainer:{
-    flexDirection:'row',
-    justifyContent: 'flex-start',
-    height:100,
-    
+  addMemberContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    height: 100,
+    marginBottom: 20,
   },
-  inputStyle:{
+  inputStyle: {
     width: "60%",
     marginLeft: 10,
   },
@@ -121,8 +156,8 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   selectList: {
-    marginTop:10,
-    width: '60%',
+    marginTop: 10,
+    width: "60%",
     marginLeft: 10,
   },
   cookbookTitleContainer: {
