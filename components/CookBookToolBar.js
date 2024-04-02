@@ -16,6 +16,7 @@ import { useFavourites } from './FavouritesContext';
 import SelectCookbookModal from '../components/SelectCookBookModel'; // This is a new component you will create
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import DuplicateModal from './DuplicateModal';
+import { supabase } from '../lib/supabase'
 const CookBookToolBar = ({route}) => {
   
   const data = route?.params;
@@ -35,10 +36,14 @@ const CookBookToolBar = ({route}) => {
     setShowMoreOptions(!showOptions);
   };
 
-  const handleSelectOption = (option) => {
+  const handleSelectOption = async(option) => {
     setShowMoreOptions(false);
     switch (option.label) {
       case 'Add Recipes':
+        const value = await supabase.auth.getUser();
+        const { data, error } = await supabase
+        .from('Recipes')
+        .select().eq('user_id',value.data.user.id);
         navigation.navigate("AddRecipeCookbookPage",data);
         break;
       case 'Duplicate':

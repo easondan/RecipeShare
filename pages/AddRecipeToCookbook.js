@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo
 import { useNavigation } from '@react-navigation/native';
-import Card from '../components/Card';
-import recipesData from '../recipes.json';
 import ActionButton from '../components/ActionButton';
 
 const AddRecipeScreen = ({route}) => {
@@ -31,13 +29,13 @@ const AddRecipeScreen = ({route}) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {recipesData.recipes.map(recipe => (
+        {data.map(recipe => (
           <TouchableOpacity
             key={recipe.name}
             style={styles.recipeItem}
             onPress={() => toggleRecipeSelection(recipe.name)}>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: recipe.imageUrl }} style={styles.image} />
+              <Image source={{ uri: recipe.imageUrl,cache:'reload' }} style={styles.image} />
               {selectedRecipes.includes(recipe.name) && <View style={styles.overlay} />}
               {selectedRecipes.includes(recipe.name) && (
                 <View style={styles.checkMark}>
