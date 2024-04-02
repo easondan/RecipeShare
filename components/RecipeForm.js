@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,7 +6,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
+import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import FormField from "../components/FormField";
 import TimeSelectFields from "../components/TimeSelectFields";
@@ -14,10 +16,109 @@ import SelectField from "../components/SelectField";
 import UploadIcon from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 import DynamicInputList from "../components/DynamicInputList";
+import { supabase } from "../lib/supabase";
+import { decode } from "base64-arraybuffer";
 
-const RecipeForm = ({onPress,label,recipe}) => {
+const RecipeForm = ({ checkAdd, label, recipe }) => {
+  const AddOrEditRecipe = async () => {
+    const value = await supabase.auth.getUser();
+    const { data: profilesData, error: profilesError } = await supabase
+      .from("profiles")
+      .select()
+      .eq("id", value.data.user.id);
+    let imageUrl = "";
+    let sendData = {
+      imageUrl: recipe!=null ? recipe.imageUrl :"",
+      name: formData.recipeName,
+      description: formData.recipeDescription,
+      cuisine: formData.cuisineType,
+      course: formData.course,
+      difficulty: formData.difficulty,
+      prepTime: Number(formData.prepHour) * 60 + Number(formData.prepMin),
+      cookTime: Number(formData.cookHour) * 60 + Number(formData.cookMin),
+      servings: formData.servings,
+      ingredients: formData.ingredients.map((item) => item.value!=null ? item.value : item),
+      directions: formData.directions.map((item) => item.value!=null ? item.value : item ),
+      author: profilesData[0].full_name,
+    };
+    // imageUrl: link.publicUrl,
+    if (checkAdd == true) {
+      // console.log(formData);
+
+      console.log(sendData);
+      await supabase.from("Recipes").insert(sendData);
+      const { data: recipeData } = await supabase
+        .from("Recipes")
+        .select("id")
+        .match({ user_id: value.data.user.id });
+      console.log(recipeData[recipeData.length - 1].id);
+      const recipeId = recipeData[recipeData.length - 1].id;
+      if (selectedImage !== null) {
+        const { error: uploadImageError } = await supabase.storage
+          .from("avatars")
+          .upload(
+            value.data.user.id + "/myRecipe/" + recipeId + ".jpg",
+            decode(selectedImage),
+            {
+              contentType: "image/png",
+            }
+          );
+        if (uploadImageError) {
+          Alert.alert("Unable to upload image");
+          console.log(uploadImageError2);
+          imageUrl =
+            "https://ixdiitlvaifwubdmmozg.supabase.co/storage/v1/object/public/avatars/public/filler.jpg";
+          return;
+        } else {
+          const { data: link, error: errorlink } = await supabase.storage
+            .from("avatars")
+            .getPublicUrl(
+              value.data.user.id + "/myRecipe/" + recipeId + ".jpg"
+            );
+          imageUrl = link.publicUrl;
+        }
+      } else {
+        imageUrl =
+          "https://ixdiitlvaifwubdmmozg.supabase.co/storage/v1/object/public/avatars/public/filler.jpg";
+      }
+
+      const { error } = await supabase
+        .from("Recipes")
+        .update({ imageUrl: imageUrl })
+        .eq("id", recipeId);
+
+    } else {
+      console.log(value.data.user.id + "/myRecipe/" + recipe.id + ".jpg");
+
+      const { error: uploadImageError } = await supabase.storage
+        .from("avatars")
+        .update(
+          value.data.user.id + "/myRecipe/" + recipe.id + ".jpg",
+          decode(selectedImage),
+        );
+      if (uploadImageError) {
+        console.log(uploadImageError);
+        Alert.alert("Unable to upload image");
+        imageUrl =
+          "https://ixdiitlvaifwubdmmozg.supabase.co/storage/v1/object/public/avatars/public/filler.jpg";
+        return;
+      } else {
+        const { data: link, error: errorlink } = await supabase.storage
+          .from("avatars")
+          .getPublicUrl(value.data.user.id + "/myRecipe/" + recipe.id + ".jpg");
+        sendData.imageUrl = link.publicUrl;
+      }
+      const {data , error} = await supabase.from("Recipes").update(sendData).eq("id", recipe.id);
+    }
+    navigation.navigate("RecipeHome");
+  };
   const navigation = useNavigation();
-  const [selectedImage, setSelectedImage] = useState(recipe ? recipe.imageUrl : null);
+  const [selectedImage, setSelectedImage] = useState(
+    recipe ? recipe.imageUrl : null
+  );
+  const [selectedImageUri, setSelectedImageUri] = useState(
+    recipe ? recipe.imageUrl : null
+  );
   const convertTime = (totalMinutes) => {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
@@ -29,7 +130,6 @@ const RecipeForm = ({onPress,label,recipe}) => {
       const cookTimeConverted = convertTime(parseInt(recipe.cookTime, 10));
 
       return {
-        authorName: recipe.author || "",
         recipeName: recipe.name || "",
         recipeDescription: recipe.description || "",
         cuisineType: recipe.cuisine || "",
@@ -46,7 +146,6 @@ const RecipeForm = ({onPress,label,recipe}) => {
       };
     } else {
       return {
-        authorName: "",
         recipeName: "",
         recipeDescription: "",
         cuisineType: "",
@@ -64,11 +163,6 @@ const RecipeForm = ({onPress,label,recipe}) => {
     }
   });
 
-
-
-
-  // const [ingredients, setIngredients] = useState([]);
-  // const [directions, setDirections] = useState([]);
 
   const courseType = [
     { key: "1", value: "Breakfast" },
@@ -102,14 +196,22 @@ const RecipeForm = ({onPress,label,recipe}) => {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
     if (!result.cancelled) {
-      setSelectedImage(result.assets[0].uri);
+      let manipResult = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+
+        [{ resize: { width: 500, height: 500 } }],
+        { format: "jpeg", base64: true }
+      );
+
+      setSelectedImage(manipResult.base64);
+      setSelectedImageUri(manipResult.uri);
     }
   };
 
   // Placeholder for a function to create a recipe
-
 
   return (
     <View style={styles.container}>
@@ -122,7 +224,10 @@ const RecipeForm = ({onPress,label,recipe}) => {
           <TouchableOpacity onPress={pickImage}>
             <View style={styles.frame}>
               {selectedImage ? (
-                <Image source={{ uri: selectedImage }} style={styles.image} />
+                <Image
+                  source={{ uri: selectedImageUri }}
+                  style={styles.image}
+                />
               ) : (
                 <View style={styles.placeholder}>
                   <Text style={styles.imageText}>
@@ -148,11 +253,6 @@ const RecipeForm = ({onPress,label,recipe}) => {
           multiline
         />
         <FormField
-          label="Author Name"
-          value={formData.authorName}
-          onChangeText={(value) => handleInputChange("authorName", value)}
-        />
-        <FormField
           label="Cuisine Type"
           value={formData.cuisineType}
           onChangeText={(value) => handleInputChange("cuisineType", value)}
@@ -161,13 +261,23 @@ const RecipeForm = ({onPress,label,recipe}) => {
           label="Course Type"
           data={courseType}
           onSelect={(value) => handleInputChange("course", value)}
-          editData = {courseType[courseType.findIndex(course => course.value === formData.course)]}
+          editData={
+            courseType[
+              courseType.findIndex((course) => course.value === formData.course)
+            ]
+          }
         />
         <SelectField
           label="Difficulty"
           data={difficultyType}
           onSelect={(value) => handleInputChange("difficulty", value)}
-          editData = {difficultyType[difficultyType.findIndex(difficulty => difficulty.value === formData.difficulty)]}
+          editData={
+            difficultyType[
+              difficultyType.findIndex(
+                (difficulty) => difficulty.value === formData.difficulty
+              )
+            ]
+          }
         />
         <FormField
           label="Servings"
@@ -180,8 +290,8 @@ const RecipeForm = ({onPress,label,recipe}) => {
           minutes={minutes}
           formData={formData}
           setFormData={setFormData}
-          editHour={recipe ? hours[formData.prepHour-1]:null}
-          editMinute={recipe ? minutes[formData.prepMin-1]:null}
+          editHour={recipe ? hours[formData.prepHour - 1] : null}
+          editMinute={recipe ? minutes[formData.prepMin - 1] : null}
         />
         <TimeSelectFields
           label="Cooking Time"
@@ -190,8 +300,8 @@ const RecipeForm = ({onPress,label,recipe}) => {
           formData={formData}
           setFormData={setFormData}
           isCookingTime
-          editHour={recipe ? hours[formData.cookHour-1]: null}
-          editMinute={recipe ? minutes[formData.cookMin-1]:null}
+          editHour={recipe ? hours[formData.cookHour - 1] : null}
+          editMinute={recipe ? minutes[formData.cookMin - 1] : null}
         />
         <DynamicInputList
           placeholder="Ingredient"
@@ -208,7 +318,7 @@ const RecipeForm = ({onPress,label,recipe}) => {
             setFormData({ ...formData, directions: newItems })
           }
         />
-        <TouchableOpacity style={styles.createButton} onPress={onPress}>
+        <TouchableOpacity style={styles.createButton} onPress={AddOrEditRecipe}>
           <Text style={styles.createButtonText}>{label} Recipe</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -221,7 +331,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    backgroundColor:'white'
+    backgroundColor: "white",
   },
   scrollView: {
     width: "100%",
@@ -253,7 +363,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 10,
   },
   placeholder: {
@@ -274,7 +384,7 @@ const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "cover",
     borderRadius: 6,
-    marginTop: 20,
+    marginTop: 0,
   },
 });
 

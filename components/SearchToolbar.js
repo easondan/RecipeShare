@@ -4,6 +4,7 @@ import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
 import { recipes } from '../recipes.json'
+import { supabase } from "../lib/supabase";
 
 const SearchToolbar = ({ route }) => {
 
@@ -22,10 +23,15 @@ const SearchToolbar = ({ route }) => {
   }
 
   //In M3 will be prob some search in the Db
-  const submitSearch = () => {
-    const filteredRecipes = recipes.filter((recipe) =>
+  const submitSearch = async () => {
+    const value = await supabase.auth.getUser();
+    const { data, error } = await supabase
+    .from('Recipes')
+    .select().eq('user_id',value.data.user.id);
+    const filteredRecipes = data.filter((recipe) =>
       recipe.name.toLowerCase().includes(searchText.toLowerCase())
     );
+
     // Navigate to the Search screen with filtered data
     navigation.navigate("SearchPage", {
       searchText: searchText,

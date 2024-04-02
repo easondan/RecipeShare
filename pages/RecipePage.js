@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { View, ScrollView, TouchableOpacity, Text, Image, StyleSheet, Button } from "react-native";
 
+
 const RecipePage = ({ route }) => {
   const [showIngredients, setShowIngredients] = useState(true);
   const { data } = route.params;
@@ -24,7 +25,7 @@ const RecipePage = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.overview}>
-        <Image source={{ uri: data.imageUrl }} style={styles.image} />
+        <Image source={{ uri: data?.imageUrl,cache: 'reload' }} style={styles.image} />
         <View style={{ marginLeft: 15 }}>
           <Text style={styles.recipeName}>{data.name}</Text>
           <View style={{ flexDirection: "row" }}>

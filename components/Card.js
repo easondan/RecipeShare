@@ -13,7 +13,7 @@ const Card = ({ data, Cookbook }) => {
 
   return (
     <TouchableOpacity style={styles.card} activeOpacity={0.8} onPress={() => handleRecipeClick(data)}>
-      <Image source={{ uri: data.imageUrl }} style={styles.image} />
+      <Image source={{ uri: data.imageUrl,cache: "reload" }} style={styles.image} />
       <Text style={styles.text}>{data.name}</Text>
     </TouchableOpacity>
   );

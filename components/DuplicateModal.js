@@ -2,8 +2,7 @@ import {React,useState} from 'react'
 import { View, Text, Modal, StyleSheet, TouchableOpacity,TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Octicons';
 
-const DuplicateModal = ({ isVisible, onCancel, onConfirm, type }) => {
-    const [name,setName] = useState("");
+const DuplicateModal = ({ isVisible, onCancel, onConfirm, type, name,setName}) => {
   return (
     <Modal
       animationType="slide"

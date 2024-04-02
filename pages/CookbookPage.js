@@ -42,7 +42,6 @@ const CookbookPage = ({ route }) => {
     );
   }
 
-  console.log(cookbook);
 
   return (
     <SafeAreaView style={styles.container}>

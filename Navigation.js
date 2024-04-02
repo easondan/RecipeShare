@@ -92,7 +92,7 @@ export default function Navigation() {
             <Stack.Screen
               name="AddRecipeCookbookPage"
               component={AddRecipeToCookbook}
-              options={({ route }) => ({ header: () => <Toolbar title={'Add Recipe'} showMenuIcon = {false} showSearch={false} route= {route} />})}
+              options={ {header: () => <Toolbar title={'Add Recipe'} showMenuIcon = {false} showSearch={false} />}}
             />
       </Stack.Navigator>
     );
@@ -100,7 +100,7 @@ export default function Navigation() {
 
   return (
     <View style={styles.root}>
-    
+     {session && session.user ? (
         <NavigationContainer theme={customTheme}>
           <Drawer.Navigator
             initialRouteName="RecipeHome"
@@ -137,7 +137,9 @@ export default function Navigation() {
               options={({ route }) => ({ header: () => <SearchToolbar route={route} /> })}
             />
           </Drawer.Navigator>
-        </NavigationContainer>
+        </NavigationContainer>):
+          <Auth />
+     }
       
     </View>
   );

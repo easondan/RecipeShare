@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Platform,
   Dimensions,
+  Alert,
 } from "react-native";
 import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useFavourites } from './FavouritesContext';
 import SelectCookbookModal from '../components/SelectCookBookModel'; // This is a new component you will create
 import DuplicateModal from './DuplicateModal';
+import { supabase } from '../lib/supabase';
 
 const RecipeToolbar = ({ route }) => {
   const [isSelectCookbookModalVisible, setIsSelectCookbookModalVisible] = useState(false);
@@ -35,6 +37,7 @@ const RecipeToolbar = ({ route }) => {
   const { isFavourited, addFavourite, removeFavourite } = useFavourites();
   const [favourite, setFavourite] = useState(false);
   const [showCopyModal, setShowCopyModal] = useState(false);
+  const [name,setName] = useState("");
   
   const navigation = useNavigation();
 
@@ -74,10 +77,19 @@ const RecipeToolbar = ({ route }) => {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     // TODO backend stuff to delete recipe record
     setShowDeleteModal(false);
-    navigation.goBack();  // Return to previous page
+    const { error } = await supabase
+    .from('Recipes')
+    .delete()
+    .eq('id', data.id)
+    if(error){
+      Alert.alert("Unable to Delete Recipe");
+    }else{
+      navigation.navigate("RecipeHome");  // Return to previous page
+    }
+  
   }
 
   const handleCancel = () => {
@@ -85,9 +97,23 @@ const RecipeToolbar = ({ route }) => {
     setShowCopyModal(false);
   }
 
-  const handleCopy = () =>{
-    setShowCopyModal(false);
-    navigation.goBack();  // Return to previous page
+  const handleCopy = async (name) =>{
+    const {id,created_at,... newData} = data;
+
+    const value = await supabase.auth.getUser();
+    newData.user_id = value.data.user.id;
+    newData.name = name==="" ? newData.name+" Copy" : name;
+
+    const { error } = await supabase
+    .from('Recipes')
+    .insert(newData)
+    if(error){
+      Alert.alert("Unable to Copy Recipe");
+    }else{
+      setShowCopyModal(false);
+    navigation.navigate("RecipeHome");  // Return to previous page
+    }
+
   }
 
   return (
@@ -127,7 +153,7 @@ const RecipeToolbar = ({ route }) => {
         onDelete={() => handleDelete()}
         msg={`Are you sure you want to delete the recipe "${data.name}" ?\n\nThis action cannot be undone.`}
       />
-      <DuplicateModal type = "Recipe" isVisible={showCopyModal} onCancel={()=>handleCancel()} onConfirm={()=>handleCopy()}/>
+      <DuplicateModal type = "Recipe" isVisible={showCopyModal} onCancel={()=>handleCancel()} onConfirm={()=>handleCopy(name)} name = {name}setName={setName}/>
     </View>
   );
 };

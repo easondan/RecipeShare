@@ -20,6 +20,7 @@ const DynamicInputList = ({ placeholder, items, setItems }) => {
     setItems(newItems);
   };
 
+  let i = 0;
   const handleChange = (text, index) => {
     const newItems = [...items];
     newItems[index].value = text;
@@ -29,11 +30,13 @@ const DynamicInputList = ({ placeholder, items, setItems }) => {
   return (
     <View style={styles.container}>
       <Text>{placeholder}</Text>
-      {items.map((item, index,key) => (
-        <View key={item.key} style={styles.inputContainer}>
+      {items.map((item, index) => {
+        console.log(item);
+        return (
+        <View key={i=i+1} style={styles.inputContainer}>
           <TextInput
-            key={key}
-            value={item}
+            key={i=i+1}
+            value={typeof(item)==='object'?item.value:item}
             onChangeText={(text) => handleChange(text, index)}
             placeholder={placeholder}
             style={styles.input}
@@ -44,8 +47,8 @@ const DynamicInputList = ({ placeholder, items, setItems }) => {
           >
             <Text>X</Text>
           </TouchableOpacity>
-        </View>
-      ))}
+        </View>)
+})}
       <View style={styles.addButtonContainer}>
         <Button title={`Add ${placeholder}`} onPress={handleAddField} />
       </View>
