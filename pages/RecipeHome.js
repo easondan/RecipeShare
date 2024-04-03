@@ -2,9 +2,8 @@ import { useNavigation,useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import ActionButton from '../components/ActionButton';
 import RecipeGrid from '../components/RecipeGrid';
-import { recipes } from '../recipes.json';
 import { supabase } from '../lib/supabase'
-import { useState,useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 const RecipeHome = () => {
   const [userRecipeData,setRecipeData] = useState([]); 
@@ -13,10 +12,9 @@ const RecipeHome = () => {
     const value = await supabase.auth.getUser();
     setRecipeData([]);
     const { data, error } = await supabase
-    .from('Recipes')
-    .select().eq('user_id',value.data.user.id);
+    .from('recipes')
+    .select().eq('owner_id',value.data.user.id);
     setRecipeData(data);
-    console.log(data)
   }
   useFocusEffect(
     useCallback(() => {

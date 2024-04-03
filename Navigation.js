@@ -100,7 +100,7 @@ export default function Navigation() {
 
   return (
     <View style={styles.root}>
-     {session && session.user ? (
+      {session && session.user ? (
         <NavigationContainer theme={customTheme}>
           <Drawer.Navigator
             initialRouteName="RecipeHome"
@@ -137,10 +137,10 @@ export default function Navigation() {
               options={({ route }) => ({ header: () => <SearchToolbar route={route} /> })}
             />
           </Drawer.Navigator>
-        </NavigationContainer>):
+        </NavigationContainer>
+      ):
           <Auth />
      }
-      
     </View>
   );
 }
