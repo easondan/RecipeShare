@@ -23,7 +23,7 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
   const AddOrEditRecipe = async () => {
     const value = await supabase.auth.getUser();
     const { data: profilesData, error: profilesError } = await supabase
-      .from("profiles")
+      .from("users")
       .select()
       .eq("id", value.data.user.id);
     let imageUrl = "";
@@ -46,11 +46,11 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
       // console.log(formData);
 
       console.log(sendData);
-      await supabase.from("Recipes").insert(sendData);
+      await supabase.from("recipes").insert(sendData);
       const { data: recipeData } = await supabase
-        .from("Recipes")
+        .from("recipes")
         .select("id")
-        .match({ user_id: value.data.user.id });
+        .match({ owner_id: value.data.user.id });
       console.log(recipeData[recipeData.length - 1].id);
       const recipeId = recipeData[recipeData.length - 1].id;
       if (selectedImage !== null) {
@@ -83,7 +83,7 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
       }
 
       const { error } = await supabase
-        .from("Recipes")
+        .from("recipes")
         .update({ imageUrl: imageUrl })
         .eq("id", recipeId);
 
@@ -108,7 +108,7 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
           .getPublicUrl(value.data.user.id + "/myRecipe/" + recipe.id + ".jpg");
         sendData.imageUrl = link.publicUrl;
       }
-      const {data , error} = await supabase.from("Recipes").update(sendData).eq("id", recipe.id);
+      const {data , error} = await supabase.from("recipes").update(sendData).eq("id", recipe.id);
     }
     navigation.navigate("RecipeHome");
   };

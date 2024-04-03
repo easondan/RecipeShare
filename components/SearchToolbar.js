@@ -26,8 +26,8 @@ const SearchToolbar = ({ route }) => {
   const submitSearch = async () => {
     const value = await supabase.auth.getUser();
     const { data, error } = await supabase
-    .from('Recipes')
-    .select().eq('user_id',value.data.user.id);
+    .from('recipes')
+    .select().eq('owner_id',value.data.user.id);
     const filteredRecipes = data.filter((recipe) =>
       recipe.name.toLowerCase().includes(searchText.toLowerCase())
     );

@@ -81,7 +81,7 @@ const RecipeToolbar = ({ route }) => {
     // TODO backend stuff to delete recipe record
     setShowDeleteModal(false);
     const { error } = await supabase
-    .from('Recipes')
+    .from('recipes')
     .delete()
     .eq('id', data.id)
     if(error){
@@ -101,11 +101,11 @@ const RecipeToolbar = ({ route }) => {
     const {id,created_at,... newData} = data;
 
     const value = await supabase.auth.getUser();
-    newData.user_id = value.data.user.id;
+    newData.owner_id = value.data.user.id;
     newData.name = name==="" ? newData.name+" Copy" : name;
 
     const { error } = await supabase
-    .from('Recipes')
+    .from('recipes')
     .insert(newData)
     if(error){
       Alert.alert("Unable to Copy Recipe");

@@ -42,8 +42,8 @@ const CookBookToolBar = ({route}) => {
       case 'Add Recipes':
         const value = await supabase.auth.getUser();
         const { data, error } = await supabase
-        .from('Recipes')
-        .select().eq('user_id',value.data.user.id);
+        .from('recipes')
+        .select().eq('owner_id',value.data.user.id);
         navigation.navigate("AddRecipeCookbookPage",data);
         break;
       case 'Duplicate':
