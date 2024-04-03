@@ -13,8 +13,8 @@ const RecipeHome = () => {
     const value = await supabase.auth.getUser();
     setRecipeData([]);
     const { data, error } = await supabase
-    .from('Recipes')
-    .select().eq('user_id',value.data.user.id);
+    .from('recipes')
+    .select().eq('owner_id',value.data.user.id);
     setRecipeData(data);
     console.log(data)
   }
