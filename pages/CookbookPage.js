@@ -13,12 +13,6 @@ const CookbookPage = ({ route }) => {
             <Text styles={styles.text}>There are no recipes</Text>
         );
     }
-    const handleRecipeClick = (recipe) => {
-        // Log the recipe data before navigating
-        console.log('Sending recipe data to RecipePage:', recipe);
-    
-        navigation.navigate('RecipePage', { data: recipe });
-    };
 
     console.log(cookbook)
 
@@ -40,9 +34,10 @@ const styles = StyleSheet.create({
   },
   grid: {
     margin: 15,
+    flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    padding: 10, 
+    gap: 15
   },
   text: {
     textAlign: 'center'

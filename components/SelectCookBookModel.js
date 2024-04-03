@@ -6,14 +6,14 @@ const SelectCookbookModal = ({ isVisible, onClose, onSelectCookbook, recipeData 
     
     const [cookbooks, setCookbooks] = useState([]);
 
-    // const clearAsyncStorage = async () => {
-    //     try {
-    //       await AsyncStorage.clear();
-    //       console.log('AsyncStorage has been cleared!');
-    //     } catch (error) {
-    //       console.error('Error clearing AsyncStorage:', error);
-    //     }
-    // };
+    const clearAsyncStorage = async () => {
+        try {
+          await AsyncStorage.clear();
+          console.log('AsyncStorage has been cleared!');
+        } catch (error) {
+          console.error('Error clearing AsyncStorage:', error);
+        }
+    };
     useEffect(() => {
       const loadCookbooks = async () => {
         const result = await AsyncStorage.getItem('cookbooks');
@@ -23,10 +23,15 @@ const SelectCookbookModal = ({ isVisible, onClose, onSelectCookbook, recipeData 
   
       loadCookbooks();
     }, []);
+    
+    useEffect(() => {
+      AsyncStorage.setItem('cookbooks', JSON.stringify(cookbooks));
+    }, [cookbooks]);
   
     const handleSelectCookbook = async (selectedCookbook) => {
         const cookbooksJson = await AsyncStorage.getItem('cookbooks');
         const cookbooks = cookbooksJson ? JSON.parse(cookbooksJson) : [];
+        await AsyncStorage.setItem('cookbooks', JSON.stringify(cookbooks));
     
     
         const updatedCookbooks = cookbooks.map(cookbook => {
@@ -38,8 +43,8 @@ const SelectCookbookModal = ({ isVisible, onClose, onSelectCookbook, recipeData 
             }
             return cookbook;
         });
-    
         await AsyncStorage.setItem('cookbooks', JSON.stringify(updatedCookbooks));
+        setCookbooks(updatedCookbooks); // Update the local state to reflect the changes immediately.
     };
 
   return (
