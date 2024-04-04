@@ -38,46 +38,21 @@
 
     //In M3 will be prob some search in the Db
     const submitSearch = async () => {
-    console.log(filter);
-    console.log(title);
     const value = await supabase.auth.getUser();
     let query = supabase
         .from("recipes")
         .select()
+        .eq('owner_id',value.data.user.id);
 
-    if (filter.course) {
-        console.log( `\%${filter.course}\%`);
-        query = query.ilike("course", `\%${filter.course}\%`);
-        console.log(filter.course);
-    }
+    if (filter.course) query = query.ilike("course", `\%${filter.course}\%`);
+    if (filter.cuisine) query = query.ilike("cuisine", `\%${filter.cuisine}\%`);
+    if (filter.difficulty) query = query.ilike("difficulty", `\%${filter.difficulty}\%`);
+    if (filter.servings) query = query.ilike("servings", `\%${filter.servings}\%`);
+    if (filter.maxPrepTime) query = query.lte("prepTime", filter.maxPrepTime);
+    if (filter.maxCookTime) query = query.lte("cookTime", filter.maxPrepTime);
 
-    if (filter.cuisine) {
-        query = query.ilike("cuisine", `\%${filter.cuisine}\%`);
-        console.log(filter.cuisine);
-    }
-
-    if (filter.difficulty) {
-        query = query.ilike("difficulty", `\%${filter.difficulty}\%`);
-        console.log(filter.difficulty);
-    }
-
-    if (filter.servings) {
-        query = query.ilike("servings", `\%${filter.servings}\%`);
-        console.log(filter.servings);
-    }
-
-    if (filter.maxPrepTime) {
-        query = query.lte("prepTime", filter.maxPrepTime);
-        console.log(filter.maxPrepTime);
-    }
-
-    if (filter.maxCookTime) {
-        query = query.lte("cookTime", filter.maxPrepTime);
-        console.log(filter.maxCookTime);
-    }
-    console.log(query);
+    
     const { data, error } = await query;
-    console.log(data);
     if (error) {
         Alert.Alert("Unable to search for recipes");
         return;
