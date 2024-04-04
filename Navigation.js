@@ -19,7 +19,7 @@ import AddRecipe from "./pages/AddRecipe";
 import CustomDrawer from "./components/CustomDrawer";
 import SearchToolbar from "./components/SearchToolbar";
 import SearchResultPage from "./pages/SearchResultPage";
-import CookbookToolbar from "./components/CookbookToolbar";
+import CookbookToolbar from "./components/CookbookToolBar";
 import EditRecipe from "./pages/EditRecipe";
 import CookbookSelectRecipes from "./pages/CookbookSelectRecipes";
 import RecipeSelectCookbooks from "./pages/RecipeSelectCookbooks";
