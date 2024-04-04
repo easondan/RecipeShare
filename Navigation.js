@@ -22,7 +22,7 @@ import SearchResultPage from "./pages/SearchResultPage";
 import CookbookToolbar from "./components/CookbookToolbar";
 import EditRecipe from "./pages/EditRecipe";
 import CookbookSelectRecipes from "./pages/CookbookSelectRecipes";
-
+import RecipeSelectCookbooks from "./pages/RecipeSelectCookbooks";
 
 export default function Navigation() {
   
@@ -90,6 +90,11 @@ export default function Navigation() {
           name="CookbookSelectRecipes"
           component={CookbookSelectRecipes}
           options={ {header: () => <Toolbar title={'Add Recipes'} showMenuIcon={false} showSearch={false} />}}
+        />
+        <Stack.Screen
+          name="RecipeSelectCookbooks"
+          component={RecipeSelectCookbooks}
+          options={ {header: () => <Toolbar title={'Add to Cookbooks'} showMenuIcon={false} showSearch={false} />}}
         />
       </Stack.Navigator>
     );

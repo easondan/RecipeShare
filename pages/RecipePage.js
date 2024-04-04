@@ -5,9 +5,8 @@ import { View, ScrollView, TouchableOpacity, Text, Image, StyleSheet, Button } f
 
 const RecipePage = ({ route }) => {
   const [showIngredients, setShowIngredients] = useState(true);
-  const { data } = route.params;
+  const { recipe } = route.params;
   
-  // TODO for now I'm assuming data is stored in mins
   const minsToHours = (mins) => {
     const hours = Math.floor(mins / 60);
     const rem = mins % 60;
@@ -25,9 +24,9 @@ const RecipePage = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.overview}>
-        <Image source={{ uri: data?.imageUrl,cache: 'reload' }} style={styles.image} />
+        <Image source={{ uri: recipe?.imageUrl,cache: 'reload' }} style={styles.image} />
         <View style={{ marginLeft: 15 }}>
-          <Text style={styles.recipeName}>{data.name}</Text>
+          <Text style={styles.recipeName}>{recipe.name}</Text>
           <View style={{ flexDirection: "row" }}>
             <View>  
               <Text style={styles.header}>Author:</Text>
@@ -37,11 +36,11 @@ const RecipePage = ({ route }) => {
               <Text style={styles.header}>Servings:</Text>
             </View>
             <View style={{ marginLeft: 15 }}>
-              <Text style={styles.body}>{data.author}</Text>
-              <Text style={styles.body}>{data.course}</Text>
-              <Text style={styles.body}>{data.cuisine}</Text>
-              <Text style={styles.body}>{data.difficulty}</Text>
-              <Text style={styles.body}>{data.servings}</Text>  
+              <Text style={styles.body}>{recipe.author}</Text>
+              <Text style={styles.body}>{recipe.course}</Text>
+              <Text style={styles.body}>{recipe.cuisine}</Text>
+              <Text style={styles.body}>{recipe.difficulty}</Text>
+              <Text style={styles.body}>{recipe.servings}</Text>  
             </View>
           </View>
         </View>
@@ -49,20 +48,20 @@ const RecipePage = ({ route }) => {
       <View style={styles.timeSummary}>
         <View style={styles.time}>
           <Text style={styles.header}>Prep Time</Text>
-          <Text style={styles.body}>{minsToHours(data.prepTime)}</Text>
+          <Text style={styles.body}>{minsToHours(recipe.prepTime)}</Text>
         </View>
         <View style={styles.time}>
           <Text style={styles.header}>Cook Time</Text>
-          <Text style={styles.body}>{minsToHours(data.cookTime)}</Text>
+          <Text style={styles.body}>{minsToHours(recipe.cookTime)}</Text>
         </View>
         <View style={styles.time}>
           <Text style={styles.header}>Total Time</Text>
-          <Text style={styles.body}>{minsToHours(Number(data.cookTime) + Number(data.prepTime))}</Text>
+          <Text style={styles.body}>{minsToHours(Number(recipe.cookTime) + Number(recipe.prepTime))}</Text>
         </View>
       </View>
       <View style={styles.description}>
         <Text style={styles.header}>Description:</Text>
-        <Text style={styles.body}>{data.description}</Text> 
+        <Text style={styles.body}>{recipe.description}</Text> 
       </View>
       <View style={styles.tabContainer}>
         <TouchableOpacity style={[styles.tabItem, showIngredients ? styles.activeTab : ""]} onPress={() => setShowIngredients(true)}>
@@ -80,7 +79,7 @@ const RecipePage = ({ route }) => {
         showIngredients ? (
           <ScrollView style={styles.view}>
             {
-              data.ingredients.map((item, i) => (
+              recipe.ingredients.map((item, i) => (
                 <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
               ))
             }
@@ -88,7 +87,7 @@ const RecipePage = ({ route }) => {
         ) : (
           <ScrollView style={styles.view}>
             {
-              data.directions.map((item, i) => (
+              recipe.directions.map((item, i) => (
                 <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
               ))
             }

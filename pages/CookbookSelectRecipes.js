@@ -23,8 +23,7 @@ const CookbookSelectRecipes = ({ route }) => {
 
   // Function to handle confirm selection
   const handleActionPress = async () => {
-    // Filter original recipe list by ID to keep only selected IDs
-    console.log("select:", cookbook)
+    // Insert relationship between current cookbook and each recipe
     for (const recipeId of selectedRecipes) {
       await supabase.from("cookbook_recipes").insert({
         "cookbook_id" : cookbook.id,
