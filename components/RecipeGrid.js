@@ -8,7 +8,7 @@ const RecipeGrid = ({ recipes = [] }) => {
       {
         recipes.map((recipe, i) => (
           <View key={i}>
-            <Card data={recipe} Cookbook={false} />
+            <Card data={recipe} />
           </View>
         ))
       }

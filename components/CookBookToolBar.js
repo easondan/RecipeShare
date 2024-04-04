@@ -12,14 +12,12 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MoreOptions from "./MoreOptions";
 import { useNavigation } from "@react-navigation/native";
-import { useFavourites } from './FavouritesContext';
-import SelectCookbookModal from '../components/SelectCookBookModel'; // This is a new component you will create
-import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import DuplicateModal from './DuplicateModal';
 import { supabase } from '../lib/supabase'
-const CookBookToolBar = ({route}) => {
+
+const CookbookToolbar = ({ route }) => {
   
-  const data = route?.params;
   const [showOptions, setShowMoreOptions] = useState(false); // State to control the visibility of the dropdown
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCopyModal, setShowCopyModal] = useState(false);
@@ -29,8 +27,8 @@ const CookBookToolBar = ({route}) => {
     { id: 3, label: "Delete" },
     // Add more options as needed
   ];
-
   const navigation = useNavigation();
+  const { cookbook } = route?.params;
 
   const toggleOptions = () => {
     setShowMoreOptions(!showOptions);
@@ -42,12 +40,12 @@ const CookBookToolBar = ({route}) => {
       case 'Add Recipes':
         const value = await supabase.auth.getUser();
         const { data, error } = await supabase
-        .from('recipes')
-        .select().eq('owner_id',value.data.user.id);
-        navigation.navigate("AddRecipeCookbookPage",data);
+          .from('recipes')
+          .select()
+          .eq('owner_id', value.data.user.id);
+        navigation.navigate("CookbookSelectRecipes", { cookbook : cookbook, recipes : data});
         break;
       case 'Duplicate':
-
         setShowCopyModal(true);
         break;
       case 'Delete':
@@ -56,6 +54,7 @@ const CookBookToolBar = ({route}) => {
         break;
     }
   };
+  
   const handleCancel = () => {
     setShowCopyModal(false);
     setShowDeleteModal(false);
@@ -64,21 +63,20 @@ const CookBookToolBar = ({route}) => {
   const handleDelete = () => {
     setShowDeleteModal(false);
     navigation.navigate("CookbookHome");
-
   }
 
   const handleCopy= () => {
     setShowCopyModal(false);
     navigation.navigate("CookbookHome");
-
   }
+
   return (
     <View id="toolbar" style={styles.toolbar}>
       <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate("CookbookHome")} activeOpacity={0.7}>
         <FAIcon name="chevron-left" size={25} color="black" />
 
       </TouchableOpacity>
-      <Text style = {styles.toolbarText}>{data?.cookbook.name}</Text>
+      <Text style = {styles.toolbarText}>{cookbook.name}</Text>
       <View style={styles.iconGroup}>
         {showOptions && (
           <MoreOptions
@@ -95,7 +93,7 @@ const CookBookToolBar = ({route}) => {
         isVisible={showDeleteModal} 
         onCancel={() => handleCancel()}
         onDelete={() => handleDelete()}
-        msg={`Are you sure you want to delete the Cookbook "${data?.cookbook.name}" ?\n\nThis action cannot be undone.`}
+        msg={`Are you sure you want to delete the Cookbook "${cookbook.name}" ?\n\nThis action cannot be undone.`}
       />
       <DuplicateModal type = "Cookbook" isVisible={showCopyModal} onCancel={()=>handleCancel()} onConfirm={()=>handleCopy()}/>
     </View>
@@ -139,4 +137,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default CookBookToolBar;
+export default CookbookToolbar;

@@ -3,11 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image
 import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../components/ActionButton';
+import { supabase } from '../lib/supabase';
 
-const AddRecipeScreen = ({route}) => {
+const CookbookSelectRecipes = ({ route }) => {
+  const { cookbook, recipes } = route?.params
+
   const [selectedRecipes, setSelectedRecipes] = useState([]);
   const navigation = useNavigation();
-  const data = route?.params
 
   // Function to toggle the selection of a recipe
   const toggleRecipeSelection = (recipeId) => {
@@ -19,59 +21,63 @@ const AddRecipeScreen = ({route}) => {
     }
   };
 
-  // Function to handle action button press
-  const handleActionPress = () => {
-    // Perform action here with selected recipes
+  // Function to handle confirm selection
+  const handleActionPress = async () => {
+    // Filter original recipe list by ID to keep only selected IDs
+    console.log("select:", cookbook)
+    for (const recipeId of selectedRecipes) {
+      await supabase.from("cookbook_recipes").insert({
+        "cookbook_id" : cookbook.id,
+        "recipe_id" : recipeId
+      });
+    }
     setSelectedRecipes([]);
-    navigation.navigate("CookbookPage",data);
+    // Finally, navigate back to cookbook page
+    navigation.navigate("CookbookPage", { cookbook : cookbook });
   };
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {data.map(recipe => (
-          <TouchableOpacity
-            key={recipe.name}
-            style={styles.recipeItem}
-            onPress={() => toggleRecipeSelection(recipe.name)}>
-            <View style={styles.imageContainer}>
+        {recipes.map(recipe => (
+          <View key={recipe.id} style={styles.card}>
+            <TouchableOpacity onPress={() => toggleRecipeSelection(recipe.id)}>
               <Image source={{ uri: recipe.imageUrl,cache:'reload' }} style={styles.image} />
-              {selectedRecipes.includes(recipe.name) && <View style={styles.overlay} />}
-              {selectedRecipes.includes(recipe.name) && (
-                <View style={styles.checkMark}>
-                  <MaterialIcons name="check" size={24} color="#C0452A" />
-                </View>
-              )}
-            </View>
+              {selectedRecipes.includes(recipe.id) && (
+                <>
+                  <View style={styles.overlay} />
+                  <View style={styles.checkMark}>
+                    <MaterialIcons name="check" size={24} color="#C0452A" />
+                  </View>
+                </>)}
+            </TouchableOpacity>
             <Text style={styles.text}>{recipe.name}</Text>
-          </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
-
-        <ActionButton disabled={selectedRecipes.length === 0} onPress={handleActionPress}/>
+      {/* TODO some kind of message if no recipes to select from ? */}
+        <ActionButton type="confirm" disabled={selectedRecipes.length === 0} onPress={handleActionPress}/>
     </View>
   );
 };
+
+// Calculate size of each recipe card, subtracting padding
 const recipeWidth = (Dimensions.get('window').width - 60) / 3;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   scrollViewContent: {
-    margin: 10,
+    margin: 15,
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     gap: 15
   },
-  recipeItem: {
-    marginBottom: 10,
-  },
-  disabled: {
-    backgroundColor: '#ccc',
-  },
-  imageContainer: {
-    position: 'relative',
+  card: {
+    flex: 1,
+    alignItems: 'center',
+    maxWidth: recipeWidth // Force names within card width
   },
   image: {
     width: recipeWidth,
@@ -101,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddRecipeScreen;
+export default CookbookSelectRecipes;

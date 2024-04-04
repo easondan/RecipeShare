@@ -1,4 +1,4 @@
-import { useNavigation,useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import ActionButton from '../components/ActionButton';
 import RecipeGrid from '../components/RecipeGrid';
