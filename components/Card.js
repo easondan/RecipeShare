@@ -7,7 +7,7 @@ const Card = ({ data, isCookbook = false}) => {
   const navigation = useNavigation();
   const handleCardPress = (data) => {
     isCookbook ? navigation.navigate('CookbookPage', { cookbook : data }) :   
-      navigation.navigate('RecipePage', { data });
+      navigation.navigate('RecipePage', { recipe : data });
   };
 
   return (

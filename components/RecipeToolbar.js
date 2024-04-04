@@ -14,18 +14,12 @@ import MoreOptions from "./MoreOptions";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { useNavigation } from "@react-navigation/native";
 import { useFavourites } from './FavouritesContext';
-import SelectCookbookModal from '../components/SelectCookBookModel'; // This is a new component you will create
 import DuplicateModal from './DuplicateModal';
 import { supabase } from '../lib/supabase';
 
 const RecipeToolbar = ({ route }) => {
-  const [isSelectCookbookModalVisible, setIsSelectCookbookModalVisible] = useState(false);
-
-  
-  const { data } = route.params;
-  
+  const { recipe } = route.params;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  
   const [showOptions, setShowMoreOptions] = useState(false); // State to control the visibility of the dropdown
   const options = [
     { id: 1, label: "Edit" },
@@ -42,17 +36,17 @@ const RecipeToolbar = ({ route }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (data) {
-      setFavourite(isFavourited(data.name));
+    if (recipe) {
+      setFavourite(isFavourited(recipe.name));
     }
-  }, [data, isFavourited]);
+  }, [recipe, isFavourited]);
 
   const toggleFavourite = () => {
-    if (data) {
+    if (recipe) {
       if (favourite) {
-        removeFavourite(data.name);
+        removeFavourite(recipe.name);
       } else {
-        addFavourite(data);
+        addFavourite(recipe);
       }
       setFavourite(!favourite);
     }
@@ -66,7 +60,7 @@ const RecipeToolbar = ({ route }) => {
     setShowMoreOptions(false);
     switch (option.label) {
       case 'Edit':
-        navigation.navigate("EditRecipePage",data);
+        navigation.navigate("EditRecipePage",recipe);
         break;
       case 'Duplicate':
         setShowCopyModal(true);
@@ -83,7 +77,7 @@ const RecipeToolbar = ({ route }) => {
     const { error } = await supabase
     .from('recipes')
     .delete()
-    .eq('id', data.id)
+    .eq('id', recipe.id)
     if(error){
       Alert.alert("Unable to Delete Recipe");
     }else{
@@ -98,7 +92,7 @@ const RecipeToolbar = ({ route }) => {
   }
 
   const handleCopy = async (name) =>{
-    const {id,created_at,... newData} = data;
+    const {id,created_at,... newData} = recipe;
 
     const value = await supabase.auth.getUser();
     newData.owner_id = value.data.user.id;
@@ -113,7 +107,10 @@ const RecipeToolbar = ({ route }) => {
       setShowCopyModal(false);
     navigation.navigate("RecipeHome");  // Return to previous page
     }
+  }
 
+  const handleAddToCookbooks = () => {
+    navigation.navigate("RecipeSelectCookbooks", { recipe : recipe })
   }
 
   return (
@@ -126,14 +123,9 @@ const RecipeToolbar = ({ route }) => {
         <TouchableOpacity activeOpacity={0.7}>
           <MaterialIcon name="cart" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsSelectCookbookModalVisible(true)} activeOpacity={0.7}>
-        <MaterialIcon name="book-plus" size={28} color="black" />
+        <TouchableOpacity onPress={() => handleAddToCookbooks()} activeOpacity={0.7}>
+          <MaterialIcon name="book-plus" size={28} color="black" />
         </TouchableOpacity>
-        <SelectCookbookModal
-          isVisible={isSelectCookbookModalVisible}
-          onClose={() => setIsSelectCookbookModalVisible(false)}
-          recipeData={data}
-        />
         <TouchableOpacity onPress={toggleFavourite} activeOpacity={0.7}>
           <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
         </TouchableOpacity>
@@ -151,7 +143,7 @@ const RecipeToolbar = ({ route }) => {
         isVisible={showDeleteModal} 
         onCancel={() => handleCancel()}
         onDelete={() => handleDelete()}
-        msg={`Are you sure you want to delete the recipe "${data.name}" ?\n\nThis action cannot be undone.`}
+        msg={`Are you sure you want to delete the recipe "${recipe.name}" ?\n\nThis action cannot be undone.`}
       />
       <DuplicateModal type = "Recipe" isVisible={showCopyModal} onCancel={()=>handleCancel()} onConfirm={()=>handleCopy(name)} name = {name}setName={setName}/>
     </View>

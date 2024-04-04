@@ -8,6 +8,7 @@ import {
   ScrollView,
   Text,
   Modal,
+  Alert
 } from "react-native";
 import ActionButton from "../components/ActionButton";
 import ShareModal from "../components/ShareModal";
@@ -17,20 +18,25 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 const CookbookPage = ({ route }) => {
 
   const { cookbook } = route.params;
+  console.log(cookbook)
   const [recipes, setRecipes] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchRecipes = async() => {
-        const { data, error } = await supabase
-          .from('cookbook_recipes')
-          .select(`recipe_id, recipes(*)`)  // Select all recipes by id
-          .eq('cookbook_id', cookbook.id);  // Where cookbook_id matches current cookbook
+        // TODO this is borked
+        const { data, error } = await supabase.rpc('get_cookbook_recipes', { cid : cookbook.id })
+        console.log("rpc", data);
+        // const { data, error } = await supabase
+        //   .from('cookbook_recipes')
+        //   .select(`recipe_id, recipes(*)`)  // Select all recipes by id
+        //   .eq('cookbook_id', cookbook.id);  // Where cookbook_id matches current cookbook
         if (error) {
           Alert.alert("ERROR", "Failed to load cookbook recipes!");
           console.error('Error fetching cookbook recipes:', error);
         } else {
+          console.log("fetched:", data)
           const loadedRecipes = data.map(item => item.recipes); // Extract only recipes
           setRecipes(loadedRecipes);
         }
