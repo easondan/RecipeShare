@@ -1,32 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { supabase } from '../lib/supabase';
 
 const SelectCookbookModal = ({ isVisible, onClose, onSelectCookbook, recipeData }) => {
     
     const [cookbooks, setCookbooks] = useState([]);
 
-    // const clearAsyncStorage = async () => {
-    //     try {
-    //       await AsyncStorage.clear();
-    //       console.log('AsyncStorage has been cleared!');
-    //     } catch (error) {
-    //       console.error('Error clearing AsyncStorage:', error);
-    //     }
-    // };
     useEffect(() => {
-      const loadCookbooks = async () => {
-        const result = await AsyncStorage.getItem('cookbooks');
-        const cookbooks = result ? JSON.parse(result) : [];
-        setCookbooks(cookbooks);
+      const fetchCookbooks = async () => {
+        const value = await supabase.auth.getUser();
+        const { data, error } = await supabase
+          .from('cookbooks')
+          .select() // Select all 
+          .eq('author_id', value.data.user.id); // Matching user id
+        if (error) {
+          Alert.alert("ERROR", "Failed to load cookbooks!");
+          console.error('Error fetching cookbooks:', error);
+        } else {
+          setCookbooks(data);
+        }
       };
-  
-      loadCookbooks();
+      const fetchSharedCookbooks = async() => {
+        const value = await supabase.auth.getUser();
+        const { data, error } = await supabase
+          .from('shared_cookbooks')
+          .select(`cookbook_id, cookbooks(*)`) // Select on matching cookbook id
+          .eq('shared_user_id', value.data.user.id);  // Where user ids equal
+        if (error) {
+          Alert.alert("ERROR", "Failed to load shared cookbooks!");
+          console.error('Error fetching shared cookbooks:', error);
+        } else {
+          // Append shared cookbooks to list of all cookbooks
+          const sharedCookbooks = data.map(item => item.cookbooks); // Extract only cookbooks
+          setCookbooks([...cookbooks, ...sharedCookbooks]);
+          // console.log(sharedCookbooks)
+        }
+      };
+      fetchCookbooks();
+      fetchSharedCookbooks();
     }, []);
   
     const handleSelectCookbook = async (selectedCookbook) => {
-        const cookbooksJson = await AsyncStorage.getItem('cookbooks');
-        const cookbooks = cookbooksJson ? JSON.parse(cookbooksJson) : [];
+      
+      const cookbooksJson = await AsyncStorage.getItem('cookbooks');
+      const cookbooks = cookbooksJson ? JSON.parse(cookbooksJson) : [];
     
     
         const updatedCookbooks = cookbooks.map(cookbook => {
@@ -41,7 +59,7 @@ const SelectCookbookModal = ({ isVisible, onClose, onSelectCookbook, recipeData 
     
         await AsyncStorage.setItem('cookbooks', JSON.stringify(updatedCookbooks));
     };
-
+  
   return (
     <Modal visible={isVisible} transparent animationType="slide">
       <View style={styles.centeredView}>

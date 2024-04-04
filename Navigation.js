@@ -19,9 +19,9 @@ import AddRecipe from "./pages/AddRecipe";
 import CustomDrawer from "./components/CustomDrawer";
 import SearchToolbar from "./components/SearchToolbar";
 import SearchResultPage from "./pages/SearchResultPage";
-import CookBookToolBar from "./components/CookBookToolBar";
+import CookbookToolbar from "./components/CookbookToolbar";
 import EditRecipe from "./pages/EditRecipe";
-import AddRecipeToCookbook from "./pages/AddRecipeToCookbook";
+import CookbookSelectRecipes from "./pages/CookbookSelectRecipes";
 
 
 export default function Navigation() {
@@ -29,8 +29,6 @@ export default function Navigation() {
   const [session, setSession] = useState(null);
   
   useEffect(() => {
-    // TODO want to review this, why are the functions defined with the use effect?
-    // Should be dependent on "session" state no?
     const fetchSession = async () => {
       const { data: session, error } = await supabase.auth.getSession();
       error
@@ -41,7 +39,6 @@ export default function Navigation() {
     const authListener = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-    
   }, []);
 
   const Drawer = createDrawerNavigator();
@@ -72,7 +69,7 @@ export default function Navigation() {
         <Stack.Screen
           name="CookbookHome"
           component={CookbookHome}
-          options={({ route }) => ({ header: () => <Toolbar title={'Cookbooks'} showSearch={true} />  })}
+          options={{ header: () => <Toolbar title={'Cookbooks'} showSearch={true} /> }}
         />
         <Stack.Screen 
           name="RecipePage" 
@@ -82,18 +79,18 @@ export default function Navigation() {
         <Stack.Screen 
           name="AddRecipePage" 
           component={AddRecipe}
-          options={{ header: () => <Toolbar title={'Add Recipe'} showMenuIcon = {false} showSearch={false} /> }}
+          options={{ header: () => <Toolbar title={'Add Recipe'} showMenuIcon={false} showSearch={false} /> }}
         />
         <Stack.Screen 
           name="EditRecipePage" 
           component={EditRecipe}
-          options={{ header: () => <Toolbar title={'Edit Recipe'} showSearch={false} showMenuIcon = {false} /> }}
+          options={{ header: () => <Toolbar title={'Edit Recipe'} showSearch={false} showMenuIcon={false} /> }}
         />
-            <Stack.Screen
-              name="AddRecipeCookbookPage"
-              component={AddRecipeToCookbook}
-              options={ {header: () => <Toolbar title={'Add Recipe'} showMenuIcon = {false} showSearch={false} />}}
-            />
+        <Stack.Screen
+          name="CookbookSelectRecipes"
+          component={CookbookSelectRecipes}
+          options={ {header: () => <Toolbar title={'Add Recipes'} showMenuIcon={false} showSearch={false} />}}
+        />
       </Stack.Navigator>
     );
   };
@@ -114,7 +111,7 @@ export default function Navigation() {
              <Stack.Screen
               name="CookbookPage"
               component={CookbookPage}
-              options={({ route }) => ({ header: () => <CookBookToolBar route={route} /> })}
+              options={({ route }) => ({ header: () => <CookbookToolbar route={route} /> })}
             />
             <Drawer.Screen
               name="GroceryList"

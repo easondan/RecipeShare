@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { supabase } from '../lib/supabase'
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import {
   View,
   StyleSheet,
@@ -7,48 +9,52 @@ import {
   Text,
   Modal,
 } from "react-native";
-import Card from "../components/Card";
-import { useNavigation } from "@react-navigation/native";
 import ActionButton from "../components/ActionButton";
 import ShareModal from "../components/ShareModal";
 import RecipeGrid from "../components/RecipeGrid";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const CookbookPage = ({ route }) => {
+
   const { cookbook } = route.params;
-  const navigation = useNavigation();
+  const [recipes, setRecipes] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  if (!cookbook || !cookbook.recipes || cookbook.recipes.length == 0) {
-    return (
-      <View style = {styles.noRecipeContainer}>
 
-        <Text style={styles.noRecipeContainer.noRecipeTest}>This cookbook has no recipes yet, get cooking !</Text>
-        <MaterialCommunityIcon name = "book-open-variant" color = "#868686" size = {100}/>
-        <ActionButton share={true} onPress={() => setModalVisible(true)} />
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <ShareModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
-      </Modal>
-      </View>
-    );
-  }
-
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchRecipes = async() => {
+        const { data, error } = await supabase
+          .from('cookbook_recipes')
+          .select(`recipe_id, recipes(*)`)  // Select all recipes by id
+          .eq('cookbook_id', cookbook.id);  // Where cookbook_id matches current cookbook
+        if (error) {
+          Alert.alert("ERROR", "Failed to load cookbook recipes!");
+          console.error('Error fetching cookbook recipes:', error);
+        } else {
+          const loadedRecipes = data.map(item => item.recipes); // Extract only recipes
+          setRecipes(loadedRecipes);
+        }
+      };
+      // Fetch updated recipes on page load
+      fetchRecipes();
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.grid}>
-        <RecipeGrid recipes={cookbook.recipes} />
-      </ScrollView>
-      <ActionButton share={true} onPress={() => setModalVisible(true)} />
+      { !recipes || recipes.length == 0 ? (
+        <View style={styles.noRecipeContainer}>
+          <Text style={styles.noRecipeContainer.noRecipeText}>
+            This cookbook has no recipes yet, get cooking !
+          </Text>
+          <MaterialCommunityIcon name="book-open-variant" color="#868686" size={100}/>
+        </View>
+      ) : (
+        <ScrollView>
+          <RecipeGrid recipes={recipes} />
+        </ScrollView>
+      )}
+      <ActionButton type="share" onPress={() => setModalVisible(true)} />
       <Modal
         animationType="fade"
         transparent={true}
@@ -62,9 +68,9 @@ const CookbookPage = ({ route }) => {
           setModalVisible={setModalVisible}
         />
       </Modal>
-    </SafeAreaView>
+  </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -75,11 +81,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems:'center',
-    noRecipeTest:{
+    noRecipeText:{
       width: "70%",
       fontSize:24,
       textAlign: 'center'
-    }
+    },
   }
   
 });

@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { View, Modal, StyleSheet, ActivityIndicator, SafeAreaView, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Modal, StyleSheet, ActivityIndicator, SafeAreaView, ScrollView, Alert, InteractionManager } from 'react-native';
 import ActionButton from '../components/ActionButton';
 import CookbookModal from '../components/CookbookModal';
 import Dropdown from '../components/Dropdown';
 import { supabase } from '../lib/supabase'
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CookbookHome = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -59,10 +59,7 @@ const CookbookHome = () => {
         Alert.alert("ERROR", "Failed to load cookbooks!");
         console.error('Error fetching cookbooks:', error);
       } else {
-        // const updatedCookbooks = data;
-        // console.log(updatedCookbooks)
         setCookbooks(data);
-        // console.log(cookbooks)
       }
     }
     if (!modalVisible) {

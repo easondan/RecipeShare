@@ -2,17 +2,16 @@ import React from "react";
 import { useNavigation } from '@react-navigation/native';
 import { Image, StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 
-const Card = ({ data, Cookbook }) => {
+const Card = ({ data, isCookbook = false}) => {
 
   const navigation = useNavigation();
-  const handleRecipeClick = (data) => {
-    Cookbook ? navigation.navigate('CookbookPage', { cookbook: data }) :   
+  const handleCardPress = (data) => {
+    isCookbook ? navigation.navigate('CookbookPage', { cookbook : data }) :   
       navigation.navigate('RecipePage', { data });
-  
   };
 
   return (
-    <TouchableOpacity style={styles.card} activeOpacity={0.8} onPress={() => handleRecipeClick(data)}>
+    <TouchableOpacity style={styles.card} activeOpacity={0.8} onPress={() => handleCardPress(data)}>
       <Image source={{ uri: data.imageUrl,cache: "reload" }} style={styles.image} />
       <Text style={styles.text}>{data.name}</Text>
     </TouchableOpacity>
