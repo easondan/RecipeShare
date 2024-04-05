@@ -23,8 +23,7 @@ const CookbookToolbar = ({ route }) => {
   const [showCopyModal, setShowCopyModal] = useState(false);
   const options = [
     { id: 1, label: "Add Recipes" },
-    { id: 2, label: "Duplicate" },
-    { id: 3, label: "Delete" },
+    { id: 2, label: "Delete" },
     // Add more options as needed
   ];
   const navigation = useNavigation();
@@ -45,12 +44,10 @@ const CookbookToolbar = ({ route }) => {
           .eq('owner_id', value.data.user.id);
         navigation.navigate("CookbookSelectRecipes", { cookbook : cookbook, recipes : data});
         break;
-      case 'Duplicate':
-        setShowCopyModal(true);
-        break;
       case 'Delete':
         // Show delete confirmation prompt
         setShowDeleteModal(true);
+        // const {error: deleteError}  = await supabase.
         break;
     }
   };
@@ -60,8 +57,22 @@ const CookbookToolbar = ({ route }) => {
     setShowDeleteModal(false);
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setShowDeleteModal(false);
+    console.log(cookbook);
+    const { error:deleteErrorRecipe } = await supabase
+      .from('cookbook_recipes')
+      .delete()
+      .eq('cookbook_id', cookbook.id)
+      const { error:deleteError } = await supabase
+      .from('shared_cookbooks')
+      .delete()
+      .eq('cookbook_id', cookbook.id)
+      const { error:deleteErrorCookbook } = await supabase
+      .from('cookbooks')
+      .delete()
+      .eq('id', cookbook.id)
+      console.log(deleteError)
     navigation.navigate("CookbookHome");
   }
 

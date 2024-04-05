@@ -39,7 +39,10 @@
     //In M3 will be prob some search in the Db
     const submitSearch = async () => {
     const value = await supabase.auth.getUser();
-    let query = supabase
+    let filteredRecipes;
+    let filteredCookbooks;
+    if(title === 'My Recipes'){
+        let query = supabase
         .from("recipes")
         .select()
         .eq('owner_id',value.data.user.id);
@@ -58,16 +61,32 @@
         return;
     }
 
-    const filteredRecipes = data.filter((recipe) =>
+    filteredRecipes = data.filter((recipe) =>
         recipe.name.toLowerCase().includes(searchText.toLowerCase())
     );
+
+
+
+    }else{
+        console.log("Hello");
+        const { data:cookbookData, error:errorCookbookData } = await supabase
+        .from('cookbooks')
+        .select().eq('author_id',value.data.user.id);
+    
+        filteredCookbooks = cookbookData.filter((cookbook) =>
+        cookbook.name.toLowerCase().includes(searchText.toLowerCase())
+
+
+    );
+
+    }
 
     // Navigate to the Search screen with filtered data
     navigation.navigate("SearchPage", {
         searchText: searchText,
         title: title,
         filters: [], // You can add filters if needed
-        resultData: filteredRecipes, // Pass filtered recipes as resultData
+        resultData: title === "My Recipes" ? filteredRecipes :filteredCookbooks, // Pass filtered recipes as resultData
     });
     };
 
