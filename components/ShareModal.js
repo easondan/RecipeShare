@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,58 +9,101 @@ import {
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import UploadIcon from "react-native-vector-icons/Feather";
-import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SelectList } from "react-native-dropdown-select-list";
 import ShareProfile from "./ShareProfile";
 import { ScrollView } from "react-native-gesture-handler";
+import { supabase } from '../lib/supabase'
+import { useFocusEffect } from '@react-navigation/native';
 
-const ShareModal = ({ modalVisible, setModalVisible }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [emailAddress, setEmailAddress] = useState("");
-  const [newPermissions, setNewPermission] = useState("Contributor");
-  const data = [
-    { key: "1", value: "Viewer" },
-    { key: "2", value: "Contributor" },
-    { key: "2", value: "Remove" },
-  ];
-  const userData = [
-    {
-      key: 1,
-      imageUrl: "https://cdn.pfps.gg/pfps/6053-pepe-mcdonals.png",
-      name: "Eason Liang",
-      email: "eliang@uoguelph.ca",
-    },
-    {
-      key: 2,
-      imageUrl: "https://cdn.pfps.gg/pfps/6053-pepe-mcdonals.png",
-      name: "Eason Liang",
-      email: "eliang@uoguelph.ca",
-    },
-    {
-      key: 3,
-      imageUrl: "https://cdn.pfps.gg/pfps/6053-pepe-mcdonals.png",
-      name: "Eason Liang",
-      email: "eliang@uoguelph.ca",
-    },
-  ];
-  const saveShareCoobook = async () => {
-    console.log("Hello");
+const ShareModal = ({ cookbook, setModalVisible }) => {
+
+  const [newEmail, setNewEmail] = useState("");
+
+  const [possibleUsers, setPossibleUsers] = useState([]);
+  const [sharedUsers, setSharedUsers] = useState([]);
+  const [updatedUserIds, setUpdatedUserIds] = useState([]);
+  const [deletedUsers, setDeletedUsers] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUsers = async () => {
+        const { data: allUserData, error : allUserError } = await supabase.from('users').select();
+        if (allUserError) {
+          Alert.alert("ERROR", "Failed to load users!");
+          console.error('Error fetching all users:', allUserError);
+        }
+        setPossibleUsers(allUserData);
+
+        const { data: sharedUserData, error: sharedUserError } = await supabase
+          .from('shared_cookbooks')
+          .select('shared_user_id')  // Select user ids 
+          .eq('cookbook_id', cookbook.id);  // Where cookbook_id matches current cookbook
+        if (sharedUserError) {
+          Alert.alert("ERROR", "Failed to load shared users!");
+          console.error('Error fetching cookbook shared users:', sharedUserError);
+        }
+        // Filter out full shared user records 
+        const sharedUserIds = sharedUserData.map(obj => obj.shared_user_id);
+        const filteredUsers = []
+        for (const user of allUserData) {
+          if (sharedUserIds.includes(user.id)) {
+            filteredUsers.push(user);
+          }
+        }
+        setSharedUsers(filteredUsers);
+        setUpdatedUserIds(sharedUserIds);
+      }
+      // Fetch possible users
+      fetchUsers();
+    }, [])
+  );
+
+  const addUser = () => {
+    // Search possible users for requested user
+    const user = possibleUsers.filter((user => user.email === newEmail))[0];
+    if (!user) {
+      Alert.alert("User Not Found", "The requested user doesn't exist!");
+      return;
+    }
+    if (!updatedUserIds.includes(user.id)) {
+      setSharedUsers([...sharedUsers, user]);
+      setUpdatedUserIds([...updatedUserIds, user.id]);
+    }
+    if (deletedUsers.includes(user.id)) {
+      // Remove from list of deletes if added back
+      setDeletedUsers(deletedUsers.filter((id => id !== user.id)))
+    }
+  }
+
+  const deleteUser = (userId) => {
+    setDeletedUsers([...deletedUsers, userId]);
+    setSharedUsers(sharedUsers.filter((user => user.id !== userId)))
+    setUpdatedUserIds(updatedUserIds.filter((id => id !== userId)))
+  }
+
+  const saveShareCookbook = async () => {
+    for (const user of possibleUsers) {
+      if (updatedUserIds.includes(user.id) && !deletedUsers.includes(user.id)) {
+        await supabase.from("shared_cookbooks").insert({
+          "cookbook_id" : cookbook.id,
+          "shared_user_id" : user.id
+        });
+      }
+    }
+    for (const userId of deletedUsers) {
+      await supabase.from("shared_cookbooks").delete({
+        "cookbook_id" : cookbook.id,
+        "shared_user_id" : userId
+      })
+    }
   };
+
   return (
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
-        <TouchableOpacity
-          style={styles.closeIcon}
-          onPress={() => {
-            setModalVisible(false);
-            setSelectedImage();
-          }}
-        >
+        <TouchableOpacity style={styles.closeIcon} onPress={() => {setModalVisible(false)}}>
           <Icon name="close" size={30} color="black" />
         </TouchableOpacity>
-        <Text style={styles.modalText}>Manage Sharing</Text>
+        <Text style={styles.modalTitle}>Manage Sharing</Text>
         <View style={styles.cookbookTitleContainer}>
           <Text style={styles.titleModalText}>Add Members</Text>
           <View style={styles.addMemberContainer}>
@@ -72,41 +115,24 @@ const ShareModal = ({ modalVisible, setModalVisible }) => {
                 inputMode="text"
                 keyboardType="default"
                 multiline={true}
-                onChangeText={setEmailAddress}
+                onChangeText={setNewEmail}
               />
             </View>
-            <SelectList
-              setSelected={setNewPermission}
-              data={data}
-              save="value"
-              search={false}
-              defaultOption={data[1]}
-              maxHeight={80}
-              boxStyles={styles.selectList}
-              dropdownStyles={styles.inputStyle}
-            />
+            <TouchableOpacity onPress={addUser}>
+              <Icon style={{padding: 5}} name="account-plus" size={35} color="black" />
+            </TouchableOpacity>
           </View>
-
           <Text style={styles.titleModalText}>Manage Member Permissions</Text>
-          <View style = {styles.peopleContainer}>
-            <ScrollView>
-              {userData.map((data) => (
-                <ShareProfile
-                  key={data.key}
-                  name={data.name}
-                  imageUrl={data.imageUrl}
-                  email={data.email}
-                />
+          <ScrollView>
+            <View style={styles.userContainer}>
+              {sharedUsers.map((user) => (
+                <ShareProfile key={user.id} userData={user} deleteUser={deleteUser}/>
               ))}
-            </ScrollView>
-          </View>
+            </View>
+          </ScrollView>
         </View>
-
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={saveShareCoobook}
-        >
-          <Text style={{ color: "white", fontSize: 20 }}>Save</Text>
+        <TouchableOpacity style={styles.saveButton} onPress={saveShareCookbook}>
+          <Text style={{ color: "white", fontSize: 20, textAlign: 'center' }}>Save</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -114,111 +140,67 @@ const ShareModal = ({ modalVisible, setModalVisible }) => {
 };
 
 const styles = StyleSheet.create({
-  peopleContainer:{
-    height: 150,
-  },
   centeredView: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   inputContainer: {
-    marginTop: 10,
+    flex: 1,
+    height: 40,
     flexDirection: "row",
-    borderWidth: 1,
+    paddingLeft: 10,
+    marginRight: 10,
     borderRadius: 5,
-    width: "60%",
+    borderWidth: 1,
   },
   addMemberContainer: {
+    margin: 10,
+    marginTop: 5,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    height: 100,
-    marginBottom: 20,
+    alignItems: 'center'
   },
-  inputStyle: {
-    width: "60%",
-    marginLeft: 10,
+  userContainer: {
+    margin: 10,
+    gap: 5,
+    backgroundColor: 'blue'
   },
   modalView: {
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 10,
-    alignItems: "center",
-    width: "90%",
-    maxWidth: 500,
-    height: 450,
-    alignSelf: "center",
+    padding: 15,
+    paddingTop: 0,
+    width: "85%",
   },
   closeIcon: {
-    position: "absolute",
     top: 10,
     right: 10,
-    paddingBottom: 5,
-  },
-  selectList: {
-    marginTop: 10,
-    width: "60%",
-    marginLeft: 10,
-  },
-  cookbookTitleContainer: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    width: "100%",
-  },
-  frame: {
-    width: 150,
-    height: 150,
-    borderWidth: 2,
-    borderColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 0,
-    marginBottom: 60,
+    padding: 5,
+    position: "absolute",
   },
   input: {
-    fontSize: 15,
-    height: 50,
-    marginLeft: 5,
+    fontSize: 16,
   },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-    borderRadius: 6,
-  },
-  placeholder: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#EAEAEA",
-    borderRadius: 6,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  modalText: {
+  modalTitle: {
     fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin: 15,
   },
   titleModalText: {
-    paddingTop: 10,
     fontSize: 18,
-    marginTop: 10,
+    margin: 10,
+    marginBottom: 0
   },
-  createButton: {
-    backgroundColor: "#D75B3F",
+  saveButton: {
     padding: 20,
-    paddingLeft: 40,
-    paddingRight: 40,
-    paddingTop: 10,
-    paddingBottom: 10,
+    margin: 40,
+    marginTop: 20,
+    marginBottom: 20,
     borderRadius: 50,
-    alignItems: "center",
-    position: "absolute",
-    bottom: 10,
-  },
-  imageText: {
-    textAlign: "center",
-    fontSize: 15,
-  },
+    backgroundColor: "#D75B3F",
+  }
 });
 
 export default ShareModal;
