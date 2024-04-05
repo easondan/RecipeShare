@@ -29,8 +29,10 @@ const RecipeSelectCookbooks = ({ route }) => {
           console.error('Error fetching shared cookbooks:', sharedCookbooksData.error);
           return;
         }
-        // Extract only cookbooks and combine into one array
-        const sharedCookbooks = sharedCookbooksData.data.map(item => item.cookbooks);
+        // Extract only cookbook records, excluding duplicates shared with user self (bad data)
+        const sharedCookbooks = sharedCookbooksData.data
+          .map(item => item.cookbooks)
+          .filter(cookbook => cookbook.author_id !== value.data.user.id);;
         setCookbooks([...cookbooksData.data, ...sharedCookbooks]);
       };
       fetchCookbooks();
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: 'center',
     flexWrap: 'wrap', // Allow names to line wrap
   },
