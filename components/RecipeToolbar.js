@@ -13,7 +13,6 @@ import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MoreOptions from "./MoreOptions";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { useNavigation } from "@react-navigation/native";
-import { useFavourites } from './FavouritesContext';
 import DuplicateModal from './DuplicateModal';
 import { supabase } from '../lib/supabase';
 
@@ -28,28 +27,36 @@ const RecipeToolbar = ({ route }) => {
     // Add more options as needed
   ];
   
-  const { isFavourited, addFavourite, removeFavourite } = useFavourites();
   const [favourite, setFavourite] = useState(false);
   const [showCopyModal, setShowCopyModal] = useState(false);
   const [name,setName] = useState("");
   
   const navigation = useNavigation();
 
-  useEffect(() => {
-    if (recipe) {
-      setFavourite(isFavourited(recipe.name));
-    }
-  }, [recipe, isFavourited]);
+  const fetchFavourite = async () =>{
+    const userValue = await supabase.auth.getUser();
 
-  const toggleFavourite = () => {
-    if (recipe) {
-      if (favourite) {
-        removeFavourite(recipe.name);
-      } else {
-        addFavourite(recipe);
-      }
-      setFavourite(!favourite);
+    const {data,error} = await supabase.from("user_favourites").select().eq('user_id', userValue.data.user.id).eq('recipe_id',recipe.id);
+    if(data.length !==0){
+      setFavourite(true);
     }
+  }
+  useEffect(() => {
+    fetchFavourite();
+  }, [recipe]);
+
+  const toggleFavourite = async () => {
+    const userValue = await supabase.auth.getUser();
+
+      if (favourite) {
+        setFavourite(!favourite);
+        const {data,error} = await supabase.from("user_favourites").delete().eq('user_id', userValue.data.user.id).eq('recipe_id',recipe.id);   
+      } else {
+        setFavourite(!favourite);
+        const {data,error} = await supabase.from("user_favourites").insert({user_id:userValue.data.user.id,recipe_id: recipe.id});
+      }
+
+    
   };
 
   const toggleOptions = () => {
@@ -74,16 +81,16 @@ const RecipeToolbar = ({ route }) => {
   const handleDelete = async () => {
     // TODO backend stuff to delete recipe record
     setShowDeleteModal(false);
-    const { error } = await supabase
-    .from('recipes')
-    .delete()
-    .eq('id', recipe.id)
-    if(error){
-      Alert.alert("Unable to Delete Recipe");
-    }else{
+    // const { error } = await supabase
+    // .from('recipes')
+    // .delete()
+    // .eq('id', recipe.id)
+    // if(error){
+    //   Alert.alert("Unable to Delete Recipe");
+    // }else{
       navigation.navigate("RecipeHome");  // Return to previous page
-    }
-  
+    // }
+    console.log(recipe);
   }
 
   const handleCancel = () => {
