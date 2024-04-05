@@ -66,7 +66,6 @@ const SearchToolbar = ({ route }) => {
           .from("user_favourites")
           .select("recipe_id")
           .eq("user_id", value.data.user.id);
-        console.log(recipeIdData);
 
         const extractedIds = recipeIdData.map((item) => item.recipe_id);
         query = supabase.from("recipes").select().in("id", extractedIds);
@@ -101,7 +100,6 @@ const SearchToolbar = ({ route }) => {
         cookbook.name.toLowerCase().includes(searchText.toLowerCase())
       );
     }
-    console.log(filteredRecipes);
     // Navigate to the Search screen with filtered data
     navigation.navigate("SearchPage", {
       searchText: searchText,
@@ -120,37 +118,40 @@ const SearchToolbar = ({ route }) => {
         style={styles.navIcon}
         activeOpacity={0.7}
       >
-        <FAIcon name="chevron-left" size={28} color="black" />
-        </TouchableOpacity>
+        <View style={styles.iconPadding}>
+          <FAIcon name="chevron-left" size={28} color="black" />
+        </View>
+      </TouchableOpacity>
 
         <View style={styles.searchContainer}>
-        <View style={styles.searchIcon}>
-            <MaterialIcon name="search" size={24} color="#989898" />
-        </View>
-        <TextInput
-          style={styles.searchInput}
-          placeholder={'Search "' + title + '"'}
-          value={searchText}
-          onChangeText={setSearchText}
-          onSubmitEditing={submitSearch}
-        />
-        {!!searchText && (
-          <TouchableOpacity
-            onPress={() => setSearchText("")}
-            style={styles.searchIcon}
-          >
-            <MaterialIcon name="close" size={22} color="black" />
-            </TouchableOpacity>
-        )}
-      </View>
-      {title === "My Recipes" || title==="Favourites" ? (
-        <TouchableOpacity onPress={ShowfilterModal} style={styles.navIcon}>
-          <MaterialIcon
-            name="tune"
-            size={30}
-            color="black"
-            style={styles.filterIcon}
+          <View style={styles.searchIcon}>
+              <MaterialIcon name="search" size={24} color="#989898" />
+          </View>
+          <TextInput
+            style={styles.searchInput}
+            placeholder={'Search "' + title + '"'}
+            value={searchText}
+            onChangeText={setSearchText}
+            onSubmitEditing={submitSearch}
           />
+          {!!searchText && (
+            <TouchableOpacity onPress={() => setSearchText("")}>
+              <View style={{padding: 5}}>
+                <MaterialIcon name="close" size={22} color="black" />
+              </View>
+            </TouchableOpacity>
+          )}
+        </View>
+      {title === "My Recipes" || title==="Favourites" ? (
+        <TouchableOpacity onPress={ShowfilterModal} style={styles.tuneIcon}>
+          <View style={styles.iconPadding}>
+            <MaterialIcon
+              name="tune"
+              size={30}
+              color="black"
+              style={styles.filterIcon}
+            />
+          </View>
         </TouchableOpacity>
       ) : (
         <View style={styles.navIcon} />
@@ -160,8 +161,8 @@ const SearchToolbar = ({ route }) => {
     );
     };
 
-    const styles = StyleSheet.create({
-    toolbar: {
+const styles = StyleSheet.create({
+  toolbar: {
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: "center",
@@ -206,10 +207,19 @@ const SearchToolbar = ({ route }) => {
   },
   navIcon: {
     paddingTop: Platform.OS === "ios" ? 30 : 0,
-    marginLeft: 25,
-    marginRight: 25,
+    marginLeft: 15,
+    marginRight: 15,
     zIndex: 1,
   },
+  tuneIcon: {
+    paddingTop: Platform.OS === "ios" ? 30 : 0,
+    marginLeft: 10,
+    marginRight: 10,
+    zIndex: 1,
+  },
+  iconPadding: {
+    padding: 8,
+  }
 });
 
-    export default SearchToolbar;
+export default SearchToolbar;

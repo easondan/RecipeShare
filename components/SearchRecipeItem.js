@@ -6,8 +6,7 @@ const SearchRecipeItem = ({ data, title }) => {
   
   const navigation = useNavigation();
   const navigate = () =>{
-    console.log(title);
-    if(title === 'My Recipes' || title === 'Favourites'){
+    if (title === 'My Recipes' || title === 'Favourites'){
       navigation.navigate("RecipePage", { recipe: data });
     }else{
       navigation.navigate('CookbookPage', { cookbook : data }) 
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
   },
   primaryText: {
     fontSize: 18,
-    // fontWeight: "bold",
+    fontWeight: "bold",
   },
   secondaryText: {
     fontSize: 15,

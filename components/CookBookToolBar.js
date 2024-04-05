@@ -59,7 +59,7 @@ const CookbookToolbar = ({ route }) => {
 
   const handleDelete = async () => {
     setShowDeleteModal(false);
-    console.log(cookbook);
+    // console.log(cookbook);
     const { error:deleteErrorRecipe } = await supabase
       .from('cookbook_recipes')
       .delete()
@@ -72,7 +72,7 @@ const CookbookToolbar = ({ route }) => {
       .from('cookbooks')
       .delete()
       .eq('id', cookbook.id)
-      console.log(deleteError)
+      // console.log(deleteError)
     navigation.navigate("CookbookHome");
   }
 

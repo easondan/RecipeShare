@@ -48,7 +48,7 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
         .from("recipes")
         .select("id")
         .match({ owner_id: value.data.user.id });
-      console.log(recipeData[recipeData.length - 1].id);
+      // console.log(recipeData[recipeData.length - 1].id);
       const recipeId = recipeData[recipeData.length - 1].id;
       if (selectedImage !== null) {
         const { error: uploadImageError } = await supabase.storage

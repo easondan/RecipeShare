@@ -17,7 +17,7 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
         showMenuIcon ? // Render hamburger menu on main pages
         <TouchableOpacity style={styles.navIcon} onPress={() => navigation.toggleDrawer()} activeOpacity={0.7}>
           <View style={styles.iconPadding}>
-            <Icon name="menu" size={28} color="black" />
+            <Icon name="menu" size={30} color="black" />
           </View>
         </TouchableOpacity>
         : // Render back arrow on internal pages

@@ -31,7 +31,6 @@ const DynamicInputList = ({ placeholder, items, setItems }) => {
     <View style={styles.container}>
       <Text>{placeholder}</Text>
       {items.map((item, index) => {
-        console.log(item);
         return (
         <View key={i=i+1} style={styles.inputContainer}>
           <TextInput
