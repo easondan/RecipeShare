@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import { supabase } from '../lib/supabase'
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import {
@@ -20,31 +20,23 @@ const CookbookPage = ({ route }) => {
   const { cookbook } = route.params;
   const [recipes, setRecipes] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const fetchRecipes = async() => {
+    // TODO this is borked
+    console.log(cookbook.id);
+    const { data, error } = await supabase.rpc('get_cookbook_recipes', { cid : cookbook.id })
+    if (error) {
+      Alert.alert("ERROR", "Failed to load cookbook recipes!");
+      console.error('Error fetching cookbook recipes:', error);
+    } else {
+      setRecipes(data);
+    }
+  };
   useFocusEffect(
-    React.useCallback(() => {
-      const fetchRecipes = async() => {
-        data = []
-        error = false;
-        // TODO this is borked
-        // const { data, error } = await supabase.rpc('get_cookbook_recipes', { cid : cookbook.id })
-        // console.log("rpc", data);
-        // const { data, error } = await supabase
-        //   .from('cookbook_recipes')
-        //   .select(`recipe_id, recipes(*)`)  // Select all recipes by id
-        //   .eq('cookbook_id', cookbook.id);  // Where cookbook_id matches current cookbook
-        if (error) {
-          Alert.alert("ERROR", "Failed to load cookbook recipes!");
-          console.error('Error fetching cookbook recipes:', error);
-        } else {
-          // console.log("fetched:", data)
-          const loadedRecipes = data.map(item => item.recipes); // Extract only recipes
-          setRecipes(loadedRecipes);
-        }
-      };
-      // Fetch updated recipes on page load
-      fetchRecipes();
-    }, [])
+    useCallback(() => {
+
+      // Fetch updated recipes on page load 
+      fetchRecipes(); 
+    }, [cookbook])
   );
 
   return (
@@ -70,7 +62,10 @@ const CookbookPage = ({ route }) => {
           setModalVisible(!modalVisible);
         }}
       >
-        <ShareModal cookbook={cookbook} setModalVisible={setModalVisible}/>
+        <ShareModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </Modal>
   </SafeAreaView>
   );
