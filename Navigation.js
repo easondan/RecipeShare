@@ -69,7 +69,7 @@ export default function Navigation() {
         <Stack.Screen
           name="CookbookHome"
           component={CookbookHome}
-          options={{ header: () => <Toolbar title={'Cookbooks'} showSearch={false} /> }}
+          options={{ header: () => <Toolbar title={'Cookbooks'} showSearch={true} /> }}
         />
         <Stack.Screen 
           name="RecipePage" 

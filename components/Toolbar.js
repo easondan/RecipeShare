@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native'
+import FAIcon from 'react-native-vector-icons/FontAwesome6';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -15,25 +16,32 @@ const Toolbar = ({ title, showMenuIcon = true, showSearch = true, moreOptions = 
       {
         showMenuIcon ? // Render hamburger menu on main pages
         <TouchableOpacity style={styles.navIcon} onPress={() => navigation.toggleDrawer()} activeOpacity={0.7}>
-          <Icon name="menu" size={28} color="black" />
+          <View style={styles.iconPadding}>
+            <Icon name="menu" size={28} color="black" />
+          </View>
         </TouchableOpacity>
         : // Render back arrow on internal pages
         <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
-          <Icon name="chevron-back-outline" size={28} color="black"/>
+          <View style={styles.iconPadding}> 
+            <FAIcon name="chevron-left" size={28} color="black" />
+          </View>
         </TouchableOpacity>
       }
       {
         showSearch &&
         <TouchableOpacity style={[styles.icon, { right: !moreOptions ? 25 : 55 }]} activeOpacity={0.7} onPress={navigateSearch}>
-          {/* TODO search icon navigates to search page for current context */}
-          <Icon name="search" size={28} color="black"/>
+          <View style={styles.iconPadding}>
+            <Icon name="search" size={28} color="black"/>
+          </View>
         </TouchableOpacity>
       }
       {
         moreOptions &&
         // TODO implement more options dropdown
         <TouchableOpacity style={[styles.icon, { right: 25 }]} activeOpacity={0.7}>
-          <SimpleIcon name="options-vertical" size={25} color="black"/>
+          <View style={styles.iconPadding}>
+            <SimpleIcon name="options-vertical" size={26} color="black"/>
+          </View>
         </TouchableOpacity>
       }
       <Text style={styles.title}>{title}</Text>
@@ -70,13 +78,16 @@ const styles = StyleSheet.create({
   navIcon: {
     paddingTop: Platform.OS === 'ios' ? 30:0,
     position: "absolute",
-    left: 25,
+    left: 20,
     zIndex: 1,
   },
   icon: {
     paddingTop: Platform.OS === 'ios' ? 30:0,
     position: "absolute",
-    zIndex: 1
+    zIndex: 1,
+  },
+  iconPadding: {
+    padding: 10
   }
 });
 

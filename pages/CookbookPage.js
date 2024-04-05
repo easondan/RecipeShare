@@ -1,10 +1,11 @@
-import React, { useState, useEffect,useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from '../lib/supabase'
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import {
   View,
   StyleSheet,
   SafeAreaView,
+  TouchableWithoutFeedback,
   ScrollView,
   Text,
   Modal,
@@ -58,14 +59,11 @@ const CookbookPage = ({ route }) => {
         animationType="fade"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onRequestClose={() => {setModalVisible(false)}}
       >
-        <ShareModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <ShareModal cookbook={cookbook} setModalVisible={setModalVisible}/>
+        </TouchableWithoutFeedback>
       </Modal>
   </SafeAreaView>
   );

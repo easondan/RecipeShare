@@ -25,23 +25,34 @@ const RecipePage = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.overview}>
         <Image source={{ uri: recipe?.imageUrl,cache: 'reload' }} style={styles.image} />
-        <View style={{ marginLeft: 15 }}>
+        <View style={styles.infoContainer}>
           <Text style={styles.recipeName}>{recipe.name}</Text>
-          <View style={{ flexDirection: "row" }}>
-            <View>  
-              <Text style={styles.header}>Author:</Text>
-              <Text style={styles.header}>Course:</Text>
-              <Text style={styles.header}>Cuisine:</Text>
-              <Text style={styles.header}>Difficulty:</Text>
-              <Text style={styles.header}>Servings:</Text>
-            </View>
-            <View style={{ marginLeft: 15 }}>
+          <View>
+            {recipe.author &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Author:</Text>
               <Text style={styles.body}>{recipe.author}</Text>
+            </View>}
+            {recipe.course &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Course:</Text>
               <Text style={styles.body}>{recipe.course}</Text>
+            </View>}
+            {recipe.cuisine &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Cuisine:</Text>
               <Text style={styles.body}>{recipe.cuisine}</Text>
+            </View>}
+            {recipe.difficulty &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Difficulty:</Text>
               <Text style={styles.body}>{recipe.difficulty}</Text>
-              <Text style={styles.body}>{recipe.servings}</Text>  
-            </View>
+            </View>}
+            {recipe.course &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Servings:</Text>
+              <Text style={styles.body}>{recipe.servings}</Text>
+            </View>}
           </View>
         </View>
       </View>
@@ -60,7 +71,7 @@ const RecipePage = ({ route }) => {
         </View>
       </View>
       <View style={styles.description}>
-        <Text style={styles.header}>Description:</Text>
+        <Text style={styles.header}>Description: &nbsp;</Text>
         <Text style={styles.body}>{recipe.description}</Text> 
       </View>
       <View style={styles.tabContainer}>
@@ -105,8 +116,17 @@ const styles = StyleSheet.create({
   overview: {
     flexDirection: "row",
     alignItems: "center",
-    margin: 10,
+    margin: 15,
     marginBottom: 0
+  },
+  infoContainer: {
+    marginLeft: 15,
+    flex: 1,
+  },
+  infoPair: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // marginBottom: 5,
   },
   image: {
     width: 155,
@@ -115,20 +135,27 @@ const styles = StyleSheet.create({
   },
   recipeName: {
     fontSize: 20,
-    fontWeight: "bold"
+    flexWrap: 'wrap',
+    fontWeight: "bold",
+    marginTop: -5,
+    marginBottom: 2
   },
+  infoHeader: {
+    fontSize: 16,
+    minWidth: 90,
+    fontWeight: 'bold',
+  },  
   header: {
     fontSize: 16,
-    fontWeight: "bold",
-    padding: 3,
-  },  
+    fontWeight: 'bold',
+
+  },
   body: {
-    fontSize: 14,
-    padding: 3,
+    fontSize: 15,
   },
   description: {
-    flexDirection: "row",
     flexWrap: "wrap",
+    alignContent: 'center',
     margin: 15,
     marginTop: 0
   },
@@ -167,10 +194,12 @@ const styles = StyleSheet.create({
   view: {
     margin: 20,
     marginTop: 10,
+    marginBottom: 0,
   },
   viewText: {
-    fontSize: 18,
-    lineHeight: 35
+    fontSize: 18, 
+    lineHeight: 27,
+    marginBottom: 10,
   }
 });
 

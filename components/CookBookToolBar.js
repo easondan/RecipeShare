@@ -84,8 +84,9 @@ const CookbookToolbar = ({ route }) => {
   return (
     <View id="toolbar" style={styles.toolbar}>
       <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate("CookbookHome")} activeOpacity={0.7}>
-        <FAIcon name="chevron-left" size={25} color="black" />
-
+        <View style={styles.iconPadding}>
+          <FAIcon name="chevron-left" size={25} color="black" />
+        </View>
       </TouchableOpacity>
       <Text style = {styles.toolbarText}>{cookbook.name}</Text>
       <View style={styles.iconGroup}>
@@ -97,7 +98,9 @@ const CookbookToolbar = ({ route }) => {
         )}
 
         <TouchableOpacity activeOpacity={0.7} onPress={toggleOptions} style={styles.dropIcon}>
-          <SimpleIcon name="options-vertical" size={24} color="black" />
+          <View style={styles.iconPadding}>
+            <SimpleIcon name="options-vertical" size={26} color="black" />
+          </View>
         </TouchableOpacity>
       </View>
       <ConfirmDeleteModal 
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "space-between", // Adjusted for spacing out items
       height: Platform.OS === "ios" ? Dimensions.get("screen").height / 8 : 75,
-      paddingHorizontal: 25, // Add horizontal padding
+      paddingHorizontal: 20, // Add horizontal padding
       shadowColor: "black",
       shadowOffset: {
         width: 0,
@@ -143,8 +146,8 @@ const styles = StyleSheet.create({
       justifyContent: "flex-end",
       alignItems: "center"
     },
-    dropIcon: {
-        paddingTop: 30
+    iconPadding: {
+      padding: 10,
     }
   });
 

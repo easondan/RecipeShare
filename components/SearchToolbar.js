@@ -44,8 +44,9 @@ const SearchToolbar = ({ route }) => {
     setVisible(true);
   };
 
-  //In M3 will be prob some search in the Db
-  const submitSearch = async () => {
+
+    //In M3 will be prob some search in the Db
+    const submitSearch = async () => {
     const value = await supabase.auth.getUser();
     let filteredRecipes;
     let filteredCookbooks;
@@ -112,7 +113,7 @@ const SearchToolbar = ({ route }) => {
     });
   };
 
-  return (
+    return (
     <View style={[styles.toolbar, styles.toolbarContent]}>
       <TouchableOpacity
         onPress={() => handleGoBack()}
@@ -120,11 +121,11 @@ const SearchToolbar = ({ route }) => {
         activeOpacity={0.7}
       >
         <FAIcon name="chevron-left" size={28} color="black" />
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      <View style={styles.searchContainer}>
+        <View style={styles.searchContainer}>
         <View style={styles.searchIcon}>
-          <MaterialIcon name="search" size={24} color="#989898" />
+            <MaterialIcon name="search" size={24} color="#989898" />
         </View>
         <TextInput
           style={styles.searchInput}
@@ -139,7 +140,7 @@ const SearchToolbar = ({ route }) => {
             style={styles.searchIcon}
           >
             <MaterialIcon name="close" size={22} color="black" />
-          </TouchableOpacity>
+            </TouchableOpacity>
         )}
       </View>
       {title === "My Recipes" || title==="Favourites" ? (
@@ -156,11 +157,11 @@ const SearchToolbar = ({ route }) => {
       )}
       <FilterModal visible={visible} onClose={onCancel} onApply={setFilter} />
     </View>
-  );
-};
+    );
+    };
 
-const styles = StyleSheet.create({
-  toolbar: {
+    const styles = StyleSheet.create({
+    toolbar: {
     backgroundColor: "#A7CCA2",
     flexDirection: "row",
     alignItems: "center",
@@ -170,8 +171,8 @@ const styles = StyleSheet.create({
     // TODO once status bar fixed, ensure shadow doesn't show "above" toolbar
     shadowColor: "black",
     shadowOffset: {
-      width: 0,
-      height: 2,
+        width: 0,
+        height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 5,
@@ -192,8 +193,8 @@ const styles = StyleSheet.create({
     borderColor: "#9DC698",
     borderWidth: 1,
     borderRadius: 5,
-  },
-  searchInput: {
+    },
+    searchInput: {
     flex: 1,
     fontSize: 15,
     margin: 5,
@@ -211,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchToolbar;
+    export default SearchToolbar;

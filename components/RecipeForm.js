@@ -315,7 +315,7 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
           }
         />
         <TouchableOpacity style={styles.createButton} onPress={AddOrEditRecipe}>
-          <Text style={styles.createButtonText}>{label} Recipe</Text>
+          <Text style={styles.createButtonText}>Save</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

@@ -12,30 +12,27 @@ const Dropdown = ({ label, cookbookList }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={toggleDropdown}>
-      <View style = {styles.container}>
-        <TouchableOpacity
-          style={styles.dropdownButton}
-          onPress={toggleDropdown}
-        >
-          {/* TODO why is there a touchable with feedback inside a non-feedback lol */}
-          {/* I think we just want the arrow to have feedback right? not the full bar */}
-          <Text style={styles.dropdownLabel}>{label}</Text>
-          <Icon style={styles.icon} size={25} name={visible ? 'chevron-up' : 'chevron-down'} />
-        </TouchableOpacity>
-        { visible && (
-          <View style={styles.grid}>
-            {
-              cookbookList.map((cookbook, i) => (
-                <View key={i}>
-                  <Card data={cookbook} isCookbook={true} />
-                </View>
-              ))
-            }
-          </View>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+    <View style = {styles.container}>
+      <TouchableOpacity
+        style={styles.dropdownButton}
+        onPress={toggleDropdown}
+        activeOpacity={0.6}
+      >
+        <Text style={styles.dropdownLabel}>{label}</Text>
+        <Icon style={styles.icon} size={25} name={visible ? 'chevron-up' : 'chevron-down'} />
+      </TouchableOpacity>
+      { visible && (
+        <View style={styles.grid}>
+          {
+            cookbookList.map((cookbook, i) => (
+              <View key={i}>
+                <Card data={cookbook} isCookbook={true} />
+              </View>
+            ))
+          }
+        </View>
+      )}
+    </View>
   );
 }
 
