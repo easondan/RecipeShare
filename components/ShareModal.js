@@ -1,27 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
   TouchableOpacity,
   TextInput,
-  Image,
   StyleSheet,
+  ScrollView,
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import ShareProfile from "./ShareProfile";
-import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from '../lib/supabase'
-import { useFocusEffect } from '@react-navigation/native';
 
 const ShareModal = ({ cookbook, setModalVisible }) => {
 
+  const emailInputRef = useRef(null);
   const [newEmail, setNewEmail] = useState("");
 
   const [possibleUsers, setPossibleUsers] = useState([]);
   const [sharedUsers, setSharedUsers] = useState([]);
-  const [updatedUserIds, setUpdatedUserIds] = useState([]);
-  const [deletedUsers, setDeletedUsers] = useState([]);
+
+  const [existingUserIds, setExistingUserIds] = useState([]);
+  const [deletedUserIds, setDeletedUserIds] = useState([]);
+  const [addedUserIds, setAddedUserIds] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -50,7 +52,7 @@ const ShareModal = ({ cookbook, setModalVisible }) => {
           }
         }
         setSharedUsers(filteredUsers);
-        setUpdatedUserIds(sharedUserIds);
+        setExistingUserIds(sharedUserIds);
       }
       // Fetch possible users
       fetchUsers();
@@ -64,36 +66,50 @@ const ShareModal = ({ cookbook, setModalVisible }) => {
       Alert.alert("User Not Found", "The requested user doesn't exist!");
       return;
     }
-    if (!updatedUserIds.includes(user.id)) {
+    if (!existingUserIds.includes(user.id) && !addedUserIds.includes(user.id)) {
       setSharedUsers([...sharedUsers, user]);
-      setUpdatedUserIds([...updatedUserIds, user.id]);
+      setAddedUserIds([...addedUserIds, user.id]);
     }
-    if (deletedUsers.includes(user.id)) {
+    if (deletedUserIds.includes(user.id)) {
       // Remove from list of deletes if added back
-      setDeletedUsers(deletedUsers.filter((id => id !== user.id)))
+      setDeletedUserIds(deletedUserIds.filter((id => id !== user.id)))
+    }
+    // Clear field, simulates "sent" request
+    if (emailInputRef.current) {
+      emailInputRef.current.clear();
     }
   }
 
   const deleteUser = (userId) => {
-    setDeletedUsers([...deletedUsers, userId]);
+    if (addedUserIds.includes(userId)) {
+      setAddedUserIds(addedUserIds.filter((id => id !== userId)))
+    }
+    setDeletedUserIds([...deletedUserIds, userId]);
     setSharedUsers(sharedUsers.filter((user => user.id !== userId)))
-    setUpdatedUserIds(updatedUserIds.filter((id => id !== userId)))
   }
 
   const saveShareCookbook = async () => {
-    for (const user of possibleUsers) {
-      if (updatedUserIds.includes(user.id) && !deletedUsers.includes(user.id)) {
-        await supabase.from("shared_cookbooks").insert({
+    setModalVisible(false);
+    for (const id of addedUserIds) {
+      const { error } = await supabase
+        .from("shared_cookbooks")
+        .insert({
           "cookbook_id" : cookbook.id,
-          "shared_user_id" : user.id
+          "shared_user_id" : id
         });
+      if (error) {
+        console.error('Error inserting users:', error);
       }
     }
-    for (const userId of deletedUsers) {
-      await supabase.from("shared_cookbooks").delete({
-        "cookbook_id" : cookbook.id,
-        "shared_user_id" : userId
-      })
+    for (const id of deletedUserIds) {
+      const { error } = await supabase
+        .from("shared_cookbooks")
+        .delete()
+        .eq("cookbook_id", cookbook.id)
+        .eq("shared_user_id", id);
+      if (error) {
+        console.error('Error deleting users:', error);
+      }
     }
   };
 
@@ -110,11 +126,12 @@ const ShareModal = ({ cookbook, setModalVisible }) => {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder="Enter Email Address"
+                placeholder="Enter an email address"
                 placeholderTextColor="#888"
                 inputMode="text"
                 keyboardType="default"
                 multiline={true}
+                ref={emailInputRef}
                 onChangeText={setNewEmail}
               />
             </View>
@@ -123,7 +140,7 @@ const ShareModal = ({ cookbook, setModalVisible }) => {
             </TouchableOpacity>
           </View>
           <Text style={styles.titleModalText}>Manage Member Permissions</Text>
-          <ScrollView>
+          <ScrollView style={styles.scrollView}>
             <View style={styles.userContainer}>
               {sharedUsers.map((user) => (
                 <ShareProfile key={user.id} userData={user} deleteUser={deleteUser}/>
@@ -131,14 +148,17 @@ const ShareModal = ({ cookbook, setModalVisible }) => {
             </View>
           </ScrollView>
         </View>
-        <TouchableOpacity style={styles.saveButton} onPress={saveShareCookbook}>
-          <Text style={{ color: "white", fontSize: 20, textAlign: 'center' }}>Save</Text>
-        </TouchableOpacity>
+        <View style={{ alignItems: 'center'}}>
+          <TouchableOpacity activeOpacity={0.7} style={styles.saveButton} onPress={saveShareCookbook}>
+            <Text style={{ fontWeight: 'bold', color: "white", fontSize: 20, textAlign: 'center' }}>Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
+const userHeight = 45;
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
@@ -159,12 +179,14 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 5,
     flexDirection: "row",
-    alignItems: 'center'
+    alignItems: 'center',
+  },
+  scrollView: {
+    maxHeight: (3 * userHeight) + 32,
   },
   userContainer: {
-    margin: 10,
+    padding: 10,
     gap: 5,
-    backgroundColor: 'blue'
   },
   modalView: {
     backgroundColor: "white",
@@ -172,6 +194,7 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingTop: 0,
     width: "85%",
+    justifyContent: 'center'
   },
   closeIcon: {
     top: 10,
@@ -194,8 +217,8 @@ const styles = StyleSheet.create({
     marginBottom: 0
   },
   saveButton: {
+    width: 120,
     padding: 20,
-    margin: 40,
     marginTop: 20,
     marginBottom: 20,
     borderRadius: 50,

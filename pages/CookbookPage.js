@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
+  TouchableWithoutFeedback,
   ScrollView,
   Text,
   Modal,
@@ -64,11 +65,11 @@ const CookbookPage = ({ route }) => {
         animationType="fade"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onRequestClose={() => {setModalVisible(false)}}
       >
-        <ShareModal cookbook={cookbook} setModalVisible={setModalVisible}/>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <ShareModal cookbook={cookbook} setModalVisible={setModalVisible}/>
+        </TouchableWithoutFeedback>
       </Modal>
   </SafeAreaView>
   );

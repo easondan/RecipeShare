@@ -116,18 +116,26 @@ const RecipeToolbar = ({ route }) => {
   return (
     <View id="toolbar" style={styles.toolbar}>
       <TouchableOpacity style={styles.navIcon} onPress={() => navigation.goBack()} activeOpacity={0.7}>
-        <FAIcon name="chevron-left" size={25} color="black" />
+        <View style={styles.iconPadding}>
+          <FAIcon name="chevron-left" size={28} color="black" />
+        </View>
       </TouchableOpacity>
 
       <View style={styles.iconGroup}>
-        <TouchableOpacity activeOpacity={0.7}>
-          <MaterialIcon name="cart" size={28} color="black" />
-        </TouchableOpacity>
+        {/* <TouchableOpacity activeOpacity={0.7}>
+          <View style={styles.iconPadding}>
+            <MaterialIcon name="cart" size={28} color="black" />
+          </View>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => handleAddToCookbooks()} activeOpacity={0.7}>
-          <MaterialIcon name="book-plus" size={28} color="black" />
+          <View style={styles.iconPadding}>
+            <MaterialIcon name="book-plus" size={30} color="black" />
+          </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleFavourite} activeOpacity={0.7}>
-          <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={30} color="#D75B3F" />
+          <View style={styles.iconPadding}>
+            <MaterialIcon name={favourite ? "heart" : "heart-outline"} size={32} color="#D75B3F" />
+          </View>
         </TouchableOpacity>
         {showOptions && (
           <MoreOptions
@@ -136,7 +144,9 @@ const RecipeToolbar = ({ route }) => {
           />
         )}
         <TouchableOpacity activeOpacity={0.7} onPress={toggleOptions}>
-          <SimpleIcon name="options-vertical" size={24} color="black" />
+          <View style={styles.iconPadding}>
+            <SimpleIcon name="options-vertical" size={26} color="black" />
+          </View>
         </TouchableOpacity>
       </View>
       <ConfirmDeleteModal 
@@ -171,7 +181,7 @@ const styles = StyleSheet.create({
   navIcon: {
     position: "absolute",
     paddingTop: Platform.OS === "ios" ? 30 : 0,
-    left: 25,
+    left: 20,
     zIndex: 1,
   },
   iconGroup: {
@@ -181,7 +191,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
-    gap: 15
+    gap: 5
+  },
+  iconPadding: {
+    padding: 8,
+    // backgroundColor: 'purple'
   }
 });
 
