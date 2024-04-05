@@ -1,14 +1,27 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import UploadIcon from "react-native-vector-icons/Feather";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { supabase } from "../lib/supabase";
 
+import { decode } from "base64-arraybuffer";
 const CookbookModal = ({ setModalVisible }) => {
-  const defaultImage = "https://ixdiitlvaifwubdmmozg.supabase.co/storage/v1/object/public/avatars/public/default_cookbook.png";
-  const [selectedImage, setSelectedImage] = useState({base64: null, uri: null});
+  const defaultImage =
+    "https://ixdiitlvaifwubdmmozg.supabase.co/storage/v1/object/public/avatars/public/default_cookbook.png";
+  const [selectedImage, setSelectedImage] = useState({
+    base64: null,
+    uri: null,
+  });
   const [cookbookTitle, setCookbookTitle] = useState("");
 
   const pickImage = async () => {
@@ -27,30 +40,85 @@ const CookbookModal = ({ setModalVisible }) => {
       );
       setSelectedImage({
         base64: result.base64,
-        uri: result.uri
+        uri: result.uri,
       });
     }
   };
 
   const createCookbook = async () => {
     // Cookbook title required field
-    if (cookbookTitle.trim() === '') {
+    if (cookbookTitle.trim() === "") {
       Alert.alert("ERROR", "Please enter a title for the cookbook.");
       return;
     }
     const value = await supabase.auth.getUser();
-    const newCookbook = {
+    let newCookbook = {
       name: cookbookTitle,
-      imageUrl: selectedImage.uri ? selectedImage.uri : defaultImage,
+      imageUrl: "",
       author_id: value.data.user.id,
     };
-    const { error } = await supabase.from('cookbooks').insert(newCookbook);
-    if (error) {
-      Alert.alert("ERROR", "Unable to create cookbook :(");
-      console.error("Erroring uploading new cookbook: ", error);
+    const { error } = await supabase.from("cookbooks").insert(newCookbook);
+    const { data: cookbookData } = await supabase
+      .from("cookbooks")
+      .select("id")
+      .match({ author_id: value.data.user.id });
+    const cookbookId = cookbookData[cookbookData.length - 1].id;
+    let imageUrl = "";
+    console.log(selectedImage)
+    if (selectedImage.base64 !== null && selectedImage.uri!==null) {
+      const { error: uploadImageError } = await supabase.storage
+        .from("avatars")
+        .upload(
+          value.data.user.id + "/myCookbook/" + cookbookId + ".jpg",
+          decode(selectedImage.base64),
+          {
+            contentType: "image/png",
+          }
+        );
+
+      if (uploadImageError) {
+        Alert.alert("ERROR", "Unable to Upload Image");
+        imageUrl =defaultImage
+      } else {
+        const { data: link, error: errorlink } = await supabase.storage
+          .from("avatars")
+          .getPublicUrl(
+            value.data.user.id + "/myCookbook/" + cookbookId + ".jpg"
+          );
+        imageUrl = link.publicUrl;
+
+        if (errorlink) {
+          Alert.alert("ERROR", "Unable to Upload Image");
+          imageUrl =
+          defaultImage
+        }
+
+        const { error: errorUpdate } = await supabase
+          .from("cookbooks")
+          .update({ imageUrl: imageUrl })
+          .eq("id", cookbookId);
+        if (errorUpdate) {
+          Alert.alert("ERROR", "Unable to create cookbook :(");
+          console.error("Erroring uploading new cookbook: ", error);
+        } else {
+          Alert.alert("SUCCESS", "Cookbook created successfully!");
+          setModalVisible(false); // Close the modal
+        }
+      }
     } else {
-      Alert.alert("SUCCESS", "Cookbook created successfully!");
-      setModalVisible(false); // Close the modal
+      imageUrl =
+      defaultImage
+        const { error: errorUpdate } = await supabase
+          .from("cookbooks")
+          .update({ imageUrl: imageUrl })
+          .eq("id", cookbookId);
+        if (errorUpdate) {
+          Alert.alert("ERROR", "Unable to create cookbook :(");
+          console.error("Erroring uploading new cookbook: ", error);
+        } else {
+          Alert.alert("SUCCESS", "Cookbook created successfully!");
+          setModalVisible(false); // Close the modal
+        }
     }
   };
 
@@ -103,7 +171,7 @@ const CookbookModal = ({ setModalVisible }) => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
@@ -128,7 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     width: "100%",
     padding: 30,
-    paddingTop: 15
+    paddingTop: 15,
   },
   frame: {
     width: 150,
@@ -164,7 +232,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     margin: 15,
   },
   inputTitle: {

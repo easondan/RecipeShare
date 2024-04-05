@@ -43,9 +43,6 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
     };
     // imageUrl: link.publicUrl,
     if (checkAdd == true) {
-      // console.log(formData);
-
-      console.log(sendData);
       await supabase.from("recipes").insert(sendData);
       const { data: recipeData } = await supabase
         .from("recipes")
