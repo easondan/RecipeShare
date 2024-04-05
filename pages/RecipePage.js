@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   recipeName: {
-    fontSize: 20,
+    fontSize: 18,
     flexWrap: 'wrap',
     fontWeight: "bold",
     marginTop: -5,
@@ -146,12 +146,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },  
   header: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
 
   },
   body: {
-    fontSize: 15,
+    fontSize: 14,
   },
   description: {
     flexWrap: "wrap",
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabHeading: {
-    fontSize: 22,
+    fontSize: 20,
     color: "#222222",
     letterSpacing: 1.5,
     padding: 13
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   viewText: {
-    fontSize: 18, 
+    fontSize: 16, 
     lineHeight: 27,
     marginBottom: 10,
   }

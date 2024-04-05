@@ -118,11 +118,11 @@ export default function Navigation() {
               component={CookbookPage}
               options={({ route }) => ({ header: () => <CookbookToolbar route={route} /> })}
             />
-            <Drawer.Screen
+            {/* <Drawer.Screen
               name="GroceryList"
               component={GroceryList}
               options={{ header: () => <Toolbar title={"Grocery List"} /> }}
-            />
+            /> */}
             <Drawer.Screen
               name="Account"
               component={Account}

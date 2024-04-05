@@ -43,8 +43,6 @@ const CustomDrawer = ({ navigation }) => {
         isActive={activeScreen === 'RecipeHome'}
         icon={<CommunityMaterialIcon color="black" size={24} name="silverware"/>}
       />
-      {/* TODO add the horizontal lines between subsections? */}
-      {/* <View style={{ marginTop: 2, backgroundColor: 'black', height: 1 }} /> */}
       <CustomDrawerItem 
         label={"Favourited Recipes"} 
         screenName={'FavouriteRecipes'} 
@@ -57,12 +55,12 @@ const CustomDrawer = ({ navigation }) => {
         isActive={activeScreen === 'CookbookHome'}
         icon={<CommunityMaterialIcon color="black" size={24} name="book-open-page-variant-outline"/>}
       />
-      <CustomDrawerItem 
+      {/* <CustomDrawerItem 
         label={"Grocery List"} 
         screenName={'GroceryList'} 
         isActive={activeScreen === 'GroceryList'}
         icon={<CommunityMaterialIcon color="black" size={24} name="cart-outline"/>}
-      />
+      /> */}
       <CustomDrawerItem 
         label={"Account"} 
         screenName={'Account'} 
