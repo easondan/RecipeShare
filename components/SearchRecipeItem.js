@@ -6,10 +6,10 @@ const SearchRecipeItem = ({ data, title }) => {
   
   const navigation = useNavigation();
   const navigate = () =>{
+    console.log(title);
     if(title === 'My Recipes' || title === 'Favourites'){
-      navigation.navigate("RecipePage", { data });
+      navigation.navigate("RecipePage", { recipe: data });
     }else{
-      console.log(data);
       navigation.navigate('CookbookPage', { cookbook : data }) 
     }
   }

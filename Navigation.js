@@ -64,7 +64,7 @@ export default function Navigation() {
         <Stack.Screen 
           name="FavouriteRecipes"
           component={FavouriteRecipes}
-          options={{ header: () => <Toolbar title={"Favourites"} /> }} 
+          options={{ header: () => <Toolbar title={"Favourites"} showSearch={true}/> }} 
         />
         <Stack.Screen
           name="CookbookHome"

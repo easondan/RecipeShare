@@ -47,6 +47,7 @@ const CookbookToolbar = ({ route }) => {
       case 'Delete':
         // Show delete confirmation prompt
         setShowDeleteModal(true);
+        // const {error: deleteError}  = await supabase.
         break;
     }
   };
