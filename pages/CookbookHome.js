@@ -39,7 +39,6 @@ const CookbookHome = () => {
         } else {
           const updatedCookbooks = data.map(item => item.cookbooks); // Extract only cookbooks
           setSharedCookbooks(updatedCookbooks);
-          // console.log(sharedCookbooks)
         }
       };
       // Wait for both fetches to complete on page load

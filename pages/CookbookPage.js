@@ -22,8 +22,6 @@ const CookbookPage = ({ route }) => {
   const [recipes, setRecipes] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const fetchRecipes = async() => {
-    // TODO this is borked
-    console.log(cookbook.id);
     const { data, error } = await supabase.rpc('get_cookbook_recipes', { cid : cookbook.id })
     if (error) {
       Alert.alert("ERROR", "Failed to load cookbook recipes!");

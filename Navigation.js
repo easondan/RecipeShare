@@ -71,6 +71,11 @@ export default function Navigation() {
           component={CookbookHome}
           options={{ header: () => <Toolbar title={'Cookbooks'} showSearch={true} /> }}
         />
+        <Stack.Screen
+          name="CookbookPage"
+          component={CookbookPage}
+          options={({ route }) => ({ header: () => <CookbookToolbar route={route} /> })}
+        />
         <Stack.Screen 
           name="RecipePage" 
           component={RecipePage}
@@ -112,11 +117,6 @@ export default function Navigation() {
               name="RecipeStack"
               component={RecipeStack}
               options={{ headerShown: false }}  // Disable duplicate header, already in Stack
-            />
-             <Stack.Screen
-              name="CookbookPage"
-              component={CookbookPage}
-              options={({ route }) => ({ header: () => <CookbookToolbar route={route} /> })}
             />
             <Drawer.Screen
               name="GroceryList"

@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: 'center',
     flexWrap: 'wrap', // Allow names to line wrap
   },
