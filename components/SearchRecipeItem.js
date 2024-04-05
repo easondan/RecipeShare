@@ -8,6 +8,9 @@ const SearchRecipeItem = ({ data, title }) => {
   const navigate = () =>{
     if(title === 'My Recipes' || title === 'Favourites'){
       navigation.navigate("RecipePage", { data });
+    }else{
+      console.log(data);
+      navigation.navigate('CookbookPage', { cookbook : data }) 
     }
   }
   return (

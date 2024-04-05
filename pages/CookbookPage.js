@@ -37,9 +37,7 @@ const CookbookPage = ({ route }) => {
           Alert.alert("ERROR", "Failed to load cookbook recipes!");
           console.error('Error fetching cookbook recipes:', error);
         } else {
-          // console.log("fetched:", data)
-          const loadedRecipes = data.map(item => item.recipes); // Extract only recipes
-          setRecipes(loadedRecipes);
+          setRecipes(data);
         }
       };
       // Fetch updated recipes on page load
