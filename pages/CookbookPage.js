@@ -23,13 +23,17 @@ const CookbookPage = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const fetchRecipes = async() => {
     // TODO this is borked
-    console.log(cookbook.id);
     const { data, error } = await supabase.rpc('get_cookbook_recipes', { cid : cookbook.id })
     if (error) {
       Alert.alert("ERROR", "Failed to load cookbook recipes!");
       console.error('Error fetching cookbook recipes:', error);
     } else {
-      setRecipes(data);
+      const updatedRecipes = data.map(recipe => ({
+        ...recipe,
+        cookbookId: cookbook.id
+      }));
+      setRecipes(updatedRecipes);
+
     }
   };
   useFocusEffect(

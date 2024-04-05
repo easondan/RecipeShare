@@ -17,23 +17,31 @@ import FilterModal from "./FilterModal";
 
 const SearchToolbar = ({ route }) => {
   const navigation = useNavigation();
-  const { title, searchTest, filters } = route.params;
+  const { title, searchTest } = route.params;
   const [searchText, setSearchText] = useState("");
   const [visible, setVisible] = useState(false);
 
   const [filter, setFilter] = useState({
-    course: null,
-    cuisine: null,
-    difficulty: null,
-    servings: null,
-    maxPrepTime: null,
-    maxCookTime: null,
+    course: '',
+    cuisine: '',
+    difficulty: '',
+    servings: '',
+    maxPrepTime: 1440,
+    maxCookTime: 1440,
   });
 
   const handleGoBack = () => {
     navigation.goBack();
     setSearchText("");
-    setFilter(null);
+    const reset = {
+      course: '',
+      cuisine: '',
+      difficulty: '',
+      servings: '',
+      maxPrepTime: 1440,
+      maxCookTime: 1440,
+    }
+    setFilter(reset);
   };
 
   const onCancel = () => {
@@ -58,9 +66,6 @@ const SearchToolbar = ({ route }) => {
           .select()
           .eq("owner_id", value.data.user.id);
 
-        filteredRecipes = data.filter((recipe) =>
-          recipe.name.toLowerCase().includes(searchText.toLowerCase())
-        );
       } else {
         const { data: recipeIdData, error: recipeError } = await supabase
           .from("user_favourites")
@@ -71,17 +76,18 @@ const SearchToolbar = ({ route }) => {
         const extractedIds = recipeIdData.map((item) => item.recipe_id);
         query = supabase.from("recipes").select().in("id", extractedIds);
       }
-      if (filter.course !== null)
+      console.log(filter);
+      if (filter.course)
         query = query.ilike("course", `\%${filter.course}\%`);
-      if (filter.cuisine !== null)
+      if (filter.cuisine)
         query = query.ilike("cuisine", `\%${filter.cuisine}\%`);
-      if (filter.difficulty !== null)
+      if (filter.difficulty)
         query = query.ilike("difficulty", `\%${filter.difficulty}\%`);
-      if (filter.servings !== null)
+      if (filter.servings)
         query = query.ilike("servings", `\%${filter.servings}\%`);
-      if (filter.maxPrepTime !== null)
+      if (filter.maxPrepTime)
         query = query.lte("prepTime", filter.maxPrepTime);
-      if (filter.maxCookTime !== null)
+      if (filter.maxCookTime)
         query = query.lte("cookTime", filter.maxPrepTime);
       const { data, error } = await query;
       filteredRecipes = data.filter((recipe) =>

@@ -81,6 +81,29 @@ const RecipeToolbar = ({ route }) => {
   const handleDelete = async () => {
     // TODO backend stuff to delete recipe record
     setShowDeleteModal(false);
+    console.log("BitcH",recipe.cookbookId);
+
+    if(recipe.cookbookId!==undefined){
+    const { error } = await supabase
+    .from('cookbook_recipes')
+    .delete()
+    .eq('recipe_id', recipe.id)
+    .eq('cookbook_id',recipe.cookbookId)
+    navigation.navigate("CookbookHome");  // Return to previous page
+    }else{
+      await supabase
+      .from('cookbook_recipes')
+      .delete()
+      .eq('recipe_id', recipe.id)
+      await supabase
+      .from('user_favourites')
+      .delete()
+      .eq('recipe_id', recipe.id)
+      await supabase
+      .from('recipes')
+      .delete()
+      .eq('id', recipe.id)
+      navigation.navigate("RecipeHome");  // Return to previous page
     // const { error } = await supabase
     // .from('recipes')
     // .delete()
@@ -88,8 +111,10 @@ const RecipeToolbar = ({ route }) => {
     // if(error){
     //   Alert.alert("Unable to Delete Recipe");
     // }else{
-      navigation.navigate("RecipeHome");  // Return to previous page
+
     // }
+    }
+
     console.log(recipe);
   }
 

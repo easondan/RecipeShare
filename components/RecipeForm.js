@@ -48,8 +48,10 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
         .from("recipes")
         .select("id")
         .match({ owner_id: value.data.user.id });
-      console.log(recipeData[recipeData.length - 1].id);
-      const recipeId = recipeData[recipeData.length - 1].id;
+
+        const recipeId = Math.max(...recipeData.map(item => item.id));
+        
+        
       if (selectedImage !== null) {
         const { error: uploadImageError } = await supabase.storage
           .from("avatars")
@@ -62,10 +64,9 @@ const RecipeForm = ({ checkAdd, label, recipe }) => {
           );
         if (uploadImageError) {
           Alert.alert("Unable to upload image");
-          console.log(uploadImageError2);
+          console.log(uploadImageError);
           imageUrl =
             "https://ixdiitlvaifwubdmmozg.supabase.co/storage/v1/object/public/avatars/public/filler.jpg";
-          return;
         } else {
           const { data: link, error: errorlink } = await supabase.storage
             .from("avatars")
