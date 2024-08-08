@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#E2E2E2",
     position: "absolute",
-    top: 32,
-    right: 10,
+    top: 45,
+    right: 15,
     // TODO need an iOS pal to check how the shadow looks
     shadowColor: 'black',
     shadowOffset: {
@@ -33,15 +33,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 5,
     elevation: 3,
+    gap: 5,
   },
   option: {
-    margin: 10,
-    marginBottom: 0,
-    fontSize: 18
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
+    justifyContent: 'center',
+    fontSize: 18,
+    minWidth: 100,
   },
   deleteOption: {
     fontWeight: 'bold',
-    marginBottom: 15,
     color: "#CE3535"
   },
 });

@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list';
 
-const SelectField = ({ label, data, onSelect }) => {
+const SelectField = ({ label, data, onSelect,editData }) => {
     
   return (
     <View style={styles.container}>
@@ -15,6 +15,7 @@ const SelectField = ({ label, data, onSelect }) => {
         search={false}
         maxHeight={50}
         boxStyles={styles.selectList}
+        {...(editData ? { defaultOption: editData } : { placeholder: "Select Course" })}
       />
     </View>
   );

@@ -1,98 +1,74 @@
 import React, { FC, useState, useRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
-import { Icon } from 'react-native-elements';
 import Card from './Card';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
-const Dropdown = ({ label, listOfCookBooks }) => {
-  const [visible, setVisible] = useState(false);
+
+const Dropdown = ({ label, cookbookList }) => {
+  const [visible, setVisible] = useState(true);
 
   const toggleDropdown = () => {
     setVisible(!visible);
-
-  };
-
-  const hideDropdown = () => {
-    setVisible(false);
-  };
-
-  // Function to chunk the array into groups of three
-  const chunkArray = (arr, size) => {
-    return arr.reduce((acc, _, i) => {
-      if (i % size === 0) acc.push(arr.slice(i, i + size));
-      return acc;
-    }, []);
-  };
-
-  const renderRows = () => {
-    const rows = chunkArray(listOfCookBooks, 3); // Group items into rows of three
-    return rows.map((row, rowIndex) => (
-      <View key={rowIndex} style={styles.row}>
-        {row.map((recipe, colIndex) => (
-          <View key={colIndex} style={styles.gridItem}>
-            <Card data={recipe} />
-          </View>
-        ))}
-      </View>
-    ));
   };
 
   return (
-    <TouchableWithoutFeedback onPress={hideDropdown}>
-      <View style = {styles.container}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={toggleDropdown}
-        >
-          <Text style={styles.buttonText}>{label}</Text>
-          <Icon type='font-awesome' name={visible ? 'chevron-up' : 'chevron-down'} />
-        </TouchableOpacity>
-
-          
-          {visible ? renderRows():''}
-
-      </View>
-    </TouchableWithoutFeedback>
+    <View style = {styles.container}>
+      <TouchableOpacity
+        style={styles.dropdownButton}
+        onPress={toggleDropdown}
+        activeOpacity={0.6}
+      >
+        <Text style={styles.dropdownLabel}>{label}</Text>
+        <Icon style={styles.icon} size={25} name={visible ? 'chevron-up' : 'chevron-down'} />
+      </TouchableOpacity>
+      { visible && (
+        <View style={styles.grid}>
+          {
+            cookbookList.map((cookbook, i) => (
+              <View key={i}>
+                <Card data={cookbook} isCookbook={true} />
+              </View>
+            ))
+          }
+        </View>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
+  dropdownButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#efefef',
-    height: 50,
-    width: '90%',
-    paddingHorizontal: 10,
+    width: '100%',
+    elevation: 5,
+    borderTopWidth: 2,
+    borderTopColor: '#efefef',
     zIndex: 1,
   },
-  buttonText: {
+  dropdownLabel: {
     flex: 1,
-    textAlign: 'center',
+    padding: 15,
+    marginLeft: 10,
+    textAlign: 'left',
+    fontSize: 20
+  },
+  icon: {
+    padding: 10,
+    marginRight: 20,
   },
   container:{
     flex:1,
-    alignItems:'center',
-    marginTop: 30,
-    width:"90%"
+    justifyContent: 'center',
   },
-  dropdown: {
-    backgroundColor: '#fff',
-    width: '90%',
-    flexDirection: 'column', // Change to column to display rows
-    justifyContent: 'flex-start', // Align rows to the top
-    maxHeight: 1000,
-  },
-  row: {
+  grid: {
+    margin: 15,
+    flexWrap: 'wrap',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems:'center',
-    paddingHorizontal: 5,
-  },
-  gridItem: {
-    flex: 1, // Each item occupies equal space
-        alignItems:'center',
-    paddingBottom: 50,
-  },
+    justifyContent: 'flex-start',
+    gap: 15
+  }
 });
 
 export default Dropdown;

@@ -1,19 +1,34 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import ActionButton from '../components/ActionButton';
 import RecipeGrid from '../components/RecipeGrid';
-import { recipes } from '../recipes.json';
+import { supabase } from '../lib/supabase'
+import { useState, useCallback } from 'react';
 
 const RecipeHome = () => {
-
+  const [userRecipeData,setRecipeData] = useState([]); 
+ 
+  const fetchData=  async()=>{
+    const value = await supabase.auth.getUser();
+    setRecipeData([]);
+    const { data, error } = await supabase
+    .from('recipes')
+    .select().eq('owner_id',value.data.user.id);
+    setRecipeData(data);
+  }
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
   const navigation = useNavigation();
-  const addRecipe = () => {
+    const addRecipe = async () => {
     navigation.navigate('AddRecipePage');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <RecipeGrid recipes={recipes} />
+      <RecipeGrid recipes={userRecipeData} />
       <ActionButton onPress={addRecipe}/>
     </SafeAreaView>
   );

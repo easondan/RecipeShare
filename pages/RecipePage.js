@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { View, ScrollView, TouchableOpacity, Text, Image, StyleSheet, Button } from "react-native";
 
+
 const RecipePage = ({ route }) => {
   const [showIngredients, setShowIngredients] = useState(true);
-  const { data } = route.params;
+  const { recipe } = route.params;
   
-  // TODO for now I'm assuming data is stored in mins
   const minsToHours = (mins) => {
     const hours = Math.floor(mins / 60);
     const rem = mins % 60;
@@ -24,44 +24,55 @@ const RecipePage = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.overview}>
-        <Image source={{ uri: data.imageUrl }} style={styles.image} />
-        <View style={{ marginLeft: 15 }}>
-          <Text style={styles.recipeName}>{data.name}</Text>
-          <View style={{ flexDirection: "row" }}>
-            <View>  
-              <Text style={styles.header}>Author:</Text>
-              <Text style={styles.header}>Course:</Text>
-              <Text style={styles.header}>Cuisine:</Text>
-              <Text style={styles.header}>Difficulty:</Text>
-              <Text style={styles.header}>Servings:</Text>
-            </View>
-            <View style={{ marginLeft: 15 }}>
-              <Text style={styles.body}>{data.author}</Text>
-              <Text style={styles.body}>{data.course}</Text>
-              <Text style={styles.body}>{data.cuisine}</Text>
-              <Text style={styles.body}>{data.difficulty}</Text>
-              <Text style={styles.body}>{data.servings}</Text>  
-            </View>
+        <Image source={{ uri: recipe?.imageUrl,cache: 'reload' }} style={styles.image} />
+        <View style={styles.infoContainer}>
+          <Text style={styles.recipeName}>{recipe.name}</Text>
+          <View>
+            {recipe.author &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Author:</Text>
+              <Text style={styles.body}>{recipe.author}</Text>
+            </View>}
+            {recipe.course &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Course:</Text>
+              <Text style={styles.body}>{recipe.course}</Text>
+            </View>}
+            {recipe.cuisine &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Cuisine:</Text>
+              <Text style={styles.body}>{recipe.cuisine}</Text>
+            </View>}
+            {recipe.difficulty &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Difficulty:</Text>
+              <Text style={styles.body}>{recipe.difficulty}</Text>
+            </View>}
+            {recipe.course &&
+            <View style={styles.infoPair}>
+              <Text style={styles.infoHeader}>Servings:</Text>
+              <Text style={styles.body}>{recipe.servings}</Text>
+            </View>}
           </View>
         </View>
       </View>
       <View style={styles.timeSummary}>
         <View style={styles.time}>
           <Text style={styles.header}>Prep Time</Text>
-          <Text style={styles.body}>{minsToHours(data.prepTime)}</Text>
+          <Text style={styles.body}>{minsToHours(recipe.prepTime)}</Text>
         </View>
         <View style={styles.time}>
           <Text style={styles.header}>Cook Time</Text>
-          <Text style={styles.body}>{minsToHours(data.cookTime)}</Text>
+          <Text style={styles.body}>{minsToHours(recipe.cookTime)}</Text>
         </View>
         <View style={styles.time}>
           <Text style={styles.header}>Total Time</Text>
-          <Text style={styles.body}>{minsToHours(Number(data.cookTime) + Number(data.prepTime))}</Text>
+          <Text style={styles.body}>{minsToHours(Number(recipe.cookTime) + Number(recipe.prepTime))}</Text>
         </View>
       </View>
       <View style={styles.description}>
-        <Text style={styles.header}>Description:</Text>
-        <Text style={styles.body}>{data.description}</Text> 
+        <Text style={styles.header}>Description: &nbsp;</Text>
+        <Text style={styles.body}>{recipe.description}</Text> 
       </View>
       <View style={styles.tabContainer}>
         <TouchableOpacity style={[styles.tabItem, showIngredients ? styles.activeTab : ""]} onPress={() => setShowIngredients(true)}>
@@ -79,7 +90,7 @@ const RecipePage = ({ route }) => {
         showIngredients ? (
           <ScrollView style={styles.view}>
             {
-              data.ingredients.map((item, i) => (
+              recipe.ingredients.map((item, i) => (
                 <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
               ))
             }
@@ -87,7 +98,7 @@ const RecipePage = ({ route }) => {
         ) : (
           <ScrollView style={styles.view}>
             {
-              data.directions.map((item, i) => (
+              recipe.directions.map((item, i) => (
                 <Text key={i} style={styles.viewText}>{i+1}.&ensp;{item}</Text>
               ))
             }
@@ -108,27 +119,43 @@ const styles = StyleSheet.create({
     margin: 15,
     marginBottom: 0
   },
+  infoContainer: {
+    marginLeft: 15,
+    flex: 1,
+  },
+  infoPair: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // marginBottom: 5,
+  },
   image: {
     width: 155,
     height: 155,
     borderRadius: 10,
   },
   recipeName: {
-    fontSize: 22,
-    fontWeight: "bold"
-  },
-  header: {
-    fontSize: 16,
+    fontSize: 18,
+    flexWrap: 'wrap',
     fontWeight: "bold",
-    padding: 3,
-  },  
-  body: {
+    marginTop: -5,
+    marginBottom: 2
+  },
+  infoHeader: {
     fontSize: 16,
-    padding: 3,
+    minWidth: 90,
+    fontWeight: 'bold',
+  },  
+  header: {
+    fontSize: 14,
+    fontWeight: 'bold',
+
+  },
+  body: {
+    fontSize: 14,
   },
   description: {
-    flexDirection: "row",
     flexWrap: "wrap",
+    alignContent: 'center',
     margin: 15,
     marginTop: 0
   },
@@ -154,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabHeading: {
-    fontSize: 22,
+    fontSize: 20,
     color: "#222222",
     letterSpacing: 1.5,
     padding: 13
@@ -167,10 +194,12 @@ const styles = StyleSheet.create({
   view: {
     margin: 20,
     marginTop: 10,
+    marginBottom: 0,
   },
   viewText: {
-    fontSize: 18,
-    lineHeight: 35
+    fontSize: 16, 
+    lineHeight: 27,
+    marginBottom: 10,
   }
 });
 

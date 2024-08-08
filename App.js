@@ -1,6 +1,6 @@
 import Navigation from "./Navigation";
 import { StatusBar, View, StyleSheet } from "react-native";
-import { FavouritesProvider } from './components/FavouritesContext'
+// import { FavouritesProvider } from './components/FavouritesContext'
 
 const App = () => {
 
@@ -8,9 +8,8 @@ const App = () => {
     <View style={styles.root}>
       {/* <StatusBar barStyle="dark-content" backgroundColor="#A7CCA2"/> */}
       <StatusBar />
-      <FavouritesProvider>
+
         <Navigation />
-      </FavouritesProvider>
     </View>
   );
 }
